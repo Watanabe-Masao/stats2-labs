@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>尺度ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+.bar{height:14px;border-radius:3px;background:var(--acc);display:inline-block;vertical-align:middle}
+.bar.b{background:var(--acc2)}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:1px 8px;margin:2px;font-size:13px;background:var(--card)}
+.qbtns{display:flex;gap:8px;margin-top:6px}
+.qbtns button{flex:1}
+</style></head><body>
+<h1>🧪 尺度ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-judge" class="mode">
+<p class="mut" style="margin:0">データを1つ出す。4つの質問に上から答え、「はい」になった所で止める。</p>
+<div class="card"><div class="mut">このデータの尺度は？</div><div class="big" id="jitem"></div></div>
+<div class="card" id="jq"></div>
+<div class="row"><button class="act" id="jnext">次のデータ</button><span class="mut" id="jscore"></span></div>
+</div>
+<div id="m-unit" class="mode">
+<p class="mut" style="margin:0">同じ2つの値を、別の単位で表し直す。「差」と「何倍（B÷A）」は単位を変えると変わるか。</p>
+<div class="row ctl"><label>データ <select id="ukind"><option value="temp">気温</option><option value="wt">重さ</option><option value="money">売上金額</option><option value="year">年</option></select></label></div>
+<input type="range" id="ua" data-name="A">
+<input type="range" id="ub" data-name="B">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res"><table id="utab"></table></div>
+<div id="uform"></div>
+<div class="card res" id="usum"></div>
+</div>
+<div id="m-likert" class="mode">
+<p class="mut" style="margin:0">5段階の満足度（各100人）。ふつうは 1〜5 点をつけて平均するが、「段階の間隔は等しい」は仮定にすぎない。両端の段階につける点を変えると、どちらの店が上になるか。</p>
+<div id="lbars"></div>
+<input type="range" id="l5" min="4.1" max="8" step="0.1" value="5" data-name="とても満足" data-unit="点">
+<input type="range" id="l1" min="-3" max="1.9" step="0.1" value="1" data-name="とても不満" data-unit="点">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res"><table id="ltab"></table></div>
+<div id="lform"></div>
+<div class="card res" id="lsum"></div>
+<div class="row ctl"><button class="sub" id="lreset">1〜5点に戻す</button></div>
+</div>
+<div id="m-bin" class="mode">
+<p class="mut" style="margin:0">20人の客の年齢。階級（年代）にまとめると、何が見えなくなるか。</p>
+<div class="row ctl"><label>まとめ方 <select id="bw"><option value="1">まとめない（1歳ごと）</option><option value="5">5歳ごと</option><option value="10" selected>10歳ごと（年代）</option></select></label></div>
+<div id="bplot"></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div id="bform"></div>
+<div class="card res" id="bsum"></div>
+</div>
+<div id="m-code" class="mode">
+<p class="mut" style="margin:0">性別（名義）を数字で記録した100人。どの数字を振るかで平均は変わる。それでも読み取れるものはあるか。</p>
+<div class="row ctl"><label>数字の振り方（男性・女性） <select id="cpair"><option value="1,2">1・2</option><option value="0,1">0・1</option><option value="2,1">2・1</option><option value="10,20">10・20</option></select></label></div>
+<input type="range" id="cn" min="0" max="100" step="1" value="42" data-name="女性" data-unit="人">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res" id="csum"></div>
+<div id="cform"></div>
+<div class="card res" id="c3"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-temp": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "10℃と20℃を、絶対温度（K）で表すと B÷A は何倍になるか。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "単位を変えると0の位置が動くので、何倍の値が変わる。重さに切り替えて比べる。"}, "s2-judge": {"mode": "judge", "task": "10問続けて判定する。間違えたら「どこで取り違えたか」を読み、どの質問で「はい／いいえ」を取り違えたかを書く。"}, "s4-judge": {"mode": "judge", "task": "転用の表の場面のデータを思い浮かべながら判定する。終わったら「階級にまとめる」で、年齢を年代にまとめると何が起きるかも見る。"}, "s5-unit": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "気温・重さ・売上金額・年を切り替え、「何倍が単位で変わる換算」と「変わらない換算」の式の違いを見つける。"}, "s6-free": {"task": "自分の判定や設計を、5つのモードで確かめる。"}, "Q-U04-002": {"mode": "unit", "set": {"kind": "money", "a": 10, "b": 20}, "task": "昨日10万円・今日20万円の売上を、ドルに直すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "ドルで B÷A", "unit": "倍"}, "why": "円→ドルは掛け算だけの換算なので、どの単位でも2倍のまま。データを「気温」に切り替えて 10℃・20℃ と比べる。"}, "Q-U04-010": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 15}, "task": "10℃と15℃。℃では15÷10＝1.5倍。絶対温度（K）で表すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "「1.5倍」は℃という単位を選んだから出た数字にすぎない。どの単位でも同じ情報を持つのは差（5℃）のほう。"}, "Q-U04-020": {"mode": "likert", "set": {"s5": 4.1, "s1": 1}, "task": "「とても満足」を5点ではなく4.1点として平均すると、平均点で上になるのはどちらの店か。", "predict": {"type": "choice", "key": "winner", "label": "平均点で上になる店", "options": ["A店", "B店", "同じ"]}, "why": "1〜5点なら B店（3.80）が上、4.1点にすると A店（3.40）が上。中央値と「満足」以上の割合（40%・70%）は変わらない。"}, "Q-U04-023": {"mode": "code", "set": {"pair": "1,2", "n2": 42}, "task": "男性を1、女性を2と記録した100人の「性別の平均」が1.42。女性の割合は何%か。", "predict": {"type": "number", "key": "prop", "label": "女性の割合", "unit": "%"}, "why": "数字の振り方を変えると平均は変わるが、2つの値しかないなら割合は逆算できる。3つ以上の例も下で見る。"}, "Q-U04-025": {"mode": "bin", "set": {"w": 10}, "task": "20人の年齢を年代（20代・30代…）にまとめ、各年代の真ん中（25歳・35歳…）で平均すると何歳か。", "predict": {"type": "number", "key": "classMean", "label": "年代で計算した平均", "unit": "歳", "tol": 0.05}, "why": "元のデータの平均は41.6歳。まとめると近い値は出るが、同じ年代の中の違いは消える。"}, "Q-U04-040": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "10℃と20℃を華氏（℉）で表すと、B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "℉ で B÷A", "unit": "倍"}, "why": "y＝1.8x＋32 のように足し算の入った変換では比が保たれない。差は 10℃→18℉ と、換算の分（×1.8）だけ変わる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div>${esc(cfg.task)}</div>`;
+if(p){h+=`<div class="mut" style="margin-top:6px">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function reveal(guess){const p=cfg.predict;lock(false);if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=`<div>あなたの予想：<b>${esc(fmtNum(guess))}${esc(p.unit||"")}</b>　ラボの結果：<b>${esc(r.text)}</b></div>`+
+(hit?`<div class="ok">◎ 予想どおり</div>`:`<div class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}。外れた所が学びどころ。</div>`);}
+else{const hit=guess===r.text;h=`<div>あなたの予想：<b>${esc(guess)}</b>　ラボの結果：<b>${esc(r.text)}</b></div>`+(hit?`<div class="ok">◎ 予想どおり</div>`:`<div class="ng">✕ 予想と違った。なぜかを1文で書く。</div>`);}
+if(cfg.why)h+=`<div class="mut" style="margin-top:4px">${esc(cfg.why)}</div>`;
+h+=`<div class="mut">ここからは自由に動かしてよい。</div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const go=$("lk-go"),sk=$("lk-skip");if(go)go.remove();if(sk)sk.remove();}
+function start(def){const tabs=$("tabs");
+order.forEach(k=>{const b=document.createElement("button");b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+order.forEach(k=>modes[k].init&&modes[k].init());
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);taskCard();if(cfg.predict)lock(true);}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc;
+const SCALES=["名義","順序","間隔","比例"];
+const CALC=["＝ ≠ だけ。代表値は最頻値。平均・何倍は意味がない","大小まで。代表値は中央値・最頻値。平均は等間隔とみなす仮定が要る。何倍は意味がない","差まで。平均・差は意味がある。何倍は意味がない","比まで。平均も何倍も意味がある"];
+const FEED=[
+[null,"番号の大小に意味はない。305番店は304番店より「上」ではない","数字で書かれていても量ではない。差を取っても意味がない","数字で書かれていても量ではない。足したり何倍と言ったりしても意味がない"],
+["区別するだけでなく、順番（上・下）には意味がある",null,"段階の間隔がそろっているとは言えない。「1段上」の大きさが段階ごとに違いうる","順番はあるが、間隔も0の意味も決まっていない"],
+["差に同じ意味がある量。ラベルではない","10と20の差が20と30の差と同じ意味を持つ。順番だけではない",null,"0が「無い」ではない（0℃でも温度はある、西暦0年も時の始まりではない）ので、何倍は言えない"],
+["量として足し引きも比べもできる。ラベルではない","順番だけでなく、差も比も意味を持つ量","0が「無い」を表す（0個＝売れていない）ので、差だけでなく何倍まで言える",null]];
+const ITEMS=[
+["店番",0,"番号は区別のためのラベル。305番店と306番店に順番や差の意味はない"],
+["郵便番号",0,"地域を区別する番号。平均しても意味がない"],
+["血液型（A・B・O・AB）",0,"区別するためのラベル。順番も差もない"],
+["JANコード",0,"商品を区別する番号。足しても平均しても意味がない"],
+["満足度（不満・普通・満足）",1,"順番には意味があるが、「不満→普通」と「普通→満足」の間隔が等しいとは限らない"],
+["売上ランキングの順位",1,"1位と2位の売上差と、2位と3位の売上差は同じとは限らない"],
+["鮮度ランク（A・B・C）",1,"順番はあるが、ランクの間隔は決まっていない"],
+["気温（℃）",2,"10℃と20℃の差は、20℃と30℃の差と同じ意味。ただし0℃は「温度が無い」ではない"],
+["西暦",2,"年の差には意味があるが、西暦0年は「時間が無い」ではない"],
+["時刻（何時何分）",2,"時刻の差（経過時間）には意味があるが、0時は「時間が無い」ではない"],
+["販売個数",3,"0個は「売れていない」。20個は10個の2倍と言える（離散型）"],
+["重さ（kg）",3,"0kgは「重さが無い」。単位をgに変えても何倍は変わらない（連続型）"],
+["売上金額",3,"0円は「売上が無い」。前年比のように比で比べられる"],
+["待ち時間（分）",3,"0分は「待っていない」。10分は5分の2倍と言える（連続型）"],
+["来店客数",3,"0人は「来ていない」。数え上げる量（離散型）"]];
+const QS=["区別するためのラベルだけ？","順番に意味はあるが、間隔はそろっていない？","差に同じ意味があるが、0が「無い」ではない？","0が「無い」を表し、何倍と言える？"];
+let jOrder=[],jPos=-1,jStep=0,jDone=false,jRight=0,jTotal=0,jFirst=null;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function jNext(){if(jPos<0||jPos>=jOrder.length-1){jOrder=shuffle([...ITEMS.keys()]);if(jFirst!==null){jOrder.splice(jOrder.indexOf(jFirst),1);jOrder.unshift(jFirst);jFirst=null;}jPos=0;}else jPos++;jStep=0;jDone=false;jRender();}
+function jRender(){const it=ITEMS[jOrder[jPos]];$("jitem").textContent=it[0];
+let h="";for(let k=0;k<jStep;k++)h+=`<div class="mut">質問${k+1}：${QS[k]} → いいえ</div>`;
+if(!jDone){h+=`<div><b>質問${jStep+1}：${QS[jStep]}</b></div><div class="qbtns"><button class="act" id="jy">はい</button><button class="sub" id="jn"${jStep===3?" disabled":""}>いいえ</button></div>`;}
+else{const pick=jStep,ans=it[1],ok=pick===ans;
+h+=`<div>質問${pick+1}：${QS[pick]} → はい</div><div class="big">あなたの判定：${SCALES[pick]}尺度</div>`+
+(ok?`<div class="ok">◯ 正しい</div>`:`<div class="ng">✕ 正しくは ${SCALES[ans]}尺度</div><div><b>どこで取り違えたか：</b>${FEED[ans][pick]}</div>`)+
+`<div style="margin-top:4px">${it[2]}</div><div class="mut">${SCALES[ans]}尺度で意味のある計算：${CALC[ans]}</div>`;}
+$("jq").innerHTML=h;$("jscore").textContent=jTotal?`${jTotal}問中 ${jRight}問 正解`:"";
+if(!jDone){$("jy").onclick=()=>{jDone=true;jTotal++;if(jStep===ITEMS[jOrder[jPos]][1])jRight++;jRender();};
+$("jn").onclick=()=>{if(jStep<3){jStep++;jRender();}};}}
+LK.register("judge",{name:"尺度を判定",
+init(){$("jnext").onclick=jNext;jNext();},
+apply(s){if(s.item){const i=ITEMS.findIndex(x=>x[0]===s.item);if(i>=0){jFirst=i;jPos=-1;jNext();}}},
+value(){return {v:jRight,text:`${jTotal}問中 ${jRight}問`};}});
+const KINDS={
+temp:{min:-10,max:40,a:10,b:20,unit:"℃",scale:2,units:[["摂氏（℃）",x=>x,"x"],["絶対温度（K）",x=>x+273.15,"x＋273.15"],["華氏（℉）",x=>x*1.8+32,"1.8x＋32"]]},
+wt:{min:0,max:50,a:10,b:20,unit:"kg",scale:3,units:[["キログラム（kg）",x=>x,"x"],["グラム（g）",x=>x*1000,"1000x"],["ポンド（lb）",x=>x/0.45359237,"x÷0.4536"]]},
+money:{min:0,max:50,a:10,b:20,unit:"万円",scale:3,units:[["万円",x=>x,"x"],["千円",x=>x*10,"10x"],["ドル（1ドル＝150円）",x=>x*10000/150,"x×10000÷150"]]},
+year:{min:1990,max:2030,a:2010,b:2020,unit:"年",scale:2,units:[["西暦",x=>x,"x"],["2000年を0とした年",x=>x-2000,"x−2000"],["1900年を0とした年",x=>x-1900,"x−1900"]]}};
+const fmt=v=>Math.abs(v)>=100?v.toFixed(1):v.toFixed(2);
+const ratio=(a,b)=>Math.abs(a)<1e-9?null:b/a;
+function uSetup(){const k=KINDS[$("ukind").value];for(const id of ["ua","ub"]){$(id).min=k.min;$(id).max=k.max;$(id).step=1;$(id).dataset.unit=k.unit;}
+LK.setRange("ua",k.a);LK.setRange("ub",k.b);uRender();}
+function uRows(){const k=KINDS[$("ukind").value],a=+$("ua").value,b=+$("ub").value;return k.units.map(([n,f,expr])=>{const A=f(a),B=f(b);return {n,A,B,expr,r:ratio(A,B),d:B-A};});}
+function uRender(){const k=KINDS[$("ukind").value],rows=uRows();
+$("utab").innerHTML="<tr><th>単位</th><th>差 B−A</th><th>B÷A</th></tr>"+rows.map(r=>`<tr><td>${r.n}<div class="mut">A＝${fmt(r.A)}　B＝${fmt(r.B)}</div></td><td>${fmt(r.d)}</td><td>${r.r===null?"—（0で割れない）":r.r.toFixed(3)}</td></tr>`).join("");
+$("uform").innerHTML=LK.formula(rows.map(r=>`${r.n.replace(/（.*）/,"")}：${r.expr} → B÷A＝${LK.fmtNum(r.B)}÷${LK.fmtNum(r.A)}＝${r.r===null?"—":r.r.toFixed(3)}`));
+const valid=rows.filter(r=>r.r!==null),same=valid.length===rows.length&&valid.every(r=>Math.abs(r.r-valid[0].r)<1e-9);
+$("usum").innerHTML=(same?`<div class="ok">何倍（B÷A）は、どの単位でも同じ。</div><div>どの単位でも0が「無い」を表す（掛け算だけの換算）ので、何倍と言える。</div>`:
+`<div class="ng">何倍（B÷A）が単位によって変わる。</div><div>単位ごとに0の位置が違う（足し算の入った換算）ので、「B は A の何倍」には意味がない。差は単位の換算（×1.8 など）の分だけ変わるが、同じ情報を表す。</div>`)+
+`<div class="mut">${SCALES[k.scale]}尺度：${CALC[k.scale]}</div>`;}
+LK.register("unit",{name:"単位を変える",
+init(){$("ukind").onchange=uSetup;LK.stepper($("ua"),uRender);LK.stepper($("ub"),uRender);uSetup();},
+apply(s){if(s.kind)$("ukind").value=s.kind;uSetup();if(s.a!==undefined)LK.setRange("ua",s.a);if(s.b!==undefined)LK.setRange("ub",s.b);uRender();},
+render:uRender,
+value(key){const [t,i]=key.split(":"),r=uRows()[+i];if(t==="ratio")return r.r===null?{v:NaN,text:"—"}:{v:r.r,text:r.r.toFixed(3)+"倍"};return {v:r.d,text:fmt(r.d)};}});
+const LV=["とても不満","不満","普通","満足","とても満足"];
+const ST={A:[0,0,60,40,0],B:[20,10,0,10,60]};
+const lscores=()=>[+$("l1").value,2,3,4,+$("l5").value];
+const lmean=(c,s)=>c.reduce((t,k,i)=>t+k*s[i],0)/c.reduce((a,b)=>a+b,0);
+function lmedian(c){const n=c.reduce((a,b)=>a+b,0);const at=r=>{let cum=0;for(let i=0;i<5;i++){cum+=c[i];if(cum>=r)return i;}};return [at(Math.floor((n+1)/2)),at(Math.ceil((n+1)/2))];}
+const ltop=c=>(c[3]+c[4])/c.reduce((a,b)=>a+b,0);
+const win=(x,y)=>Math.abs(x-y)<1e-9?"同じ":x>y?"A店":"B店";
+function lRender(){const s=lscores();
+let h='<div class="card"><table><tr><th>段階（点）</th><th>A店</th><th>B店</th></tr>';
+for(let i=4;i>=0;i--)h+=`<tr><td>${LV[i]}（${s[i].toFixed(1)}）</td><td><span class="bar" style="width:${ST.A[i]*0.8}px"></span> ${ST.A[i]}</td><td><span class="bar b" style="width:${ST.B[i]*0.8}px"></span> ${ST.B[i]}</td></tr>`;
+$("lbars").innerHTML=h+"</table></div>";
+const mA=lmean(ST.A,s),mB=lmean(ST.B,s),dA=lmedian(ST.A),dB=lmedian(ST.B),tA=ltop(ST.A),tB=ltop(ST.B);
+const med=d=>d[0]===d[1]?LV[d[0]]:LV[d[0]]+"と"+LV[d[1]]+"の間";
+$("ltab").innerHTML=`<tr><th>比べ方</th><th>A店</th><th>B店</th></tr>`+
+`<tr><td>平均点<div class="mut">上：${win(mA,mB)}</div></td><td>${mA.toFixed(2)}</td><td>${mB.toFixed(2)}</td></tr>`+
+`<tr><td>中央値<div class="mut">上：${win(dA[0],dB[0])}</div></td><td>${med(dA)}</td><td>${med(dB)}</td></tr>`+
+`<tr><td>「満足」以上の割合<div class="mut">上：${win(tA,tB)}</div></td><td>${Math.round(tA*100)}%</td><td>${Math.round(tB*100)}%</td></tr>`;
+const term=(c)=>c.map((k,i)=>k?`${s[i].toFixed(1)}×${k}`:"").filter(Boolean).join("＋");
+$("lform").innerHTML=LK.formula([`A店：(${term(ST.A)})÷100＝${mA.toFixed(2)}`,`B店：(${term(ST.B)})÷100＝${mB.toFixed(2)}`],"式で計算（平均点＝点×人数の合計÷人数）");
+$("lsum").innerHTML=(mA>mB+1e-9?`<div class="ng">平均点では A店が上になった。</div>`:`<div>平均点では ${win(mA,mB)}${win(mA,mB)==="同じ"?"":"が上"}。</div>`)+
+`<div>中央値と「満足」以上の割合は、点のつけ方を変えても変わらない（順番しか使わないから）。平均点は、段階の間隔をどう置くかという<b>仮定</b>で結果が変わる。</div>`;}
+LK.register("likert",{name:"満足度の平均",
+init(){LK.stepper($("l5"),lRender);LK.stepper($("l1"),lRender);$("lreset").onclick=()=>{LK.setRange("l1",1);LK.setRange("l5",5);lRender();};lRender();},
+apply(s){if(s.s5!==undefined)LK.setRange("l5",s.s5);if(s.s1!==undefined)LK.setRange("l1",s.s1);lRender();},
+render:lRender,
+value(key){const s=lscores(),mA=lmean(ST.A,s),mB=lmean(ST.B,s);
+if(key==="winner"){const w=win(mA,mB);return {v:w,text:w};}
+if(key==="meanA")return {v:mA,text:mA.toFixed(2)};return {v:mB,text:mB.toFixed(2)};}});
+const AGES=[22,24,27,29,31,33,34,36,38,39,41,43,45,47,48,52,55,58,61,69];
+const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+function bClasses(w){const m=new Map();AGES.forEach(a=>{const lo=Math.floor(a/w)*w;m.set(lo,(m.get(lo)||0)+1);});return [...m.entries()].sort((x,y)=>x[0]-y[0]);}
+function bClassMean(w){if(w===1)return mean(AGES);let t=0;bClasses(w).forEach(([lo,n])=>{t+=n*(lo+w/2);});return t/AGES.length;}
+function bRender(){const w=+$("bw").value,cls=bClasses(w);
+const W=340,H=86,lo=20,hi=70,X=v=>12+(v-lo)/(hi-lo)*(W-24);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="年齢の点と階級">`;
+if(w>1)cls.forEach(([c],i)=>{s+=`<rect x="${X(c)}" y="8" width="${X(c+w)-X(c)-1}" height="50" fill="var(--acc)" opacity="${i%2?0.10:0.18}"/>`;});
+const seen={};AGES.forEach(a=>{const g=w>1?Math.floor(a/w)*w:a;seen[g]=(seen[g]||0)+1;const x=w>1?X(g+w/2):X(a),y=w>1?54-(seen[g]-1)*6:40;s+=`<circle cx="${x}" cy="${y}" r="3.4" fill="var(--acc2)"/>`;});
+for(let t=20;t<=70;t+=10)s+=`<text x="${X(t)}" y="78" font-size="10" text-anchor="middle" fill="var(--mut)">${t}</text>`;
+s+=`<line x1="12" y1="62" x2="${W-12}" y2="62" stroke="var(--line)"/></svg>`;
+$("bplot").innerHTML=s+'<div class="mut">点＝1人。まとめると、同じ階級の人は階級の真ん中に重なる。</div>';
+const chips=w===1?AGES.map(a=>`<span class="chip">${a}</span>`).join(""):cls.map(([c,n])=>`<span class="chip">${c}〜${c+w-1}歳：${n}人</span>`).join("");
+$("bform").innerHTML=w===1?LK.formula([`(${AGES.join("＋")})÷20`,`＝${AGES.reduce((a,b)=>a+b,0)}÷20＝${mean(AGES).toFixed(2)}`],"式で計算（元のデータの平均）"):
+LK.formula([cls.map(([c,n])=>`${c+w/2}×${n}`).join("＋"),`＝${cls.reduce((t,[c,n])=>t+n*(c+w/2),0)}　→ ÷20＝${bClassMean(w).toFixed(2)}`],"式で計算（階級の真ん中×人数の合計÷人数）");
+$("bsum").innerHTML=`<div>${chips}</div><div>区別できる値：<b>${w===1?new Set(AGES).size:cls.length}</b> 種類（元は ${new Set(AGES).size} 種類）</div>`+
+`<div>平均：元のデータ <b>${mean(AGES).toFixed(2)}</b> 歳／${w===1?"同じ":"階級の真ん中で計算 <b>"+bClassMean(w).toFixed(2)+"</b> 歳"}</div>`+
+(w===10?`<div class="mut">30代の ${AGES.filter(a=>a>=30&&a<40).join("・")} 歳は、全員「30代」になり、31歳と39歳の差は見えない。年代は「順番のある区分」として扱うことになる。</div>`:"");}
+LK.register("bin",{name:"階級にまとめる",
+init(){$("bw").onchange=bRender;bRender();},
+apply(s){if(s.w)$("bw").value=String(s.w);bRender();},
+render:bRender,
+value(key){const w=+$("bw").value;if(key==="rawMean")return {v:mean(AGES),text:mean(AGES).toFixed(2)+"歳"};return {v:bClassMean(w),text:bClassMean(w).toFixed(2)+"歳"};}});
+function cVals(){const [c1,c2]=$("cpair").value.split(",").map(Number),n2=+$("cn").value,n1=100-n2,m=(c1*n1+c2*n2)/100;return {c1,c2,n1,n2,m,p:(m-c1)/(c2-c1)*100};}
+function cRender(){const r=cVals();
+$("csum").innerHTML=`<div>男性 ${r.n1}人（${r.c1}）・女性 ${r.n2}人（${r.c2}）</div><div class="big">「性別の平均」＝${r.m.toFixed(2)}</div>`+
+`<div>数字の振り方を変えると平均は変わる（1・2なら${((1*r.n1+2*r.n2)/100).toFixed(2)}、0・1なら${(r.n2/100).toFixed(2)}）。「平均の性別」には意味がない。</div>`+
+`<div style="margin-top:4px">ただし<b>2つの値しかない</b>ときは、平均から女性の割合を逆算できる：<b>${r.p.toFixed(0)}%</b></div>`;
+$("cform").innerHTML=LK.formula([`平均＝(${r.c1}×${r.n1}＋${r.c2}×${r.n2})÷100＝${r.m.toFixed(2)}`,`女性の割合＝(平均−${r.c1})÷(${r.c2}−${r.c1})＝${(r.p/100).toFixed(2)}`]);
+$("c3").innerHTML=`<div><b>3つ以上の値だと？</b>　店舗A・B・Cに 1・2・3 を振る。</div><table><tr><th>構成（A・B・C）</th><th>「店舗の平均」</th></tr><tr><td>50人・20人・30人</td><td>${((50*1+20*2+30*3)/100).toFixed(2)}</td></tr><tr><td>40人・40人・20人</td><td>${((40*1+40*2+20*3)/100).toFixed(2)}</td></tr></table><div class="mut">構成が違っても平均は同じ 1.80。3つ以上の名義の平均からは、何も読み取れない。</div>`;}
+LK.register("code",{name:"数字のラベル",
+init(){$("cpair").onchange=cRender;LK.stepper($("cn"),cRender);cRender();},
+apply(s){if(s.pair)$("cpair").value=s.pair;if(s.n2!==undefined)LK.setRange("cn",s.n2);cRender();},
+render:cRender,
+value(key){const r=cVals();if(key==="mean")return {v:r.m,text:r.m.toFixed(2)};return {v:r.p,text:r.p.toFixed(0)+"%"};}});
+LK.start("judge");
+window.__LAB__={LK,ITEMS,KINDS,ST,lmean,lmedian,ltop,AGES,bClassMean,ratio,cVals};
+</script>
+</body></html>
