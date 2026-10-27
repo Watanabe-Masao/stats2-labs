@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>時系列ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{min-height:40px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:14px;cursor:pointer}
+.seg button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+</style></head><body>
+<h1>🧪 時系列ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-ratio" class="mode">
+<p class="mut" style="margin:0">2回続けて増減する。増減率は「前の値」を基準にするので、足しても全体の変化にならない。倍率に直して掛ける。</p>
+<input type="range" id="rx0" min="10" max="400" step="10" value="80" data-name="最初">
+<input type="range" id="rr1" min="-50" max="50" step="5" value="25" data-name="1回目" data-unit="%">
+<input type="range" id="rr2" min="-50" max="50" step="5" value="-10" data-name="2回目" data-unit="%">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="rplot"></div>
+<div class="card res key" id="rsum"></div>
+<div id="rform"></div>
+</div>
+<div id="m-growth" class="mode">
+<p class="mut" style="margin:0">毎期の増減率から「平均して毎期何%ずつ」を求める。同じ率を期間の数だけ掛けて、実際の最後の値を再現できるのはどちらか。</p>
+<div class="row ctl"><label>期間の数 <select id="gm" data-key="m"><option value="2">2期間</option><option value="3">3期間</option><option value="4" selected>4期間</option></select></label></div>
+<input type="range" id="g1" min="-40" max="60" step="1" value="25" data-name="1期目" data-unit="%">
+<input type="range" id="g2" min="-40" max="60" step="1" value="-10" data-name="2期目" data-unit="%">
+<input type="range" id="g3" min="-40" max="60" step="1" value="20" data-name="3期目" data-unit="%">
+<input type="range" id="g4" min="-40" max="60" step="1" value="-20" data-name="4期目" data-unit="%">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="gplot"></div>
+<div class="card res key" id="gsum"></div>
+<div id="gform"></div>
+</div>
+<div id="m-ma" class="mode">
+<p class="mut" style="margin:0">前後（または過去）の数点を平均して、細かい上下をならす。窓を広げると滑らかになるが、急な変化に遅れる。</p>
+<div class="row ctl"><label>データ <select id="mdata" data-key="series"></select></label></div>
+<div class="row ctl seg" id="mk"></div>
+<div class="row ctl seg" id="mtype"><button type="button" data-v="center" class="on">中央（当期に置く）</button><button type="button" data-v="trail">後方（過去だけ）</button></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="mplot"></div>
+<div class="card res det"><table id="mtab"></table></div>
+<div class="card res key" id="msum"></div>
+</div>
+<div id="m-acf" class="mode">
+<p class="mut" style="margin:0">8週間（56日）の日販。同じ系列を k 日ずらして自分自身との相関（自己相関）をとる。曜日の波とトレンドを動かすと、どのラグの棒が高くなるか。</p>
+<input type="range" id="aw" min="0" max="10" step="1" value="6" data-name="曜日の波">
+<input type="range" id="at" min="0" max="10" step="1" value="2" data-name="トレンド">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="aplot"></div>
+<div class="card res key" id="asum"></div>
+</div>
+<div id="m-contrib" class="mode">
+<p class="mut" style="margin:0">全体の増減率を、部門ごとの「全体への寄与」に分ける。寄与度＝部門の増減額÷<b>全体の前期の値</b>。足すと全体の増減率になる。</p>
+<input type="range" id="ca0" min="10" max="100" step="1" value="60" data-name="A前期">
+<input type="range" id="ca1" min="10" max="100" step="1" value="66" data-name="A今期">
+<input type="range" id="cb0" min="10" max="100" step="1" value="40" data-name="B前期">
+<input type="range" id="cb1" min="10" max="100" step="1" value="38" data-name="B今期">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="cplot"></div>
+<div class="card res key" id="csum"></div>
+<div id="cform"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-ratio": {"mode": "ratio", "set": {"x0": 80, "r1": 25, "r2": -10}, "task": "80パックが25%増えて、その後10%減った。全体では何%増えたか。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "1.25×0.90＝1.125。2回目の基準は増えた後の100なので、25−10＝15%にはならない。1回目を＋20%、2回目を−20%にして元に戻らないことも確かめる。"}, "s1-growth": {"mode": "growth", "set": {"m": 4, "rates": "25,-10,20,-20"}, "task": "4期の増減率が ＋25%、−10%、＋20%、−20% だった。平均して毎期何%ずつ増えたか（幾何平均）。", "predict": {"type": "number", "key": "gmean", "label": "平均成長率", "unit": "%"}, "why": "累計倍率は 1.25×0.9×1.2×0.8＝1.08。その4乗根から1を引いて約1.94%。算術平均の3.75%で4回増やすと、実際の108より大きくなる。"}, "s2-ma": {"mode": "ma", "set": {"series": "day", "k": 3, "type": "center"}, "task": "日販4週間で、窓を3点から7点に広げると曜日の上下がどう変わるかを見る。次に「後方」にして、最新の日まで計算できるかを確かめる。"}, "s4-acf": {"mode": "acf", "modes": ["acf", "ma"], "task": "曜日の波を0〜10、トレンドを0〜10に動かし、自己相関のどのラグが高くなるかを見る。次に「移動平均」で日販を7点でならす。"}, "s5-acf": {"mode": "acf", "task": "曜日の波だけを大きくしたとき、ラグ7とラグ14の自己相関がどうなるかを見る。トレンドだけを大きくしたときと比べる。"}, "s6-free": {"task": "自分の店の数字の扱い方を、5つのモードで確かめる（増減の重ね方、平均成長率、移動平均、自己相関、寄与度）。"}, "Q-U05T-001": {"mode": "growth", "set": {"m": 2, "rates": "25,-10"}, "task": "80→100→90（＋25%、−10%）の2期間の平均成長率は何%か。", "predict": {"type": "number", "key": "gmean", "label": "平均成長率", "unit": "%"}, "why": "幾何平均の線（青の点線）は2期後にちょうど実際の90に届く。算術平均の線（7.5%）は92.45まで行ってしまう。"}, "Q-U05T-002": {"mode": "ma", "set": {"series": "qty", "k": 3, "type": "center"}, "task": "月別数量 10, 14, 12, 18, 16 の中央3点移動平均で、4月の値はいくつか。", "predict": {"type": "number", "key": "ma:3", "label": "4月の移動平均"}, "why": "(12＋18＋16)÷3。「後方」に切り替えると、5月まで計算できる代わりに、値が後ろ（新しい月）にずれる。"}, "Q-U05T-003": {"mode": "ratio", "set": {"x0": 200, "r1": 25, "r2": -20}, "task": "200個が25%増え、その後20%減った。全体の増減率は何%か。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "1.25×0.8＝1.0 で元の200個に戻る。率の数字（25と20）が違っても、基準が違うので元に戻ることがある。"}, "Q-U05T-004": {"mode": "ratio", "set": {"x0": 100, "r1": 20, "r2": -20}, "task": "100が20%増え、その後20%減った。全体の増減率は何%か。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "2回目の20%減は、増えた後の120を基準にするので24減る。率を足すと0%だが、実際は96。"}, "Q-U05T-005": {"mode": "ma", "set": {"series": "sales", "k": 3, "type": "center"}, "task": "月別売上 20, 26, 23, 29, 32 の中央3点移動平均で、4月の値はいくつか。", "predict": {"type": "number", "key": "ma:3", "label": "4月の移動平均"}, "why": "元の値は上がったり下がったりするが、移動平均は23→26→28と一方向に増える。ならすと傾向が見える。"}, "Q-U05T-010": {"mode": "growth", "set": {"m": 2, "rates": "0,21"}, "task": "1年目0%、2年目＋21%で100→121になった。平均成長率は何%か。", "predict": {"type": "number", "key": "gmean", "label": "平均成長率", "unit": "%"}, "why": "途中の伸び方が違っても、最初と最後と期間の数が同じなら平均成長率は同じ（毎年10%なら100→110→121）。算術平均は10.5%で、121を再現しない。"}, "Q-U05T-020": {"mode": "contrib", "set": {"a0": 60, "a1": 66, "b0": 40, "b1": 38}, "task": "A部門 60→66、B部門 40→38。A部門の寄与度は何ポイントか。", "predict": {"type": "number", "key": "cA", "label": "Aの寄与度", "unit": "ポイント"}, "why": "寄与度の分母は全体の前期（100）。A部門自体の増減率（分母60で10%）とは違う。A・Bの寄与度を足すと全体の＋4%になる。"}, "Q-U05T-023": {"mode": "acf", "set": {"wave": 10, "trend": 0}, "task": "曜日の波がある56日の日販。自己相関の棒がいちばん高いのはどのラグか。", "predict": {"type": "choice", "key": "peak", "label": "いちばん高いのは", "options": ["ラグ1", "ラグ7", "ラグ14"]}, "why": "7日ずらすと同じ曜日どうしが重なるので相関が高い。曜日の波を0にすると、ラグ7の山は消える。"}, "Q-U05T-030": {"mode": "growth", "set": {"m": 3, "rates": "50,-20,10"}, "task": "3年間で＋50%、−20%、＋10%。年平均の成長率（幾何平均）は何%か。", "predict": {"type": "number", "key": "gmean", "label": "年平均", "unit": "%"}, "why": "算術平均の13.3%で3年増やすと実際の132より大きくなる。投資の「年率」は幾何平均で言う。"}, "Q-U05T-032": {"mode": "ma", "set": {"series": "day", "k": 7, "type": "trail"}, "task": "28日の日販に後方7日移動平均を使うと、何日分の値が計算できるか。", "predict": {"type": "number", "key": "count", "label": "計算できる日数", "unit": "日"}, "why": "中央に切り替えても22日分だが、計算できない日が「最初の6日」から「最初と最後の3日ずつ」に変わる。毎朝最新日まで見たいなら後方。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc,f=LK.fmtNum;
+const W=340;
+const pct=v=>(v>=0?"＋":"−")+f(Math.abs(+v.toFixed(2)))+"%";
+function lineSvg(series,opt={}){ // series:[{v:[..], color, dash, dots, label}] x は 0..n-1（null は描かない）
+const n=Math.max(...series.map(s=>s.v.length)),all=series.flatMap(s=>s.v.filter(x=>x!==null));
+let lo=opt.lo??Math.min(...all),hi=opt.hi??Math.max(...all);if(hi-lo<1e-9){hi+=1;lo-=1;}const pad=(hi-lo)*0.12;lo-=pad;hi+=pad;
+const H=opt.h||150,X=i=>22+i*(W-34)/Math.max(1,n-1),Y=v=>H-14-(v-lo)/(hi-lo)*(H-28);
+let s=`<svg viewBox="0 0 ${W} ${H+(opt.labels?16:0)}" width="${W}" role="img" aria-label="${esc(opt.aria||"推移")}">`;
+s+=`<line x1="22" y1="${H-14}" x2="${W-12}" y2="${H-14}" stroke="var(--line)"/>`;
+series.forEach(sr=>{let d="",pen=false;sr.v.forEach((v,i)=>{if(v===null){pen=false;return;}d+=(pen?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1);pen=true;});
+s+=`<path d="${d}" fill="none" stroke="${sr.color}" stroke-width="${sr.w||2.5}" ${sr.dash?`stroke-dasharray="${sr.dash}"`:""} stroke-linejoin="round"/>`;
+if(sr.dots)sr.v.forEach((v,i)=>{if(v!==null)s+=`<circle cx="${X(i)}" cy="${Y(v)}" r="3.5" fill="${sr.color}"/>`;});
+if(sr.values)sr.v.forEach((v,i)=>{if(v!==null)s+=`<text x="${X(i)}" y="${Y(v)-8}" font-size="11" text-anchor="middle" fill="var(--fg)" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${f(+v.toFixed(2))}</text>`;});});
+if(opt.labels)opt.labels.forEach((t,i)=>{s+=`<text x="${X(i)}" y="${H+8}" font-size="11" text-anchor="middle" fill="var(--mut)">${esc(t)}</text>`;});
+return s+"</svg>"+(opt.legend?`<div class="legend mut">${opt.legend.map(([c,t,d])=>`<span><i class="sw" style="background:${c}${d?";opacity:.7":""}"></i>${esc(t)}</span>`).join("")}</div>`:"");}
+function rVals(){const x0=+$("rx0").value,r1=+$("rr1").value/100,r2=+$("rr2").value/100,x1=x0*(1+r1),x2=x1*(1+r2);return {x0,r1,r2,x1,x2,tot:(x2/x0-1)*100,naive:(r1+r2)*100};}
+function rRender(){const R=rVals();
+$("rplot").innerHTML=lineSvg([{v:[R.x0,R.x1,R.x2],color:"var(--acc)",dots:true,values:true}],{labels:["最初","1回目のあと","2回目のあと"],aria:"増減の推移",lo:0});
+$("rsum").innerHTML=`<div>倍率：${f(1+R.r1)}×${f(1+R.r2)}＝<b>${f(+(1+R.tot/100).toFixed(4))}</b> → 全体で <b>${pct(R.tot)}</b></div><div class="mut">増減率を足すと ${pct(R.naive)}（基準が違う率を足しているので、全体の変化ではない）。指数（最初＝100）：100 → ${f(+(100*R.x1/R.x0).toFixed(2))} → ${f(+(100*R.x2/R.x0).toFixed(2))}</div>`;
+$("rform").innerHTML=LK.formula([`${f(R.x0)}×${f(1+R.r1)}＝${f(+R.x1.toFixed(2))}`,`${f(+R.x1.toFixed(2))}×${f(1+R.r2)}＝${f(+R.x2.toFixed(2))}`,`全体の増減率＝${f(+R.x2.toFixed(2))}÷${f(R.x0)}−1＝${f(+(R.tot/100).toFixed(4))}`]);}
+LK.register("ratio",{name:"増減を重ねる",
+init(){["rx0","rr1","rr2"].forEach(id=>LK.stepper($(id),rRender));rRender();},
+apply(s){if(s.x0!==undefined)LK.setRange("rx0",s.x0);if(s.r1!==undefined)LK.setRange("rr1",s.r1);if(s.r2!==undefined)LK.setRange("rr2",s.r2);rRender();},
+render:rRender,
+value(key){const R=rVals();if(key==="x2")return {v:R.x2,text:f(+R.x2.toFixed(2))};if(key==="naive")return {v:R.naive,text:pct(R.naive)};return {v:R.tot,text:pct(R.tot)};}});
+function gVals(){const m=+$("gm").value,rs=[1,2,3,4].slice(0,m).map(i=>+$("g"+i).value/100),x0=100;
+const prod=rs.reduce((p,r)=>p*(1+r),1),g=Math.pow(prod,1/m)-1,a=rs.reduce((s,r)=>s+r,0)/m;
+const actual=[x0],gp=[x0],ap=[x0];rs.forEach((r,i)=>{actual.push(actual[i]*(1+r));gp.push(gp[i]*(1+g));ap.push(ap[i]*(1+a));});
+return {m,rs,prod,g:g*100,a:a*100,actual,gp,ap};}
+function gRender(){const G=gVals();[3,4].forEach(i=>{const w=$("g"+i).closest(".lk-step");if(w)w.style.display=i<=G.m?"":"none";});
+$("gplot").innerHTML=lineSvg([{v:G.actual,color:"var(--fg)",dots:true,w:2},{v:G.gp,color:"var(--acc)",dash:"6 4"},{v:G.ap,color:"var(--acc2)",dash:"2 3"}],
+{labels:G.actual.map((_,i)=>i===0?"最初":i+"期後"),aria:"実際と平均の線",legend:[["var(--fg)","実際"],["var(--acc)","幾何平均の率で毎期"],["var(--acc2)","算術平均の率で毎期"]]});
+const last=G.actual.length-1;
+$("gsum").innerHTML=`<div>幾何平均：(${G.rs.map(r=>f(1+r)).join("×")})^(1/${G.m})−1＝<b>${pct(G.g)}</b> → ${G.m}期後 ${f(+G.gp[last].toFixed(2))}（実際 ${f(+G.actual[last].toFixed(2))}）</div><div>算術平均：(${G.rs.map(r=>pct(r*100)).join("＋")})÷${G.m}＝<b>${pct(G.a)}</b> → ${G.m}期後 ${f(+G.ap[last].toFixed(2))}</div><div class="mut">実際の最後の値を再現するのは幾何平均の線だけ。</div>`;
+$("gform").innerHTML=LK.formula([`累計倍率＝${G.rs.map(r=>f(1+r)).join("×")}＝${f(+G.prod.toFixed(4))}`,`平均倍率＝${f(+G.prod.toFixed(4))}^(1/${G.m})＝${f(+(1+G.g/100).toFixed(4))}`]);}
+LK.register("growth",{name:"平均成長率",
+init(){$("gm").onchange=gRender;[1,2,3,4].forEach(i=>LK.stepper($("g"+i),gRender));gRender();},
+apply(s){if(s.m)$("gm").value=String(s.m);if(s.rates!==undefined)String(s.rates).split(",").forEach((r,i)=>LK.setRange("g"+(i+1),+r));gRender();},
+render:gRender,
+value(key){const G=gVals(),last=G.actual.length-1;if(key==="amean")return {v:G.a,text:pct(G.a)};if(key==="final")return {v:G.actual[last],text:f(+G.actual[last].toFixed(2))};
+return {v:G.g,text:pct(G.g)};}});
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const WEEK=[1.0,0.2,-0.4,-0.6,-0.3,0.6,1.5];   // 曜日の波（月〜日）
+function daily(wave,trend,n=56){const g=rng(11);return Array.from({length:n},(_,t)=>+(50+trend*0.25*t+wave*WEEK[t%7]*2+(g()+g()+g()-1.5)*2.2).toFixed(1));}
+const SERIES={qty:{name:"月別数量（1〜5月）",v:[10,14,12,18,16],lab:["1月","2月","3月","4月","5月"]},sales:{name:"月別売上（1〜5月）",v:[20,26,23,29,32],lab:["1月","2月","3月","4月","5月"]},
+day:{name:"日販（4週間）",v:daily(6,2,28),lab:null}};
+let mK=3,mType="center";
+function maOf(v,k,type){return v.map((_,i)=>{const lo=type==="center"?i-(k-1)/2:i-k+1,hi=type==="center"?i+(k-1)/2:i;if(lo<0||hi>=v.length)return null;let s=0;for(let j=lo;j<=hi;j++)s+=v[j];return s/k;});}
+function mRender(){const S=SERIES[$("mdata").value],ks=S.v.length<=5?[3,5]:[3,7];if(!ks.includes(mK))mK=ks[0];
+$("mk").innerHTML=ks.map(k=>`<button type="button" data-k="${k}" class="${k===mK?"on":""}">${k}点の平均</button>`).join("");
+$("mk").querySelectorAll("button").forEach(b=>b.onclick=()=>{mK=+b.dataset.k;mRender();});
+document.querySelectorAll("#mtype button").forEach(b=>b.classList.toggle("on",b.dataset.v===mType));
+const m=maOf(S.v,mK,mType);
+$("mplot").innerHTML=lineSvg([{v:S.v,color:"var(--mut)",dots:S.v.length<=7,w:1.5},{v:m,color:"var(--acc)",dots:S.v.length<=7,values:S.v.length<=7}],
+{labels:S.lab,aria:"元の値と移動平均",legend:[["var(--mut)","元の値"],["var(--acc)",`${mK}点の${mType==="center"?"中央":"後方"}移動平均`]]});
+const lab=i=>S.lab?S.lab[i]:(i+1)+"日目";
+$("mtab").innerHTML="<tr><th>時点</th><th>元の値</th><th>移動平均</th></tr>"+S.v.map((x,i)=>`<tr><td>${lab(i)}</td><td>${f(x)}</td><td>${m[i]===null?"—":f(+m[i].toFixed(2))}</td></tr>`).join("");
+const nn=m.filter(x=>x!==null).length;
+$("msum").innerHTML=`<div>計算できる時点：<b>${nn}</b>（全 ${S.v.length}）。${mType==="center"?`中央は前後${(mK-1)/2}点ずつ要るので、最初と最後の${(mK-1)/2}点は計算できない（最新の時点は確定しない）。`:`後方は過去${mK-1}点が要るので最初の${mK-1}点は計算できないが、最新の時点まで計算できる。その代わり変化に遅れる。`}</div>`;}
+LK.register("ma",{name:"移動平均",
+init(){$("mdata").innerHTML=Object.entries(SERIES).map(([k,s])=>`<option value="${k}">${s.name}</option>`).join("");$("mdata").onchange=mRender;
+document.querySelectorAll("#mtype button").forEach(b=>b.onclick=()=>{mType=b.dataset.v;mRender();});mRender();},
+apply(s){if(s.series)$("mdata").value=s.series;if(s.k)mK=+s.k;if(s.type)mType=s.type;mRender();},
+render:mRender,
+value(key){const S=SERIES[$("mdata").value],m=maOf(S.v,mK,mType);if(key==="count"){const c=m.filter(x=>x!==null).length;return {v:c,text:c+"時点"};}
+const v=m[+key.split(":")[1]];return v===null?{v:NaN,text:"—"}:{v,text:f(+v.toFixed(2))};}});
+function acf(x,k){const n=x.length,mu=x.reduce((a,b)=>a+b,0)/n;let num=0,den=0;for(let t=0;t<n;t++)den+=(x[t]-mu)**2;for(let t=0;t<n-k;t++)num+=(x[t]-mu)*(x[t+k]-mu);return num/den;}
+function aVals(){const x=daily(+$("aw").value,+$("at").value);return {x,r:Array.from({length:14},(_,i)=>acf(x,i+1))};}
+function aRender(){const A=aVals();
+let s=lineSvg([{v:A.x,color:"var(--acc)",w:1.8}],{aria:"56日の日販",h:110})+'<div class="mut">日販（56日）</div>';
+const H=130,bw=(W-40)/14,Y=v=>H/2-v*(H/2-12);
+s+=`<svg viewBox="0 0 ${W} ${H+18}" width="${W}" role="img" aria-label="自己相関"><line x1="24" y1="${H/2}" x2="${W-8}" y2="${H/2}" stroke="var(--line)"/>`;
+[1,0.5,-0.5,-1].forEach(t=>{s+=`<text x="18" y="${Y(t)+4}" font-size="10" text-anchor="end" fill="var(--mut)">${t}</text>`;});
+A.r.forEach((r,i)=>{const x=28+i*bw,top=Math.min(Y(r),H/2),h=Math.abs(Y(r)-H/2);s+=`<rect x="${x}" y="${top}" width="${bw-4}" height="${Math.max(1,h)}" rx="2" fill="${(i+1)%7===0?"var(--acc2)":"var(--acc)"}" fill-opacity=".85"/><text x="${x+(bw-4)/2}" y="${H+14}" font-size="10" text-anchor="middle" fill="var(--mut)">${i+1}</text>`;});
+$("aplot").innerHTML=s+"</svg>"+'<div class="mut">棒＝ラグ k（日）の自己相関。ラグ7・14（色付き）は1週・2週ずらしたもの。</div>';
+$("asum").innerHTML=`<div>ラグ1：<b>${A.r[0].toFixed(2)}</b>　ラグ7：<b>${A.r[6].toFixed(2)}</b>　ラグ14：<b>${A.r[13].toFixed(2)}</b></div><div class="mut">曜日の波を0にするとラグ7の山が消え、トレンドを大きくすると全部のラグが正に寄る。棒が高くても原因（曜日）が確定したわけではない。</div>`;}
+LK.register("acf",{name:"自己相関",
+init(){LK.stepper($("aw"),aRender);LK.stepper($("at"),aRender);aRender();},
+apply(s){if(s.wave!==undefined)LK.setRange("aw",s.wave);if(s.trend!==undefined)LK.setRange("at",s.trend);aRender();},
+render:aRender,
+value(key){const A=aVals();if(key==="peak"){let b=0;A.r.forEach((r,i)=>{if(r>A.r[b])b=i;});return {v:b+1,text:"ラグ"+(b+1)};}const r=A.r[+key.split(":")[1]-1];return {v:r,text:r.toFixed(2)};}});
+function cVals(){const a0=+$("ca0").value,a1=+$("ca1").value,b0=+$("cb0").value,b1=+$("cb1").value,t0=a0+b0,t1=a1+b1;
+return {a0,a1,b0,b1,t0,t1,tot:(t1-t0)/t0*100,cA:(a1-a0)/t0*100,cB:(b1-b0)/t0*100,rA:(a1-a0)/a0*100,rB:(b1-b0)/b0*100};}
+function cRender(){const C=cVals(),H=120,mx=Math.max(Math.abs(C.cA),Math.abs(C.cB),Math.abs(C.tot),1),Y=v=>H/2-v/mx*(H/2-16);
+const bars=[["A部門",C.cA,"var(--acc)"],["B部門",C.cB,"var(--acc2)"],["全体",C.tot,"var(--fg)"]];
+let s=`<svg viewBox="0 0 ${W} ${H+20}" width="${W}" role="img" aria-label="寄与度"><line x1="10" y1="${H/2}" x2="${W-10}" y2="${H/2}" stroke="var(--line)"/>`;
+bars.forEach(([t,v,c],i)=>{const x=40+i*100,top=Math.min(Y(v),H/2),h=Math.abs(Y(v)-H/2);s+=`<rect x="${x}" y="${top}" width="60" height="${Math.max(1,h)}" rx="3" fill="${c}" fill-opacity=".8"/><text x="${x+30}" y="${v>=0?top-5:top+h+13}" font-size="12" text-anchor="middle" fill="var(--fg)" font-weight="700">${(v>=0?"＋":"−")+f(Math.abs(+v.toFixed(2)))}</text><text x="${x+30}" y="${H+16}" font-size="12" text-anchor="middle" fill="var(--mut)">${t}</text>`;});
+$("cplot").innerHTML=s+"</svg>";
+$("csum").innerHTML=`<div>全体：${C.t0}→${C.t1}、増減率 <b>${pct(C.tot)}</b></div><div>寄与度：A <b>${(C.cA>=0?"＋":"−")+f(Math.abs(+C.cA.toFixed(2)))}</b>ポイント、B <b>${(C.cB>=0?"＋":"−")+f(Math.abs(+C.cB.toFixed(2)))}</b>ポイント（足すと全体の増減率）</div><div class="mut">A部門自体の増減率は ${pct(C.rA)}。寄与度とは分母（全体の前期か、部門の前期か）が違う。</div>`;
+$("cform").innerHTML=LK.formula([`Aの寄与度＝(${C.a1}−${C.a0})÷${C.t0}`,`Bの寄与度＝(${C.b1}−${C.b0})÷${C.t0}`,`合計＝(${C.t1}−${C.t0})÷${C.t0}＝全体の増減率`]);}
+LK.register("contrib",{name:"寄与度",
+init(){["ca0","ca1","cb0","cb1"].forEach(id=>LK.stepper($(id),cRender));cRender();},
+apply(s){[["a0","ca0"],["a1","ca1"],["b0","cb0"],["b1","cb1"]].forEach(([k,id])=>{if(s[k]!==undefined)LK.setRange(id,s[k]);});cRender();},
+render:cRender,
+value(key){const C=cVals(),v={total:C.tot,cA:C.cA,cB:C.cB,rateA:C.rA}[key];return {v,text:(v>=0?"＋":"−")+f(Math.abs(+v.toFixed(2)))};}});
+LK.start("ratio");
+window.__LAB__={LK,rVals,gVals,maOf,acf,daily,SERIES,cVals};
+</script>
+</body></html>
