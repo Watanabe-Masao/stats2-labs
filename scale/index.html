@@ -82,6 +82,8 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-step .lk-name{max-width:5.2em;white-space:nowrap}
 .lk-embed .lk-done .lk-q{display:none}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 .bar{height:14px;border-radius:3px;background:var(--acc);display:inline-block;vertical-align:middle}
 .bar.b{background:var(--acc2)}
 .chip{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:1px 8px;margin:2px;font-size:13px;background:var(--card)}
@@ -136,7 +138,7 @@ body.lk-embed{padding:8px 12px 10px}
 <div class="card res" id="c3"></div>
 </div>
 <script>
-window.__LABPRESETS__={"s1-temp": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "10℃と20℃を、絶対温度（K）で表すと B÷A は何倍になるか。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "単位を変えると0の位置が動くので、何倍の値が変わる（℃では2倍、Kでは約1.035倍）。"}, "s2-judge": {"mode": "judge", "task": "10問続けて判定する。間違えたら「どこで取り違えたか」を読み、どの質問で「はい／いいえ」を取り違えたかを書く。"}, "s4-judge": {"mode": "judge", "modes": ["judge", "bin"], "task": "転用の表の場面のデータを思い浮かべながら判定する。終わったら「階級にまとめる」で、年齢を年代にまとめると何が起きるかも見る。"}, "s5-unit": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "気温・重さ・売上金額・年を切り替え、「何倍が単位で変わる換算」と「変わらない換算」の式の違いを見つける。"}, "s6-free": {"task": "自分の判定や設計を、5つのモードで確かめる。"}, "Q-U04-002": {"mode": "unit", "set": {"kind": "money", "a": 10, "b": 20}, "task": "昨日10万円・今日20万円の売上を、ドルに直すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "ドルで B÷A", "unit": "倍"}, "why": "円→ドルは掛け算だけの換算なので、どの単位でも2倍のまま。データを「気温」に切り替えて 10℃・20℃ と比べる。"}, "Q-U04-010": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 15}, "task": "10℃と15℃。℃では15÷10＝1.5倍。絶対温度（K）で表すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "「1.5倍」は℃という単位を選んだから出た数字にすぎない。どの単位でも同じ情報を持つのは差（5℃）のほう。"}, "Q-U04-020": {"mode": "likert", "set": {"s5": 4.1, "s1": 1}, "task": "「とても満足」を5点ではなく4.1点として平均すると、平均点で上になるのはどちらの店か。", "predict": {"type": "choice", "key": "winner", "label": "平均点で上になる店", "options": ["A店", "B店", "同じ"]}, "why": "1〜5点なら B店（3.80）が上、4.1点にすると A店（3.40）が上。中央値と「満足」以上の割合（40%・70%）は変わらない。"}, "Q-U04-023": {"mode": "code", "set": {"pair": "1,2", "n2": 42}, "task": "男性を1、女性を2と記録した100人の「性別の平均」が1.42。女性の割合は何%か。", "predict": {"type": "number", "key": "prop", "label": "女性の割合", "unit": "%"}, "why": "数字の振り方を変えると平均は変わるが、2つの値しかないなら割合は逆算できる。3つ以上の例も下で見る。"}, "Q-U04-025": {"mode": "bin", "set": {"w": 10}, "task": "20人の年齢を年代（20代・30代…）にまとめ、各年代の真ん中（25歳・35歳…）で平均すると何歳か。", "predict": {"type": "number", "key": "classMean", "label": "年代で計算した平均", "unit": "歳", "tol": 0.05}, "why": "元のデータの平均は41.6歳。まとめると近い値は出るが、同じ年代の中の違いは消える。"}, "Q-U04-040": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "10℃と20℃を華氏（℉）で表すと、B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "℉ で B÷A", "unit": "倍"}, "why": "y＝1.8x＋32 のように足し算の入った変換では比が保たれない。差は 10℃→18℉ と、換算の分（×1.8）だけ変わる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-temp": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "unlock": ["kind"], "task": "10℃と20℃を、絶対温度（K）で表すと B÷A は何倍になるか。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "単位を変えると0の位置が動くので、何倍の値が変わる（℃では2倍、Kでは約1.035倍）。"}, "s1-exA": {"mode": "judge", "set": {"items": ["店番", "満足度（不満・普通・満足）", "気温（℃）", "販売個数"]}, "task": "例題Aの4つを、4つの質問に上から答えて判定し直す。表を見ずに、どの質問で止まるかを確かめる。"}, "s2-judge": {"mode": "judge", "task": "10問続けて判定する。間違えたら「どこで取り違えたか」を読み、どの質問で「はい／いいえ」を取り違えたかを書く。"}, "s4-judge": {"mode": "judge", "modes": ["judge", "bin"], "task": "転用の表の場面のデータを思い浮かべながら判定する。終わったら「階級にまとめる」で、年齢を年代にまとめると何が起きるかも見る。"}, "s5-unit": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "気温・重さ・売上金額・年を切り替え、「何倍が単位で変わる換算」と「変わらない換算」の式の違いを見つける。"}, "s6-free": {"task": "自分の判定や設計を、5つのモードで確かめる。"}, "Q-U04-002": {"mode": "unit", "set": {"kind": "money", "a": 10, "b": 20}, "task": "昨日10万円・今日20万円の売上を、ドルに直すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "ドルで B÷A", "unit": "倍"}, "why": "円→ドルは掛け算だけの換算で、0円はどの単位でも「売上が無い」。だから何倍はどの単位でも2倍のまま。"}, "Q-U04-003": {"mode": "judge", "set": {"item": "血液型（A・B・O・AB）"}, "task": "血液型を、4つの質問に上から答えて判定する。続けて「次のデータ」で、ほかの名義尺度と見分ける練習をする。"}, "Q-U04-004": {"mode": "judge", "set": {"item": "売上ランキングの順位"}, "task": "売上ランキングの順位を、4つの質問に上から答えて判定する。質問3（差に同じ意味があるか）で「いいえ」になる理由を確かめる。"}, "Q-U04-010": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 15}, "task": "10℃と15℃。℃では15÷10＝1.5倍。絶対温度（K）で表すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "「1.5倍」は℃という単位を選んだから出た数字にすぎない。どの単位でも同じ情報を持つのは差（5℃）のほう。"}, "Q-U04-020": {"mode": "likert", "set": {"s5": 4.1, "s1": 1}, "task": "「とても満足」を5点ではなく4.1点として平均すると、平均点で上になるのはどちらの店か。", "predict": {"type": "choice", "key": "winner", "label": "平均点で上になる店", "options": ["A店", "B店", "同じ"]}, "why": "1〜5点なら B店（3.80）が上、4.1点にすると A店（3.40）が上。中央値と「満足」以上の割合（40%・70%）は変わらない。"}, "Q-U04-023": {"mode": "code", "set": {"pair": "1,2", "n2": 42}, "task": "男性を1、女性を2と記録した100人の「性別の平均」が1.42。女性の割合は何%か。", "predict": {"type": "number", "key": "prop", "label": "女性の割合", "unit": "%"}, "why": "数字の振り方を変えると平均は変わるが、2つの値しかないなら割合は逆算できる。3つ以上の例も下で見る。"}, "Q-U04-025": {"mode": "bin", "set": {"w": 10}, "task": "20人の年齢を年代（20代・30代…）にまとめ、各年代の真ん中（25歳・35歳…）で平均すると何歳か。", "predict": {"type": "number", "key": "classMean", "label": "年代で計算した平均", "unit": "歳", "tol": 0.05}, "why": "元のデータの平均は41.6歳。まとめると近い値は出るが、同じ年代の中の違いは消える。"}, "Q-U04-040": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "10℃と20℃を華氏（℉）で表すと、B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "℉ で B÷A", "unit": "倍"}, "why": "y＝1.8x＋32 のように足し算の入った変換では比が保たれない。差は 10℃→18℉ と、換算の分（×1.8）だけ変わる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const $=id=>document.getElementById(id);
@@ -165,7 +167,7 @@ input._lkUpd=upd;upd();return wrap;}
 function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
 function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
 function fixPicks(){if(!cfg.predict||!cfg.set)return;
-Object.keys(cfg.set).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
 const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
 const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
 el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
@@ -245,9 +247,10 @@ const ITEMS=[
 ["待ち時間（分）",3,"0分は「待っていない」。10分は5分の2倍と言える（連続型）"],
 ["来店客数",3,"0人は「来ていない」。数え上げる量（離散型）"]];
 const QS=["区別するためのラベルだけ？","順番に意味はあるが、間隔はそろっていない？","差に同じ意味があるが、0が「無い」ではない？","0が「無い」を表し、何倍と言える？"];
-let jOrder=[],jPos=-1,jStep=0,jDone=false,jRight=0,jTotal=0,jFirst=null;
+let jOrder=[],jPos=-1,jStep=0,jDone=false,jRight=0,jTotal=0,jQueue=[],jSet=0;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-function jNext(){if(jPos<0||jPos>=jOrder.length-1){jOrder=shuffle([...ITEMS.keys()]);if(jFirst!==null){jOrder.splice(jOrder.indexOf(jFirst),1);jOrder.unshift(jFirst);jFirst=null;}jPos=0;}else jPos++;jStep=0;jDone=false;jRender();}
+function jNext(){if(jQueue.length){jOrder=[jQueue.shift()];jPos=0;}
+else if(jPos<0||jPos>=jOrder.length-1){jOrder=shuffle([...ITEMS.keys()]);jPos=0;}else jPos++;jStep=0;jDone=false;jRender();}
 function jRender(){const it=ITEMS[jOrder[jPos]];$("jitem").textContent=it[0];
 let h="";for(let k=0;k<jStep;k++)h+=`<div class="mut">質問${k+1}：${QS[k]} → いいえ</div>`;
 if(!jDone){h+=`<div><b>質問${jStep+1}：${QS[jStep]}</b></div><div class="qbtns"><button class="act" id="jy">はい</button><button class="sub" id="jn"${jStep===3?" disabled":""}>いいえ</button></div>`;}
@@ -255,12 +258,14 @@ else{const pick=jStep,ans=it[1],ok=pick===ans;
 h+=`<div>質問${pick+1}：${QS[pick]} → はい</div><div class="big">あなたの判定：${SCALES[pick]}尺度</div>`+
 (ok?`<div class="ok">◯ 正しい</div>`:`<div class="ng">✕ 正しくは ${SCALES[ans]}尺度</div><div><b>どこで取り違えたか：</b>${FEED[ans][pick]}</div>`)+
 `<div style="margin-top:4px">${it[2]}</div><div class="mut">${SCALES[ans]}尺度で意味のある計算：${CALC[ans]}</div>`;}
-$("jq").innerHTML=h;$("jscore").textContent=jTotal?`${jTotal}問中 ${jRight}問 正解`:"";
+$("jq").innerHTML=h;$("jscore").textContent=(jTotal?`${jTotal}問中 ${jRight}問 正解`:"")+(jSet&&jTotal<jSet?`（指定の${jSet}件のうち ${Math.min(jTotal+1,jSet)}件目）`:"");
 if(!jDone){$("jy").onclick=()=>{jDone=true;jTotal++;if(jStep===ITEMS[jOrder[jPos]][1])jRight++;jRender();};
 $("jn").onclick=()=>{if(jStep<3){jStep++;jRender();}};}}
 LK.register("judge",{name:"尺度を判定",
 init(){$("jnext").onclick=jNext;jNext();},
-apply(s){if(s.item){const i=ITEMS.findIndex(x=>x[0]===s.item);if(i>=0){jFirst=i;jPos=-1;jNext();}}},
+apply(s){const list=s.items||(s.item?[s.item]:[]);jQueue=list.map(n=>ITEMS.findIndex(x=>x[0]===n));
+if(jQueue.some(i=>i<0))console.error("尺度ラボ：ITEMS にないデータ "+list.filter((n,k)=>jQueue[k]<0).join("・"));
+jQueue=jQueue.filter(i=>i>=0);jSet=jQueue.length;jPos=-1;jNext();},
 value(){return {v:jRight,text:`${jTotal}問中 ${jRight}問`};}});
 const KINDS={
 temp:{min:-10,max:40,a:10,b:20,unit:"℃",scale:2,units:[["摂氏（℃）",x=>x,"x"],["絶対温度（K）",x=>x+273.15,"x＋273.15"],["華氏（℉）",x=>x*1.8+32,"1.8x＋32"]]},
