@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>散らばりラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+</style></head><body>
+<h1>🧪 散らばりラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-dev" class="mode">
+<p class="mut" style="margin:0">平均からのずれ（偏差）を線で見る。偏差の合計はいつも0なので、2乗して足す（偏差平方和）。全部の値を b 倍して a を足すと、散らばりの数はどう変わるか。</p>
+<div class="row ctl"><label>データ <select id="ddata" data-key="data"></select></label></div>
+<input type="range" id="db" min="0.5" max="3" step="0.1" value="1" data-name="b 倍">
+<input type="range" id="da" min="-20" max="40" step="1" value="0" data-name="a を足す">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="dplot"></div>
+<div class="card res key" id="dsum"></div>
+<div class="card res det"><table id="dtab"></table></div>
+<div id="dform"></div>
+</div>
+<div id="m-cv" class="mode">
+<p class="mut" style="margin:0">平均の大きさが違う2つの散らばりを比べる。標準偏差は平均が大きいほど大きくなりやすいので、平均で割った変動係数（CV）で比べる。</p>
+<input type="range" id="cmp" min="1" max="3000" step="1" value="100" data-name="Pの平均">
+<input type="range" id="csp" min="0" max="1000" step="1" value="10" data-name="Pの標準偏差">
+<input type="range" id="cmq" min="1" max="3000" step="1" value="20" data-name="Qの平均">
+<input type="range" id="csq" min="0" max="1000" step="1" value="4" data-name="Qの標準偏差">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="cplot"></div>
+<div class="card res key" id="csum"></div>
+</div>
+<div id="m-unb" class="mode">
+<p class="mut" style="margin:0">母集団 2, 4, 6, 8, 10（母分散 8）から大きさ n の標本を取る。取り方は全部で 5ⁿ 通り（同じ値を何度でも取れる）。全部の標本で n で割る分散と n−1 で割る分散を計算し、平均を比べる。</p>
+<input type="range" id="un" min="2" max="6" step="1" value="2" data-name="標本の大きさ n">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="uplot"></div>
+<div class="card res key" id="usum"></div>
+</div>
+<div id="m-gini" class="mode">
+<p class="mut" style="margin:0">4店の売上を小さい順に並べ、累積の店の割合（横）と累積の売上の割合（縦）を結ぶ（ローレンツ曲線）。対角線との間が広いほど偏っている。</p>
+<input type="range" id="g1" min="0" max="20" step="1" value="1" data-name="1店目">
+<input type="range" id="g2" min="0" max="20" step="1" value="1" data-name="2店目">
+<input type="range" id="g3" min="0" max="20" step="1" value="2" data-name="3店目">
+<input type="range" id="g4" min="0" max="20" step="1" value="6" data-name="4店目">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="gplot"></div>
+<div class="card res key" id="gsum"></div>
+<div id="gform"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-dev": {"mode": "dev", "set": {"data": "B"}, "task": "売場Bの5日間 4, 7, 10, 13, 16 個の不偏分散（n−1 で割る）はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −6, −3, 0, 3, 6 を2乗して足すと90。n−1＝4 で割って22.5。n で割ると18。標準偏差は √22.5≒4.74個。"}, "s1-scale": {"mode": "dev", "set": {"data": "B", "b": 2}, "task": "売場Bの5日間の販売数を全部2倍にすると、不偏分散（もとは22.5）はいくつになるか。予想したら、a（足す数）も動かしてみる。", "predict": {"type": "number", "key": "s2", "label": "2倍したあとの不偏分散"}, "why": "偏差がどれも2倍になり、2乗するので分散は4倍の90。標準偏差は2倍。a を足しても全部が同じだけずれるので、偏差も分散も変わらない。"}, "s4-cv": {"mode": "cv", "modes": ["cv", "gini"], "task": "平均と標準偏差を動かして、標準偏差が大きくても CV が小さくなる組み合わせを作る。次に「ジニ係数」で、売上が1店に集まるほど係数がどうなるかを見る。"}, "s5-unb": {"mode": "unb", "task": "n を2から6まで動かし、n で割る分散の平均が母分散8のどれだけになるか（(n−1)/n 倍）を確かめる。"}, "s6-free": {"task": "自分の店の数字で、散らばりの数の選び方を4つのモードで確かめる（偏差と分散、変動係数、n か n−1 か、ジニ係数）。"}, "Q-U07-001": {"mode": "dev", "set": {"data": "A"}, "task": "売場Aの5日間 8, 9, 10, 11, 12 個の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −2〜2 を2乗して足すと10、4で割って2.5。売場B（22.5）の9分の1で、標準偏差は3分の1。"}, "Q-U07-002": {"mode": "cv", "set": {"mP": 100, "sP": 10, "mQ": 20, "sQ": 4}, "task": "商品Pは平均100個・標準偏差10個、商品Qは平均20個・標準偏差4個。相対的にばらつきが大きいのはどちらか。", "predict": {"type": "choice", "key": "bigger", "label": "CVが大きいのは", "options": ["P", "Q", "同じ"]}, "why": "標準偏差は P の10個の方が大きいが、平均で割ると P は0.10、Q は0.20。Q の平均を100にすると、CV は0.04まで下がる。"}, "Q-U07-003": {"mode": "dev", "set": {"data": "t3"}, "task": "2, 4, 6 の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −2, 0, 2 を2乗して足すと8、n−1＝2 で割って4。標準偏差は2。"}, "Q-U07-004": {"mode": "dev", "set": {"data": "t4"}, "task": "1, 3, 5, 7 の n で割る分散はいくつか。予想したら b を2にして、分散が何倍になるかも見る。", "predict": {"type": "number", "key": "v", "label": "n で割る分散"}, "why": "偏差平方和20を4で割って5。b＝2 にすると偏差平方和は80になり、分散は4倍の20。"}, "Q-U07-005": {"mode": "dev", "set": {"data": "ry"}, "task": "Y（0, 0, 5, 10, 10）の偏差平方和はいくつか。予想したら X に切り替えて比べる。", "predict": {"type": "number", "key": "ss", "label": "偏差平方和"}, "why": "どの点も平均5から離れているので、偏差平方和は X（50）の2倍。範囲（10）は同じでも散らばりは違う。"}, "Q-U07-010": {"mode": "dev", "set": {"data": "B"}, "task": "4, 7, 10, 13, 16 の偏差平方和はいくつか（くわしくの式に「近道」の計算が出る）。", "predict": {"type": "number", "key": "ss", "label": "偏差平方和"}, "why": "偏差の2乗を足しても、Σx²−(Σx)²÷n で計算しても90。平均が割り切れないデータでは近道の方が計算しやすい。"}, "Q-U07-011": {"mode": "dev", "set": {"data": "temp", "b": 1.8, "a": 32}, "task": "18, 20, 22℃ を華氏（1.8倍して32を足す）にしたとき、標準偏差（√不偏分散）は何°Fか。", "predict": {"type": "number", "key": "s", "label": "標準偏差", "unit": "°F"}, "why": "32を足しても散らばりは変わらない。1.8倍したので標準偏差も1.8倍（2→3.6）、分散は1.8²倍（4→12.96）。"}, "Q-U07-012": {"mode": "dev", "set": {"data": "visit"}, "task": "無作為に選んだ5日の来店数 20, 22, 24, 26, 28 人の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差平方和40を n−1＝4 で割って10。母分散の推定に使うので n−1 で割る（n で割ると8）。"}, "Q-U07-020": {"mode": "cv", "set": {"mP": 3000, "sP": 600, "mQ": 300, "sQ": 90}, "task": "P＝メロン（平均3,000円・標準偏差600円）、Q＝みかん（平均300円・標準偏差90円）。みかんの CV はいくつか。", "predict": {"type": "number", "key": "cvQ", "label": "みかんの CV"}, "why": "90÷300＝0.3。メロンの0.2より大きい。標準偏差の大小と CV の大小は逆になることがある。"}, "Q-U07-021": {"mode": "dev", "set": {"data": "B", "b": 2, "a": 3}, "task": "売場Bの販売数（不偏分散22.5）を全部2倍して3を足すと、不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "2倍で4倍の90。3を足しても変わらない。a だけを動かして、分散が変わらないことも確かめる。"}, "Q-U07-022": {"mode": "gini", "set": {"sales": "1,1,2,6"}, "task": "4店の売上 1, 1, 2, 6 のジニ係数はいくつか。", "predict": {"type": "number", "key": "gini", "label": "ジニ係数"}, "why": "曲線の下の面積は0.3。対角線の下（0.5）との差0.2を2倍して0.4。4店を同じ売上にすると0になる。"}, "Q-U07-023": {"mode": "unb", "set": {"n": 2}, "task": "母集団 2, 4, 6, 8, 10（母分散8）から大きさ2の標本を取る全25通りで、n で割る分散の平均は母分散より大きいか小さいか。", "predict": {"type": "choice", "key": "bias", "label": "母分散と比べて", "options": ["小さい", "等しい", "大きい"]}, "why": "n で割る分散の平均は4（母分散の半分）、n−1 で割るとちょうど8。n を大きくすると差は縮むが、(n−1)/n 倍は残る。"}, "Q-U07-030": {"mode": "dev", "set": {"data": "fundB"}, "task": "投資信託Bの年リターン −4, 4, 12% の標準偏差（√不偏分散）は何%か。", "predict": {"type": "number", "key": "s", "label": "標準偏差", "unit": "%"}, "why": "偏差 −8, 0, 8 を2乗して足すと128、2で割って64、平方根8%。A（2, 4, 6%）の4倍。"}, "Q-U07-031": {"mode": "cv", "set": {"mP": 2, "sP": 3, "mQ": 20, "sQ": 3}, "task": "P＝都市X（平均2℃・標準偏差3℃）、Q＝都市Y（平均20℃・標準偏差3℃）。X の CV はいくつか。計算してから、意味がある数かを考える。", "predict": {"type": "number", "key": "cvP", "label": "X の CV"}, "why": "計算では1.5になるが、平均の2℃は0℃の決め方しだいで変わる。平均を0に近づけると CV はいくらでも大きくなる。摂氏の気温では標準偏差（どちらも3℃）で比べる。"}, "Q-U07-040": {"mode": "unb", "set": {"n": 3}, "task": "大きさ3の標本の全125通りで、n で割る分散の平均はいくつか。", "predict": {"type": "number", "key": "av", "label": "n で割る分散の平均"}, "why": "(n−1)/n＝2/3 倍で約5.33。n を6まで動かすと、2/3→5/6 と母分散8に近づく。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc,f=LK.fmtNum;
+const W=340;
+const r2=v=>+v.toFixed(2);
+const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+const ssq=a=>{const m=mean(a);return a.reduce((s,x)=>s+(x-m)**2,0);};
+function stats(a){const n=a.length,m=mean(a),ss=ssq(a),v=ss/n,s2=ss/(n-1);return {n,m,ss,v,s2,s:Math.sqrt(s2),sdn:Math.sqrt(v),cv:Math.sqrt(s2)/m,sx2:a.reduce((s,x)=>s+x*x,0),sx:a.reduce((s,x)=>s+x,0)};}
+const DATA={
+B:{name:"売場B（4〜16個）",v:[4,7,10,13,16],unit:"個"},
+A:{name:"売場A（8〜12個）",v:[8,9,10,11,12],unit:"個"},
+t3:{name:"3個（2, 4, 6）",v:[2,4,6],unit:""},
+t4:{name:"4個（1, 3, 5, 7）",v:[1,3,5,7],unit:""},
+rx:{name:"X（0, 5, 5, 5, 10）",v:[0,5,5,5,10],unit:""},
+ry:{name:"Y（0, 0, 5, 10, 10）",v:[0,0,5,10,10],unit:""},
+temp:{name:"3日の気温（18, 20, 22℃）",v:[18,20,22],unit:""},
+visit:{name:"5日の来店数（20〜28人）",v:[20,22,24,26,28],unit:"人"},
+fundB:{name:"投信Bの年リターン（−4, 4, 12%）",v:[-4,4,12],unit:"%"}};
+function dVals(){const D=DATA[$("ddata").value],b=+$("db").value,a=+$("da").value,x=D.v.map(v=>+(b*v+a).toFixed(6));return {D,b,a,x,...stats(x)};}
+function dRender(){const R=dVals(),x=R.x,lo=Math.min(...x,R.m)-1,hi=Math.max(...x,R.m)+1,X=v=>20+(v-lo)/(hi-lo)*(W-40),n=x.length,H=40+n*18;
+let s=`<svg viewBox="0 0 ${W} ${H+20}" width="${W}" role="img" aria-label="偏差の図">`;
+s+=`<line x1="${X(R.m)}" y1="6" x2="${X(R.m)}" y2="${H}" stroke="var(--acc2)" stroke-width="2"/><text x="${Math.min(W-30,Math.max(30,X(R.m)))}" y="${H+14}" font-size="11" text-anchor="middle" fill="var(--acc2)" font-weight="700">平均 ${f(r2(R.m))}</text>`;
+x.forEach((v,i)=>{const y=18+i*18;s+=`<line x1="${X(R.m)}" y1="${y}" x2="${X(v)}" y2="${y}" stroke="var(--acc)" stroke-width="2" stroke-dasharray="4 3"/><circle cx="${X(v)}" cy="${y}" r="5" fill="var(--fg)"/><text x="${X(v)+(v>=R.m?9:-9)}" y="${y+4}" font-size="10" text-anchor="${v>=R.m?"start":"end"}" fill="var(--mut)">${f(r2(v))}</text>`;});
+$("dplot").innerHTML=s+`</svg><div class="mut">点線の長さ＝偏差（値−平均）。左右の点線を足すと0になる。</div>`;
+const u=R.D.unit,tr=(R.b!==1||R.a!==0)?`<div class="mut">変換 ${f(R.b)}x${R.a>=0?"＋":"−"}${Math.abs(R.a)}：平均は ${f(R.b)}倍して${R.a>=0?"足し":"引き"}、分散は ${f(r2(R.b*R.b))}倍、標準偏差は ${f(R.b)}倍。a は散らばりを変えない。</div>`:"";
+$("dsum").innerHTML=`<div>偏差平方和 <b>${f(r2(R.ss))}</b>　分散（n）<b>${f(r2(R.v))}</b>　不偏分散（n−1）<b>${f(r2(R.s2))}</b></div><div>標準偏差 s＝√${f(r2(R.s2))}≒<b>${f(r2(R.s))}</b>${u}${R.m>0?`　CV≒<b>${f(r2(R.cv))}</b>`:""}</div>${tr}`;
+$("dtab").innerHTML="<tr><th>xᵢ</th><th>xᵢ−x̄</th><th>(xᵢ−x̄)²</th></tr>"+x.map(v=>`<tr><td>${f(r2(v))}</td><td>${f(r2(v-R.m))}</td><td>${f(r2((v-R.m)**2))}</td></tr>`).join("")+`<tr><td><b>合計</b></td><td>0</td><td><b>${f(r2(R.ss))}</b></td></tr>`;
+$("dform").innerHTML=LK.formula([`平均＝${f(r2(R.sx))}÷${n}＝${f(r2(R.m))}`,`分散（n）＝${f(r2(R.ss))}÷${n}＝${f(r2(R.v))}、不偏分散＝${f(r2(R.ss))}÷${n-1}＝${f(r2(R.s2))}`,`近道：Σx²−(Σx)²÷n＝${f(r2(R.sx2))}−${f(r2(R.sx))}²÷${n}＝${f(r2(R.ss))}`]);}
+LK.register("dev",{name:"偏差と分散",
+init(){$("ddata").innerHTML=Object.entries(DATA).map(([k,d])=>`<option value="${k}">${d.name}</option>`).join("");$("ddata").onchange=dRender;
+LK.stepper($("db"),dRender);LK.stepper($("da"),dRender);dRender();},
+apply(s){if(s.data)$("ddata").value=s.data;if(s.b!==undefined)LK.setRange("db",s.b);if(s.a!==undefined)LK.setRange("da",s.a);dRender();},
+render:dRender,
+value(key){const R=dVals(),v={ss:R.ss,v:R.v,s2:R.s2,s:R.s,sdn:R.sdn,cv:R.cv,mean:R.m}[key];return {v,text:f(r2(v))};}});
+function cVals(){const mp=+$("cmp").value,sp=+$("csp").value,mq=+$("cmq").value,sq=+$("csq").value;return {mp,sp,mq,sq,cp:sp/mp,cq:sq/mq};}
+function cRender(){const C=cVals(),H=120,mx=Math.max(C.cp,C.cq,0.01),bars=[["P",C.cp,"var(--acc)"],["Q",C.cq,"var(--acc2)"]];
+let s=`<svg viewBox="0 0 ${W} ${H+20}" width="${W}" role="img" aria-label="変動係数の比較"><line x1="10" y1="${H}" x2="${W-10}" y2="${H}" stroke="var(--line)"/>`;
+bars.forEach(([t,v,c],i)=>{const h=v/mx*(H-30),x=60+i*130;s+=`<rect x="${x}" y="${H-h}" width="80" height="${Math.max(1,h)}" rx="3" fill="${c}" fill-opacity=".75"/><text x="${x+40}" y="${H-h-6}" font-size="13" text-anchor="middle" fill="var(--fg)" font-weight="700">${f(r2(v))}</text><text x="${x+40}" y="${H+15}" font-size="12" text-anchor="middle" fill="var(--mut)">${t}のCV</text>`;});
+$("cplot").innerHTML=s+"</svg>";
+const big=C.cp>C.cq+1e-12?"P":C.cq>C.cp+1e-12?"Q":"同じ";
+$("csum").innerHTML=`<div>CV：P＝${C.sp}÷${C.mp}≒<b>${f(r2(C.cp))}</b>、Q＝${C.sq}÷${C.mq}≒<b>${f(r2(C.cq))}</b></div><div class="mut">${C.sp===C.sq?"標準偏差は同じ。":`標準偏差だけなら ${C.sp>C.sq?"P":"Q"} の方が大きい。`}平均に対する相対的なばらつき（CV）が大きいのは <b>${big}</b>。CVは0に意味がある正の量で使う。</div>`;}
+LK.register("cv",{name:"変動係数",
+init(){["cmp","csp","cmq","csq"].forEach(id=>LK.stepper($(id),cRender));cRender();},
+apply(s){[["mP","cmp"],["sP","csp"],["mQ","cmq"],["sQ","csq"]].forEach(([k,id])=>{if(s[k]!==undefined)LK.setRange(id,s[k]);});cRender();},
+render:cRender,
+value(key){const C=cVals();if(key==="bigger"){const t=C.cp>C.cq+1e-12?"P":C.cq>C.cp+1e-12?"Q":"同じ";return {v:C.cp-C.cq,text:t};}const v=key==="cvQ"?C.cq:C.cp;return {v,text:f(r2(v))};}});
+const POP=[2,4,6,8,10],SIG2=8;
+function uVals(){const n=+$("un").value;let sv=0,ss2=0,cnt=0,small=0;const idx=Array(n).fill(0);
+while(true){const x=idx.map(i=>POP[i]),q=ssq(x);sv+=q/n;ss2+=q/(n-1);if(q/n<SIG2)small++;cnt++;
+let k=n-1;while(k>=0&&idx[k]===POP.length-1){idx[k]=0;k--;}if(k<0)break;idx[k]++;}
+return {n,cnt,av:sv/cnt,as2:ss2/cnt,small};}
+function uRender(){const U=uVals(),H=130,mx=10,Y=v=>H-v/mx*(H-20),bars=[["nで割る",U.av,"var(--acc2)"],["n−1で割る",U.as2,"var(--acc)"]];
+let s=`<svg viewBox="0 0 ${W} ${H+22}" width="${W}" role="img" aria-label="分散の平均と母分散"><line x1="10" y1="${H}" x2="${W-10}" y2="${H}" stroke="var(--line)"/>`;
+bars.forEach(([t,v,c],i)=>{const x=50+i*140;s+=`<rect x="${x}" y="${Y(v)}" width="90" height="${H-Y(v)}" rx="3" fill="${c}" fill-opacity=".7"/><text x="${x+45}" y="${Y(v)-6}" font-size="13" text-anchor="middle" fill="var(--fg)" font-weight="700">${f(r2(v))}</text><text x="${x+45}" y="${H+16}" font-size="12" text-anchor="middle" fill="var(--mut)">${t}</text>`;});
+s+=`<line x1="20" y1="${Y(SIG2)}" x2="${W-14}" y2="${Y(SIG2)}" stroke="var(--fg)" stroke-width="2" stroke-dasharray="6 4"/><text x="${W-16}" y="${Y(SIG2)-5}" font-size="11" text-anchor="end" fill="var(--fg)">母分散 8</text>`;
+$("uplot").innerHTML=s+"</svg>";
+$("usum").innerHTML=`<div>全 ${U.cnt.toLocaleString("ja-JP")} 通りの平均：n で割る分散 <b>${f(r2(U.av))}</b>、n−1 で割る分散 <b>${f(r2(U.as2))}</b>（母分散 8）</div><div class="mut">n で割ると平均して母分散の (n−1)/n＝${f(r2((U.n-1)/U.n))} 倍に小さくなる。n を大きくすると差は縮む。1回の標本では母分散より大きくなることもある（n で割って8未満の標本は ${Math.round(U.small/U.cnt*100)}%）。</div>`;}
+LK.register("unb",{name:"n か n−1 か",
+init(){LK.stepper($("un"),uRender);uRender();},
+apply(s){if(s.n!==undefined)LK.setRange("un",s.n);uRender();},
+render:uRender,
+value(key){const U=uVals();if(key==="bias"){const t=U.av<SIG2-1e-9?"小さい":U.av>SIG2+1e-9?"大きい":"等しい";return {v:U.av-SIG2,text:t};}
+if(key==="ratio"){const v=U.av/SIG2;return {v,text:f(r2(v))};}const v=key==="as2"?U.as2:U.av;return {v,text:f(r2(v))};}});
+function gVals(){const x=[1,2,3,4].map(i=>+$("g"+i).value).sort((a,b)=>a-b),t=x.reduce((a,b)=>a+b,0),n=x.length;let c=0;const pts=[[0,0]];
+x.forEach((v,i)=>{c+=v;pts.push([(i+1)/n,t?c/t:(i+1)/n]);});let area=0;for(let i=1;i<pts.length;i++)area+=(pts[i][0]-pts[i-1][0])*(pts[i][1]+pts[i-1][1])/2;
+return {x,t,pts,area,gini:2*(0.5-area)};}
+function gRender(){const G=gVals(),S=200,O=20,X=v=>O+v*S,Y=v=>O+S-v*S;
+let s=`<svg viewBox="0 0 ${W} ${S+50}" width="${W}" role="img" aria-label="ローレンツ曲線"><rect x="${O}" y="${O}" width="${S}" height="${S}" fill="none" stroke="var(--line)"/>`;
+s+=`<polygon points="${[[0,0],[1,1],...G.pts.slice().reverse()].map(p=>X(p[0])+","+Y(p[1])).join(" ")}" fill="var(--acc2)" fill-opacity=".18"/>`;
+s+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(1)}" stroke="var(--mut)" stroke-dasharray="5 4"/>`;
+s+=`<polyline points="${G.pts.map(p=>X(p[0])+","+Y(p[1])).join(" ")}" fill="none" stroke="var(--acc)" stroke-width="2.5"/>`;
+G.pts.forEach(p=>{s+=`<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3.5" fill="var(--acc)"/>`;});
+G.pts.slice(1).forEach(p=>{s+=`<text x="${X(p[0])-4}" y="${Y(p[1])-6}" font-size="10" text-anchor="end" fill="var(--fg)">${f(r2(p[1]))}</text><text x="${X(p[0])}" y="${O+S+14}" font-size="10" text-anchor="middle" fill="var(--mut)">${f(p[0])}</text>`;});
+s+=`<text x="${O+S+8}" y="${O+40}" font-size="11" fill="var(--mut)">色の部分×2</text><text x="${O+S+8}" y="${O+56}" font-size="11" fill="var(--mut)">＝ジニ係数</text>`;
+$("gplot").innerHTML=s+`<text x="${O+S/2}" y="${S+48}" font-size="11" text-anchor="middle" fill="var(--mut)">累積の店の割合</text></svg>`;
+$("gsum").innerHTML=G.t?`<div>ジニ係数＝2×(0.5−${f(r2(G.area))})＝<b>${f(r2(G.gini))}</b></div><div class="mut">0に近いほど均等、1に近いほど一部の店に偏る。全店同じ売上なら曲線は対角線に重なり0。</div>`:`<div>売上の合計が0なので計算できない。</div>`;
+$("gform").innerHTML=LK.formula([`小さい順：${G.x.join(", ")}（合計${G.t}）`,`累積の売上の割合：${G.pts.slice(1).map(p=>f(r2(p[1]))).join(", ")}`,`曲線の下の面積（台形）＝${f(+G.area.toFixed(4))}`]);}
+LK.register("gini",{name:"ジニ係数",
+init(){[1,2,3,4].forEach(i=>LK.stepper($("g"+i),gRender));gRender();},
+apply(s){if(s.sales!==undefined)String(s.sales).split(",").forEach((v,i)=>LK.setRange("g"+(i+1),+v));gRender();},
+render:gRender,
+value(key){const G=gVals();const v=key==="area"?G.area:G.gini;return {v,text:f(r2(v))};}});
+LK.start("dev");
+window.__LAB__={LK,stats,ssq,DATA,dVals,cVals,uVals,gVals};
+</script>
+</body></html>
