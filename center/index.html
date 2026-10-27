@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>代表値ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+</style></head><body>
+<h1>🧪 代表値ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-mm" class="mode">
+<p class="mut" style="margin:0">平均・中央値・最頻値を同じ図に置く。いちばん大きい値を動かすと、どれが大きく動くか。</p>
+<div class="row ctl"><label>データ <select id="mdata" data-key="data"></select></label></div>
+<input type="range" id="mtop" min="0" max="60" step="1" value="17" data-name="最大の値">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="mplot"></div>
+<div class="card res key" id="msum"></div>
+<div id="mform"></div>
+</div>
+<div id="m-wmean" class="mode">
+<p class="mut" style="margin:0">人数（個数）の違う2つのグループの平均をまとめる。単純に2つの平均を足して2で割ると、人数の違い（重み）を無視することになる。</p>
+<input type="range" id="wna" min="1" max="200" step="1" value="20" data-name="Aの人数">
+<input type="range" id="wxa" min="50" max="5000" step="50" value="3000" data-name="Aの平均">
+<input type="range" id="wnb" min="1" max="200" step="1" value="80" data-name="Bの人数">
+<input type="range" id="wxb" min="50" max="5000" step="50" value="2000" data-name="Bの平均">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="wplot"></div>
+<div class="card res key" id="wsum"></div>
+<div id="wform"></div>
+</div>
+<div id="m-freq" class="mode">
+<p class="mut" style="margin:0">度数分布表だけが分かるときは、各階級の値が階級値（真ん中の値）に集まっていると見なして平均を近似する。</p>
+<input type="range" id="f1" min="0" max="20" step="1" value="2" data-name="0〜10">
+<input type="range" id="f2" min="0" max="20" step="1" value="5" data-name="10〜20">
+<input type="range" id="f3" min="0" max="20" step="1" value="3" data-name="20〜30">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="fplot"></div>
+<div class="card res key" id="fsum"></div>
+<div class="card res det"><table id="ftab"></table></div>
+</div>
+<div id="m-shape" class="mode">
+<p class="mut" style="margin:0">分布の裾の向きを変えると、平均・中央値・最頻値の並び方がどう変わるか（200人分の分布）。</p>
+<input type="range" id="ssk" min="-10" max="10" step="1" value="6" data-name="裾の向き">
+<div class="mut" style="margin-top:-4px">−：左に裾が長い　0：左右対称　＋：右に裾が長い</div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="splot"></div>
+<div class="card res key" id="ssum"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-mm": {"mode": "mm", "set": {"data": "buy10"}, "task": "10人の購入額 1, 1, 2, 2, 2, 3, 3, 4, 5, 17（千円）の平均は何千円か。図で、平均が中央値より右にある理由も見る。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "千円"}, "why": "合計40÷10人＝4千円。17千円の1人が平均を右に引っ張るので、10人のうち7人が平均より少ない。中央値は5番目と6番目の平均で2.5千円。"}, "s1-move": {"mode": "mm", "set": {"data": "buy10", "top": 40}, "task": "いちばん大きい17千円が40千円だったら、平均は何千円になるか。予想したら −／＋ で最大の値を動かし、中央値が動くかを見る。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "千円"}, "why": "合計は 40−17＋40＝63 で、平均は6.3千円。中央値は2.5千円のまま。平均は合計を使うので端の値の大きさに引っ張られ、中央値は順番の真ん中なので引っ張られない。"}, "s4-shape": {"mode": "shape", "modes": ["shape", "mm"], "task": "裾の向きを −10〜10 に動かし、平均・中央値・最頻値の並びがどう変わるかを見る。次に「平均・中央値・最頻値」で9人の年収を選び、最大の値を動かす。"}, "s5-mm": {"mode": "mm", "set": {"data": "buy10"}, "task": "最大の値を動かして、平均・中央値・10%トリム平均（くわしくの式）がどれだけ動くかを比べる。"}, "s6-free": {"task": "自分の店の数字で、代表値の選び方を4つのモードで確かめる（3つの代表値、重み付き平均、度数表の平均、分布の形）。"}, "Q-U06-001": {"mode": "wmean", "set": {"nA": 20, "xA": 3000, "nB": 80, "xB": 2000}, "task": "A店は客20人で平均3,000円、B店は客80人で平均2,000円。2店を合わせた客1人あたりの平均は何円か。", "predict": {"type": "number", "key": "wmean", "label": "全体の平均", "unit": "円"}, "why": "棒の幅が客数。客の多いB店（2,000円）に引き寄せられて2,200円になる。2つの平均を足して2で割った2,500円（点線）は、客数が同じときしか正しくない。"}, "Q-U06-002": {"mode": "mm", "set": {"data": "skew5"}, "task": "1, 2, 2, 3, 22 の平均はいくつか。予想したら、平均と中央値の位置を図で比べる。", "predict": {"type": "number", "key": "mean", "label": "平均"}, "why": "合計30÷5＝6。5つのうち4つが6より小さい。中央値（2）は22の大きさに関係なく真ん中の値。"}, "Q-U06-003": {"mode": "mm", "set": {"data": "five"}, "task": "3, 5, 5, 7, 10 の中央値はいくつか。", "predict": {"type": "number", "key": "median", "label": "中央値"}, "why": "5個（奇数）なので3番目の値。平均6は10に少し引っ張られて中央値より右にある。"}, "Q-U06-004": {"mode": "mm", "set": {"data": "q06"}, "task": "2, 2, 3, 4, 9 の平均はいくつか。予想したら、9を −／＋ で動かして平均と中央値の動きを比べる。", "predict": {"type": "number", "key": "mean", "label": "平均"}, "why": "合計20÷5＝4。9を大きくすると平均だけが上がり、中央値は3のまま。"}, "Q-U06-005": {"mode": "mm", "set": {"data": "six"}, "task": "6日間の来店数 12, 15, 15, 18, 20, 40 の中央値は何人か。", "predict": {"type": "number", "key": "median", "label": "中央値", "unit": "人"}, "why": "6個（偶数）なので3番目（15）と4番目（18）の平均。40を動かしても中央値は16.5のまま。"}, "Q-U06-010": {"mode": "wmean", "set": {"nA": 10, "xA": 100, "nB": 30, "xB": 200}, "task": "100円の商品が10個、200円の商品が30個売れた。1個あたりの平均単価は何円か。", "predict": {"type": "number", "key": "wmean", "label": "平均単価", "unit": "円"}, "why": "個数で重みを付けると、たくさん売れた200円の側に寄る。単純平均の150円は、10個と30個を同じ重さで扱っている。"}, "Q-U06-012": {"mode": "mm", "set": {"data": "income"}, "task": "9人の年収 300〜1500万円で、平均と中央値はどちらが大きいか。", "predict": {"type": "choice", "key": "bigger", "label": "大きいのは", "options": ["平均", "中央値", "同じ"]}, "why": "1500万円の1人が平均を右に引っ張る（約572万円）。中央値は5番目の450万円。"}, "Q-U06-020": {"mode": "freq", "set": {"f1": 2, "f2": 5, "f3": 3}, "task": "階級 0〜10 が2人、10〜20 が5人、20〜30 が3人。平均の近似値はいくつか。", "predict": {"type": "number", "key": "amean", "label": "近似平均"}, "why": "階級値×度数の合計160÷10人。度数を変えると、人数の多い階級の側に近似平均が寄る（これも重み付き平均）。"}, "Q-U06-021": {"mode": "wmean", "set": {"nA": 200, "xA": 1000, "nB": 50, "xB": 2000}, "task": "A店は客200人で平均1,000円、B店は客50人で平均2,000円。客1人あたりの平均は何円か。", "predict": {"type": "number", "key": "wmean", "label": "全体の平均", "unit": "円"}, "why": "客の多いA店の1,000円に引き寄せられる。B店の客数を200人に増やすと、単純平均の1,500円と一致する。"}, "Q-U06-022": {"mode": "shape", "set": {"skew": 6}, "task": "山が1つで右に裾が長い分布。平均・中央値・最頻値はどの順に並ぶか。", "predict": {"type": "choice", "key": "order", "label": "並び", "options": ["最頻値＜中央値＜平均", "平均＜中央値＜最頻値", "ほぼ等しい"]}, "why": "平均は長い裾の側に引っ張られる。裾の向きを−にすると並びが逆になり、0（左右対称）では3つが重なる。"}, "Q-U06-040": {"mode": "mm", "set": {"data": "buy10"}, "task": "10人の購入額の両端を1人ずつ除いた10%トリム平均はいくつか。", "predict": {"type": "number", "key": "trim", "label": "10%トリム平均", "unit": "千円"}, "why": "最大の17を大きくしても、トリム平均は除かれる側なので変わらない（くわしくの式で確かめる）。平均は動き、中央値は動かない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc,f=LK.fmtNum;
+const W=340;
+const yen=v=>Math.round(v).toLocaleString("ja-JP");
+const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+function median(a){const s=[...a].sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2;}
+function modes(a){const c={};a.forEach(x=>c[x]=(c[x]||0)+1);const mx=Math.max(...Object.values(c));return mx<2?[]:Object.keys(c).filter(k=>c[k]===mx).map(Number).sort((x,y)=>x-y);}
+function quart(a){const s=[...a].sort((x,y)=>x-y),n=s.length,h=Math.floor(n/2);return {q1:median(s.slice(0,h)),q3:median(s.slice(n-h))};}  // 中央値を除いた下半分・上半分の中央値（05と同じ）
+function trim(a,p){const s=[...a].sort((x,y)=>x-y),k=Math.floor(s.length*p);return mean(s.slice(k,s.length-k));}
+const DATA={
+buy10:{name:"10人の購入額（千円）",v:[1,1,2,2,2,3,3,4,5,17],unit:"千円"},
+five:{name:"5個（3〜10）",v:[3,5,5,7,10],unit:""},
+q06:{name:"5個（2〜9）",v:[2,2,3,4,9],unit:""},
+skew5:{name:"5個（1〜22）",v:[1,2,2,3,22],unit:""},
+six:{name:"6日の来店数（人）",v:[12,15,15,18,20,40],unit:"人"},
+income:{name:"9人の年収（万円）",v:[300,350,400,400,450,500,550,700,1500],unit:"万円"}};
+function mVals(){const D=DATA[$("mdata").value],v=[...D.v].sort((x,y)=>x-y);v[v.length-1]=+$("mtop").value;
+const s=[...v].sort((x,y)=>x-y);return {D,v:s,mean:mean(s),median:median(s),modes:modes(s),...quart(s),trim:trim(s,0.1),sum:s.reduce((a,b)=>a+b,0)};}
+function mRange(){const D=DATA[$("mdata").value],s=[...D.v].sort((x,y)=>x-y),top=s[s.length-1],sec=s[s.length-2],st=top>=100?50:1;
+const el=$("mtop");el.step=st;el.min=Math.ceil(sec/st)*st;el.max=Math.max(top*3,sec*2,top+20);}
+let mBase=null;
+function mRender(){const M=mVals(),s=M.v,lo=Math.min(0,s[0]),hi=Math.max(...s)*1.04+1e-9,X=x=>18+(x-lo)/(hi-lo)*(W-36),H=150,base=H-30;
+if(!mBase||mBase.data!==$("mdata").value){const D=DATA[$("mdata").value];mBase={data:$("mdata").value,mean:mean(D.v),median:median(D.v)};}
+let svg=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="データと代表値">`;
+svg+=`<rect x="${X(M.q1)}" y="${base-70}" width="${Math.max(1,X(M.q3)-X(M.q1))}" height="70" fill="var(--acc)" fill-opacity=".08"/>`;
+svg+=`<line x1="14" y1="${base}" x2="${W-10}" y2="${base}" stroke="var(--line)"/>`;
+const cnt={};s.forEach(x=>{const k=cnt[x]=(cnt[x]||0)+1;svg+=`<circle cx="${X(x)}" cy="${base-8-(k-1)*13}" r="5.5" fill="var(--fg)" fill-opacity=".75"/>`;});
+const mk=(x,c,t,y,dash)=>`<line x1="${X(x)}" y1="${base-72}" x2="${X(x)}" y2="${base+4}" stroke="${c}" stroke-width="2.5" ${dash?`stroke-dasharray="${dash}"`:""}/><text x="${Math.min(W-24,Math.max(24,X(x)))}" y="${y}" font-size="11" text-anchor="middle" fill="${c}" font-weight="700" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${t}</text>`;
+svg+=mk(M.median,"var(--acc2)","中央値 "+f(M.median),base-76,"5 3")+mk(M.mean,"var(--acc)","平均 "+f(+M.mean.toFixed(2)),base+18);
+const ticks=[s[0],s[s.length-1]];ticks.forEach(t=>{svg+=`<text x="${X(t)}" y="${H-2}" font-size="10" text-anchor="middle" fill="var(--mut)">${f(t)}</text>`;});
+$("mplot").innerHTML=svg+`</svg><div class="legend mut"><span><i class="sw" style="background:var(--acc)"></i>平均</span><span><i class="sw" style="background:var(--acc2)"></i>中央値</span><span>薄い帯＝Q₁〜Q₃（真ん中の半分）</span></div>`;
+const u=M.D.unit,md=M.modes.length?M.modes.map(f).join("・"):"なし（どの値も1回ずつ）";
+const dm=M.mean-mBase.mean,dd=M.median-mBase.median;
+$("msum").innerHTML=`<div>平均 <b>${f(+M.mean.toFixed(2))}</b>${u}　中央値 <b>${f(M.median)}</b>${u}　最頻値 <b>${md}</b></div><div class="mut">最初のデータから：平均は ${dm>=0?"＋":"−"}${f(Math.abs(+dm.toFixed(2)))}、中央値は ${dd>=0?"＋":"−"}${f(Math.abs(+dd.toFixed(2)))}。Q₁＝${f(M.q1)}、Q₃＝${f(M.q3)}（中央値を除いた下半分・上半分の中央値）。</div>`;
+const n=s.length;$("mform").innerHTML=LK.formula([`並べる：${s.map(f).join(", ")}`,`平均＝合計${f(M.sum)}÷${n}＝${f(+M.mean.toFixed(3))}`,n%2?`中央値＝${(n+1)/2}番目＝${f(M.median)}`:`中央値＝${n/2}番目と${n/2+1}番目の平均＝(${f(s[n/2-1])}＋${f(s[n/2])})÷2＝${f(M.median)}`,`10%トリム平均（両端の${Math.floor(n*0.1)}個ずつ除く）＝${f(+M.trim.toFixed(3))}`]);}
+LK.register("mm",{name:"平均・中央値・最頻値",
+init(){$("mdata").innerHTML=Object.entries(DATA).map(([k,d])=>`<option value="${k}">${d.name}</option>`).join("");
+$("mdata").onchange=()=>{mRange();const s=[...DATA[$("mdata").value].v].sort((x,y)=>x-y);LK.setRange("mtop",s[s.length-1]);mRender();};
+mRange();LK.stepper($("mtop"),mRender);mRender();},
+apply(s){if(s.data){$("mdata").value=s.data;mRange();const v=[...DATA[s.data].v].sort((x,y)=>x-y);LK.setRange("mtop",v[v.length-1]);mBase=null;}if(s.top!==undefined)LK.setRange("mtop",s.top);mRender();},
+render:mRender,
+value(key){const M=mVals();
+if(key==="mode"){const t=M.modes.length?M.modes.map(f).join("・"):"なし";return {v:M.modes.length?M.modes[0]:NaN,text:t};}
+if(key==="bigger"){const t=Math.abs(M.mean-M.median)<1e-9?"同じ":M.mean>M.median?"平均":"中央値";return {v:M.mean-M.median,text:t};}
+const v={mean:M.mean,median:M.median,q1:M.q1,q3:M.q3,trim:M.trim,sum:M.sum}[key];return {v,text:f(+v.toFixed(3))};}});
+function wVals(){const na=+$("wna").value,xa=+$("wxa").value,nb=+$("wnb").value,xb=+$("wxb").value;return {na,xa,nb,xb,w:(na*xa+nb*xb)/(na+nb),s:(xa+xb)/2,tot:na*xa+nb*xb};}
+function wRender(){const R=wVals(),H=150,mx=Math.max(R.xa,R.xb)*1.15,Y=v=>H-24-v/mx*(H-40),tw=W-40,wa=Math.max(8,tw*R.na/(R.na+R.nb)),wb=Math.max(8,tw-wa);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="人数を幅にした平均">`;
+s+=`<rect x="20" y="${Y(R.xa)}" width="${wa-2}" height="${H-24-Y(R.xa)}" fill="var(--acc)" fill-opacity=".55" rx="3"/><rect x="${20+wa}" y="${Y(R.xb)}" width="${wb-2}" height="${H-24-Y(R.xb)}" fill="var(--acc2)" fill-opacity=".55" rx="3"/>`;
+s+=`<line x1="14" y1="${Y(R.w)}" x2="${W-10}" y2="${Y(R.w)}" stroke="var(--fg)" stroke-width="2.5"/><line x1="14" y1="${Y(R.s)}" x2="${W-10}" y2="${Y(R.s)}" stroke="var(--mut)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+s+=`<line x1="14" y1="${H-24}" x2="${W-10}" y2="${H-24}" stroke="var(--line)"/>`;
+s+=`<text x="${20+wa/2}" y="${H-8}" font-size="11" text-anchor="middle" fill="var(--mut)">A ${R.na}人</text><text x="${20+wa+wb/2}" y="${H-8}" font-size="11" text-anchor="middle" fill="var(--mut)">B ${R.nb}人</text>`;
+$("wplot").innerHTML=s+`</svg><div class="legend mut"><span><i class="sw" style="background:var(--fg)"></i>重み付き平均 ${yen(R.w)}</span><span><i class="sw" style="background:var(--mut)"></i>2つの平均の単純平均 ${yen(R.s)}</span></div><div class="mut">棒の幅＝人数、高さ＝平均。面積の合計が全員の合計になる。</div>`;
+$("wsum").innerHTML=`<div>全員の平均（重み付き平均）＝<b>${yen(R.w)}</b>　単純平均＝${yen(R.s)}</div><div class="mut">人数の多いグループの平均に近づく。人数が同じときだけ両者が一致する。</div>`;
+$("wform").innerHTML=LK.formula([`合計＝${R.na}×${yen(R.xa)}＋${R.nb}×${yen(R.xb)}＝${yen(R.tot)}`,`重み付き平均＝${yen(R.tot)}÷${R.na+R.nb}＝${f(+R.w.toFixed(3))}`,`単純平均＝(${yen(R.xa)}＋${yen(R.xb)})÷2＝${f(R.s)}`]);}
+LK.register("wmean",{name:"重み付き平均",
+init(){["wna","wxa","wnb","wxb"].forEach(id=>LK.stepper($(id),wRender));wRender();},
+apply(s){[["nA","wna"],["xA","wxa"],["nB","wnb"],["xB","wxb"]].forEach(([k,id])=>{if(s[k]!==undefined)LK.setRange(id,s[k]);});wRender();},
+render:wRender,
+value(key){const R=wVals(),v=key==="smean"?R.s:R.w;return {v,text:f(+v.toFixed(3))};}});
+function fVals(){const fr=[1,2,3].map(i=>+$("f"+i).value),mid=[5,15,25],n=fr.reduce((a,b)=>a+b,0),s=fr.reduce((a,x,i)=>a+x*mid[i],0);return {fr,mid,n,s,m:n?s/n:NaN};}
+function fRender(){const F=fVals(),H=140,mx=Math.max(...F.fr,1),bw=(W-40)/3,X=v=>20+v/30*(W-40);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="ヒストグラムと近似平均"><line x1="16" y1="${H-24}" x2="${W-12}" y2="${H-24}" stroke="var(--line)"/>`;
+F.fr.forEach((c,i)=>{const h=c/mx*(H-50);s+=`<rect x="${20+i*bw+1}" y="${H-24-h}" width="${bw-2}" height="${h}" fill="var(--acc)" fill-opacity=".45"/><text x="${20+i*bw+bw/2}" y="${H-28-h}" font-size="12" text-anchor="middle" fill="var(--fg)">${c}</text>`;});
+[0,10,20,30].forEach(t=>{s+=`<text x="${X(t)}" y="${H-8}" font-size="10" text-anchor="middle" fill="var(--mut)">${t}</text>`;});
+if(F.n)s+=`<line x1="${X(F.m)}" y1="10" x2="${X(F.m)}" y2="${H-24}" stroke="var(--acc2)" stroke-width="2.5"/><text x="${Math.min(W-30,Math.max(30,X(F.m)))}" y="12" font-size="11" text-anchor="middle" fill="var(--acc2)" font-weight="700" stroke="var(--bg)" stroke-width="3" paint-order="stroke">近似平均 ${f(+F.m.toFixed(2))}</text>`;
+$("fplot").innerHTML=s+"</svg>";
+$("fsum").innerHTML=F.n?`<div>近似平均＝(${F.fr.map((c,i)=>F.mid[i]+"×"+c).join("＋")})÷${F.n}＝<b>${f(+F.m.toFixed(3))}</b></div><div class="mut">各階級の値を階級値（5・15・25）に置いた近似。元のデータの平均とは少しずれることがある。</div>`:`<div>度数が全部0なので平均を出せない。</div>`;
+$("ftab").innerHTML="<tr><th>階級</th><th>階級値</th><th>度数</th><th>階級値×度数</th></tr>"+F.fr.map((c,i)=>`<tr><td>${i*10}〜${i*10+10}</td><td>${F.mid[i]}</td><td>${c}</td><td>${F.mid[i]*c}</td></tr>`).join("")+`<tr><td>合計</td><td></td><td>${F.n}</td><td>${F.s}</td></tr>`;}
+LK.register("freq",{name:"度数表の平均",
+init(){[1,2,3].forEach(i=>LK.stepper($("f"+i),fRender));fRender();},
+apply(s){[1,2,3].forEach(i=>{if(s["f"+i]!==undefined)LK.setRange("f"+i,s["f"+i]);});fRender();},
+render:fRender,
+value(){const F=fVals();return {v:F.m,text:f(+F.m.toFixed(3))};}});
+function sCounts(k){const a=4*Math.exp(-0.13*k),b=4*Math.exp(0.13*k),p=Array.from({length:21},(_,i)=>Math.pow((i+0.5)/21,a-1)*Math.pow(1-(i+0.5)/21,b-1)),t=p.reduce((x,y)=>x+y,0);
+const c=p.map(x=>Math.round(200*x/t));return c;}
+function sVals(){const k=+$("ssk").value,a=4*Math.exp(-0.13*k),b=4*Math.exp(0.13*k),c=sCounts(k),N=4000;   // ベータ分布の形（0〜20に広げる）
+let cdf=0,tot=0,med=null;const d=t=>Math.pow(t,a-1)*Math.pow(1-t,b-1);for(let i=0;i<N;i++)tot+=d((i+0.5)/N);
+for(let i=0;i<N;i++){cdf+=d((i+0.5)/N)/tot;if(cdf>=0.5){med=20*(i+0.5)/N;break;}}
+return {k,c,n:c.reduce((x,y)=>x+y,0),mean:20*a/(a+b),median:med,mode:20*(a-1)/(a+b-2)};}
+function order(S){const e=(a,b)=>Math.abs(a-b)<0.05;if(e(S.mean,S.median)&&e(S.median,S.mode))return "ほぼ等しい";
+if(S.mean>S.median&&S.median>S.mode)return "最頻値＜中央値＜平均";if(S.mean<S.median&&S.median<S.mode)return "平均＜中央値＜最頻値";return "その他";}
+function sRender(){const S=sVals(),H=150,mx=Math.max(...S.c),bw=(W-30)/21,X=v=>15+v/20*(W-30-bw)+bw/2;
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="分布と代表値"><line x1="12" y1="${H-20}" x2="${W-12}" y2="${H-20}" stroke="var(--line)"/>`;
+S.c.forEach((c,i)=>{const h=c/mx*(H-60);s+=`<rect x="${15+i*bw+1}" y="${H-20-h}" width="${bw-2}" height="${h}" fill="var(--fg)" fill-opacity=".22"/>`;});
+const mk=(x,col,t,y,d)=>`<line x1="${X(x)}" y1="${y+4}" x2="${X(x)}" y2="${H-20}" stroke="${col}" stroke-width="2.5" ${d?`stroke-dasharray="${d}"`:""}/><text x="${Math.min(W-28,Math.max(28,X(x)))}" y="${y}" font-size="11" text-anchor="middle" fill="${col}" font-weight="700" stroke="var(--bg)" stroke-width="3" paint-order="stroke">${t}</text>`;
+s+=mk(S.mode,"var(--fg)","最頻値",14)+mk(S.median,"var(--acc2)","中央値",28,"5 3")+mk(S.mean,"var(--acc)","平均",42);
+$("splot").innerHTML=s+"</svg>";
+$("ssum").innerHTML=`<div>並び：<b>${order(S)}</b></div><div class="mut">平均 ${S.mean.toFixed(1)}、中央値 ${S.median.toFixed(1)}、最頻値 ${S.mode.toFixed(1)}（0〜20 の目盛り）。平均は長い裾の側に引っ張られる。</div>`;}
+LK.register("shape",{name:"分布の形",
+init(){LK.stepper($("ssk"),sRender);sRender();},
+apply(s){if(s.skew!==undefined)LK.setRange("ssk",s.skew);sRender();},
+render:sRender,
+value(key){const S=sVals();if(key==="gap"){const v=S.mean-S.median;return {v,text:f(+v.toFixed(2))};}const t=order(S);return {v:S.mean-S.median,text:t};}});
+LK.start("mm");
+window.__LAB__={LK,mean,median,modes,quart,trim,DATA,wVals,fVals,sVals,order};
+</script>
+</body></html>
