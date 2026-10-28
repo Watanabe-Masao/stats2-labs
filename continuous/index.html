@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>連続分布ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.card{overflow-wrap:anywhere}
+.mode .lk-step .lk-name{max-width:6.4em}
+.dim{opacity:.45}
+</style></head><body>
+<h1>🧪 連続分布ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-norm" class="mode">
+<p class="mut" style="margin:0">正規分布 N(μ, σ²) で、区間に入る確率＝曲線の下の面積。z＝(値−μ)÷σ で標準化し、Φ(z)（z 以下の面積）の差で求める。</p>
+<input type="range" id="nm" min="0" max="1000" step="1" value="100" data-name="平均 μ">
+<input type="range" id="ns" min="0.5" max="200" step="0.5" value="10" data-name="標準偏差 σ">
+<input type="range" id="na" min="55" max="145" step="1" value="90" data-name="下の端 a">
+<input type="range" id="nb" min="55" max="145" step="1" value="110" data-name="上の端 b">
+<div class="row ctl"><label>求める <select id="nkind" data-key="kind"><option value="between">a 以上 b 以下</option><option value="le">b 以下</option><option value="ge">a 以上</option><option value="out">a 未満か b を超える</option></select></label></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="nplot"></div>
+<div class="card res key" id="nsum"></div>
+<div class="res det" id="ntab"></div>
+</div>
+<div id="m-q" class="mode">
+<p class="mut" style="margin:0">「上位 p% に入るには何以上か」は、面積から逆に z を決め、値＝μ＋z×σ に戻す。</p>
+<input type="range" id="qm" min="0" max="1000" step="1" value="60" data-name="平均 μ">
+<input type="range" id="qs" min="0.5" max="200" step="0.5" value="10" data-name="標準偏差 σ">
+<input type="range" id="qp" min="0.5" max="50" step="0.5" value="5" data-name="割合 p" data-unit="%">
+<div class="row ctl"><label>どこの p% <select id="qside" data-key="side"><option value="upper">上側（上位）</option><option value="lower">下側（下位）</option><option value="both">両側（外側の合計）</option></select></label></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="qplot"></div>
+<div class="card res key" id="qsum"></div>
+<div class="res det" id="qtab"></div>
+</div>
+<div id="m-unif" class="mode">
+<p class="mut" style="margin:0">一様分布 U(a, b)：a から b のどこも同じ高さ 1÷(b−a)。区間に入る確率は「区間の幅÷全体の幅」。</p>
+<input type="range" id="ua" min="0" max="100" step="0.5" value="0" data-name="下限 a">
+<input type="range" id="ub" min="0.5" max="100" step="0.5" value="10" data-name="上限 b">
+<input type="range" id="uc" min="0" max="10" step="0.5" value="2" data-name="区間の左 c">
+<input type="range" id="ud" min="0" max="10" step="0.5" value="5" data-name="区間の右 d">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="uplot"></div>
+<div class="card res key" id="usum"></div>
+</div>
+<div id="m-expo" class="mode">
+<p class="mut" style="margin:0">一定の率で起きる出来事の待ち時間は指数分布。λ＝1÷平均。t より長く待つ確率は e^(−λt)。すでに s 待っても、その先の確率は変わらない（無記憶性）。</p>
+<input type="range" id="em" min="0.1" max="60" step="0.1" value="0.5" data-name="平均の待ち" data-unit="時間">
+<input type="range" id="et" min="0" max="3" step="0.05" value="1" data-name="待つ t" data-unit="時間">
+<input type="range" id="es" min="0" max="3" step="0.05" value="0" data-name="待った s" data-unit="時間">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="eplot"></div>
+<div class="card res key" id="esum"></div>
+</div>
+<div id="m-dens" class="mode">
+<p class="mut" style="margin:0">曲線の高さ f(x) は確率ではない。x のまわりの幅 w の面積が確率で、およそ f(x)×w。幅を0に近づけると確率も0に近づく。</p>
+<input type="range" id="ds" min="0.1" max="20" step="0.1" value="1" data-name="標準偏差 σ">
+<input type="range" id="dx" min="-3" max="3" step="0.1" value="0" data-name="点 x">
+<input type="range" id="dw" min="0" max="2" step="0.02" value="1" data-name="幅 w">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="dplot"></div>
+<div class="card res key" id="dsum"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-norm": {"mode": "norm", "set": {"mu": 100, "sd": 10, "a": 120, "b": 130, "kind": "ge"}, "task": "1日の来店客数は平均100人・標準偏差10人の正規分布。120人以上になる確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≧120)"}, "why": "z＝(120−100)÷10＝2。1−Φ(2)＝1−0.9772≒0.023。50日に1日くらい。a を90、求めるを「a 以上 b 以下」、b を110にすると約68%になる。"}, "s1-dens": {"mode": "dens", "set": {"sd": 0.2, "x": 0, "w": 0.1}, "task": "標準偏差0.2の正規分布（真ん中は0）。真ん中の高さ f(0) は1を超えるか。", "predict": {"type": "choice", "key": "over1", "label": "f(0) は1を", "options": ["超える", "超えない"]}, "why": "f(0)≒1.99。高さは確率ではないので1を超えてよい。確率は面積で、幅0.1なら約0.2。幅を0にすると確率は0になる。"}, "s1-band": {"mode": "norm", "set": {"mu": 100, "sd": 10, "a": 80, "b": 120, "kind": "between"}, "task": "平均100・標準偏差10の正規分布で、80以上120以下（μ±2σ）に入る確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(80≦X≦120)"}, "why": "z は −2 と 2。Φ(2)−Φ(−2)≒0.954。σ を変えても、a・b を μ±2σ に合わせ直せば同じ約95%になる。確率は z だけで決まる。"}, "s3-free": {"mode": "norm", "modes": ["norm", "q", "unif", "expo"], "task": "解いてから、問題の分布（正規・一様・指数）と、求めるもの（区間の確率か、上位 p% の値か）に合うモードで確かめる。"}, "s4-free": {"mode": "norm", "modes": ["norm", "q", "expo"], "task": "自分の売場の数字（販売数・重さ・待ち時間の平均と標準偏差）を入れ、「〇〇以上」の確率や、上位 p% の値を読む。"}, "s5-free": {"mode": "expo", "modes": ["expo", "unif", "dens"], "task": "「指数分布」で s（すでに待った時間）を動かし、その先の確率が変わらないことを見る（発展1）。「高さと面積」で σ を小さくし、高さが1を超えても面積は1のままなのを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（正規分布の確率、上位 p% の値、一様分布、指数分布、高さと面積）。"}, "Q-U16-001": {"mode": "norm", "set": {"mu": 60, "sd": 4, "a": 52, "b": 66, "kind": "between"}, "task": "卵の重さは平均60g・標準偏差4gの正規分布。52g以上66g以下の割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(52≦X≦66)"}, "why": "z は −2 と 1.5。Φ(1.5)−Φ(−2)≒0.910。左右で z が違うときは、両端それぞれの Φ を引く。"}, "Q-U16-002": {"mode": "unif", "set": {"unit": "分", "a": 0, "b": 15, "c": 5, "d": 15}, "task": "待ち時間は0分から15分の一様分布。5分以上待つ確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≧5)"}, "why": "幅10÷全体15≒0.667。一様分布では、確率は区間の幅に比例する。平均は真ん中の7.5分。"}, "Q-U16-003": {"mode": "norm", "set": {"mu": 50, "sd": 5, "a": 40, "b": 60, "kind": "le"}, "task": "X は N(50, 5²)。60 を標準化した z（z_b）はいくつか。", "predict": {"type": "number", "key": "zb", "label": "60 の z"}, "why": "(60−50)÷5＝2。N(50, 5²) の「5²」は分散なので、標準偏差は5。分散25で割ると z＝0.4 と間違える。"}, "Q-U16-004": {"mode": "unif", "set": {"a": 2, "b": 8, "c": 3, "d": 5}, "task": "X は U(2, 8)。P(3≦X≦5) は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(3≦X≦5)"}, "why": "幅2÷全体の幅6＝1/3。高さ1/6×幅2 と同じ。区間が全体のどこにあっても、幅が同じなら確率は同じ。"}, "Q-U16-005": {"mode": "expo", "set": {"unit": "時間", "mean": 0.5, "t": 1, "s": 0.5}, "task": "待ち時間は平均0.5時間の指数分布。すでに0.5時間待ったとき、さらに1時間を超えて待つ確率は（小数で）？", "predict": {"type": "number", "key": "cond", "label": "P(さらに1時間超)"}, "why": "待つ前の P(待ち＞1)＝e⁻²≒0.135 と同じ。「もうすぐ来るはず」とはならない。s を動かしても変わらない。"}, "Q-U16-010": {"mode": "norm", "set": {"mu": 400, "sd": 8, "a": 380, "b": 390, "kind": "le"}, "task": "弁当の重さは平均400g・標準偏差8gの正規分布。390g 以下の割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≦390)"}, "why": "z＝−1.25。表は正の z しかないことが多いので、左右対称を使って 1−Φ(1.25)。連続分布なので「未満」と「以下」は同じ。"}, "Q-U16-011": {"mode": "q", "set": {"mu": 60, "sd": 10, "p": 5, "side": "upper"}, "task": "点数は平均60・標準偏差10の正規分布。上位5%の境目の点数は？", "predict": {"type": "number", "key": "x", "label": "境目の点数", "unit": "点"}, "why": "上側5%の z＝1.645 を、値＝μ＋z×σ で元の点数に戻す。確率から値を求めるときは、標準化を逆にたどる。"}, "Q-U16-012": {"mode": "expo", "set": {"unit": "分", "mean": 20, "t": 20, "s": 0}, "task": "待ち時間は平均20分の指数分布。20分以上待つ確率は（小数で）？", "predict": {"type": "number", "key": "pgt", "label": "P(待ち＞20)"}, "why": "e⁻¹≒0.368。平均と同じ時間より長く待つのは約37%で、半分より少ない。平均より短く待つことの方が多い。"}, "Q-U16-020": {"mode": "unif", "set": {"unit": "秒", "a": 0, "b": 60, "c": 0, "d": 10}, "task": "秒針の位置は0〜60秒の一様分布。0秒から10秒の間にある確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(0≦X≦10)"}, "why": "幅10÷全体60＝1/6。どの位置も同じくらい起きやすいなら一様分布。"}, "Q-U16-021": {"mode": "norm", "set": {"mu": 0, "sd": 1, "a": -1.5, "b": 1.5, "kind": "between"}, "task": "標準正規分布で −1.5 以上 1.5 以下の確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(−1.5≦Z≦1.5)"}, "why": "外側は左右に0.0668ずつ。1から2つ分を引く。上側確率の表をそのまま答えにしない。"}, "Q-U16-022": {"mode": "norm", "set": {"mu": 500, "sd": 3, "a": 494, "b": 506, "kind": "out"}, "task": "重さは平均500g・標準偏差3gの正規分布。494g未満か506gを超える割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "規格外の割合"}, "why": "z＝±2 の外側で約4.6%（表の4桁で計算すると0.0456）。σ を2に下げると約0.3%になる。平均をずらすより、ばらつきを減らす方が効くことが多い。"}, "Q-U16-023": {"mode": "dens", "set": {"sd": 0.2, "x": 0, "w": 0}, "task": "標準偏差0.2の正規分布で、x＝0 ちょうど（幅0）の確率はいくつか。", "predict": {"type": "number", "key": "p", "label": "P(X＝0)"}, "why": "幅0の面積は0。高さ f(0)≒1.99 は1を超えているが、確率ではない。幅を少し広げると、確率≒高さ×幅 になる。"}, "Q-U16-030": {"mode": "q", "set": {"mu": 80, "sd": 12, "p": 5, "side": "upper"}, "task": "販売数は平均80・標準偏差12の正規分布。上側5%の境目（これより多く売れる日が5%）は何個か。", "predict": {"type": "number", "key": "x", "label": "境目の個数", "unit": "個"}, "why": "80＋1.645×12≒99.7。平均に上乗せする 1.645×12≒20個 が、欠品を5%に抑えるための余裕（安全在庫）。"}, "Q-U16-031": {"mode": "norm", "set": {"mu": 502, "sd": 2, "a": 495, "b": 500, "kind": "le"}, "task": "内容量は平均502g・標準偏差2gの正規分布。500g 以下の割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≦500)"}, "why": "z＝−1 で約16%。μ を504に動かすと約2%。平均を上げるか、σ を下げるか、どちらの手でも割合を下げられる。"}, "Q-U16-032": {"mode": "expo", "set": {"unit": "分", "mean": 3, "t": 5, "s": 0}, "task": "待ち時間は平均3分の指数分布。5分を超えて待つ割合は（小数で）？", "predict": {"type": "number", "key": "pgt", "label": "P(待ち＞5)"}, "why": "e^(−5/3)≒0.189。t を3（平均）にすると0.368で、半分より少ない。右に長い裾があるので、平均は中央値（約2.1分）より大きい。"}, "Q-U16-040": {"mode": "unif", "set": {"unit": "分", "a": 0, "b": 15, "c": 0, "d": 15}, "task": "待ち時間は U(0, 15)。分散はいくつか。", "predict": {"type": "number", "key": "var", "label": "分散"}, "why": "(b−a)²÷12＝225÷12。12で割るのは、一様分布の平均からの距離の2乗を平均するとこうなるから（発展2）。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc;
+const W=340;
+const f=(v,d=4)=>{if(!isFinite(v))return "—";const r=+v.toFixed(d);return String(Object.is(r,-0)?0:r);};
+const pc=v=>{const p=v*100;return (p<0.1&&p>0?f(p,3):f(p,1))+"%";};
+const once=v=>v>0.0005&&v<0.5?`（およそ ${Math.round(1/v)} 回に1回）`:"";
+function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return s*y;}
+const Phi=z=>z<-9?0:z>9?1:0.5*(1+erf(z/Math.SQRT2));
+const dn=(x,m,s)=>Math.exp(-0.5*((x-m)/s)**2)/(s*Math.sqrt(2*Math.PI));
+function qnorm(p){const a=[-39.69683028665376,220.9460984245205,-275.9285104469687,138.3577518672690,-30.66479806614716,2.506628277459239],b=[-54.47609879822406,161.5858368580409,-155.6989798598866,66.80131188771972,-13.28068155288572],c=[-0.007784894002430293,-0.3223964580411365,-2.400758277161838,-2.549732539343734,4.374664141464968,2.938163982698783],d=[0.007784695709041462,0.3224671290700398,2.445134137142996,3.754408661907416],pl=0.02425;
+if(p<=0)return -Infinity;if(p>=1)return Infinity;let q,r;
+if(p<pl){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+if(p>1-pl){q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+const STEPS=[0.01,0.02,0.05,0.1,0.2,0.5,1,2,5,10,20,50];
+const nice=v=>{let s=STEPS[0];STEPS.forEach(x=>{if(x<=v)s=x;});return s;};
+const snap=(v,st)=>+(Math.round(v/st)*st).toFixed(6);
+function reRange(id,lo,hi,st){const e=$(id),v=+e.value;e.step=st;e.min=snap(Math.floor(lo/st)*st,st);e.max=snap(Math.ceil(hi/st)*st,st);e.value=Math.min(+e.max,Math.max(+e.min,snap(v,st)));e._lkUpd&&e._lkUpd();}
+function curve(pdf,x0,x1,opt){const H=opt.H||170,L=opt.yaxis?34:12,R=W-12,base=H-(opt.sub?40:28),top=24,N=160;
+const xs=[];for(let i=0;i<=N;i++)xs.push(x0+(x1-x0)*i/N);const ys=xs.map(pdf);const mx=opt.ymax||Math.max(...ys)*1.08||1;
+const X=x=>L+(x-x0)/(x1-x0)*(R-L),Y=y=>base-Math.min(y,mx)/mx*(base-top);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="${esc(opt.label||"分布")}">`;
+if(opt.yaxis){const st=nice(mx/3);for(let y=0;y<=mx+1e-9;y+=st){s+=`<line x1="${L}" y1="${Y(y)}" x2="${R}" y2="${Y(y)}" stroke="var(--line)" stroke-dasharray="${y?"2 3":""}"/><text x="${L-4}" y="${Y(y)+4}" font-size="10" text-anchor="end" fill="var(--mut)">${f(y,2)}</text>`;}}
+(opt.shade||[]).forEach(([a,b,col,op])=>{const lo=Math.max(a,x0),hi=Math.min(b,x1);if(hi<=lo)return;const pts=[];for(let i=0;i<=80;i++){const x=lo+(hi-lo)*i/80;pts.push(`${X(x).toFixed(1)},${Y(pdf(x)).toFixed(1)}`);}
+s+=`<path d="M${X(lo).toFixed(1)},${base} L${pts.join(" L")} L${X(hi).toFixed(1)},${base} Z" fill="${col||"var(--acc2)"}" fill-opacity="${op||0.55}"/>`;});
+s+=`<path d="M${xs.map((x,i)=>`${X(x).toFixed(1)},${Y(ys[i]).toFixed(1)}`).join(" L")}" fill="none" stroke="var(--acc)" stroke-width="2"/>`;
+s+=`<line x1="${L}" y1="${base}" x2="${R}" y2="${base}" stroke="var(--fg)" stroke-opacity=".5"/>`;
+(opt.ticks||[]).forEach(t=>{if(t.x<x0-1e-9||t.x>x1+1e-9)return;s+=`<line x1="${X(t.x)}" y1="${base}" x2="${X(t.x)}" y2="${base+4}" stroke="var(--fg)" stroke-opacity=".5"/><text x="${X(t.x)}" y="${base+15}" font-size="10" text-anchor="middle" fill="var(--fg)">${esc(t.label)}</text>`;if(t.sub!==undefined)s+=`<text x="${X(t.x)}" y="${base+28}" font-size="9.5" text-anchor="middle" fill="var(--mut)">${esc(t.sub)}</text>`;});
+(opt.lines||[]).forEach(t=>{if(t.x<x0||t.x>x1)return;const lx=X(t.x);s+=`<line x1="${lx}" y1="${top-6}" x2="${lx}" y2="${base}" stroke="var(--acc2)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${Math.min(R,Math.max(L,lx))}" y="${top-10}" font-size="11" text-anchor="${lx>W*0.75?"end":lx<W*0.25?"start":"middle"}" fill="var(--acc2)">${esc(t.label)}</text>`;});
+if(opt.sub)s+=`<text x="${R}" y="${H-2}" font-size="9.5" text-anchor="end" fill="var(--mut)">${esc(opt.sub)}</text>`;
+return s+`</svg>`;}
+const LEG=`<div class="legend mut"><span><i class="sw" style="background:var(--acc2);opacity:.6"></i>求める面積＝確率</span></div>`;
+function nFix(){const m=+$("nm").value,s=+$("ns").value,st=nice(s/10);reRange("na",m-4.5*s,m+4.5*s,st);reRange("nb",m-4.5*s,m+4.5*s,st);}
+function nVals(){const mu=+$("nm").value,sd=+$("ns").value,a=+$("na").value,b=+$("nb").value,kind=$("nkind").value;
+const za=(a-mu)/sd,zb=(b-mu)/sd,phiA=Phi(za),phiB=Phi(zb);
+const p=kind==="between"?Math.max(0,phiB-phiA):kind==="le"?phiB:kind==="ge"?1-phiA:phiA+Math.max(0,1-phiB);
+return {mu,sd,a,b,kind,za,zb,phiA,phiB,p,pct:p*100};}
+function nRender(){nFix();const V=nVals(),k=V.kind,lo=V.mu-4*V.sd,hi=V.mu+4*V.sd;
+$("na").closest(".lk-step").classList.toggle("dim",k==="le");$("nb").closest(".lk-step").classList.toggle("dim",k==="ge");
+const sh=k==="between"?[[V.a,V.b]]:k==="le"?[[-1e9,V.b]]:k==="ge"?[[V.a,1e9]]:[[-1e9,Math.min(V.a,V.b)],[V.b,1e9]];
+const ticks=[-3,-2,-1,0,1,2,3].map(z=>({x:V.mu+z*V.sd,label:f(V.mu+z*V.sd,2),sub:z?(z>0?"+":"")+z:"z＝0"}));
+const lines=[];if(k!=="le")lines.push({x:V.a,label:`a＝${f(V.a,2)}`});if(k!=="ge")lines.push({x:V.b,label:`b＝${f(V.b,2)}`});
+if(lines.length===2&&Math.abs(lines[0].x-lines[1].x)<1.2*V.sd){lines[0].label="a";lines[1].label="b";}
+$("nplot").innerHTML=curve(x=>dn(x,V.mu,V.sd),lo,hi,{shade:sh,ticks,lines,sub:"上段：値　下段：z（σ の何個分）",label:"正規分布"})+LEG;
+const za=`z_a＝(${f(V.a,2)}−${f(V.mu,2)})÷${f(V.sd,2)}＝<b>${f(V.za,3)}</b>`,zb=`z_b＝(${f(V.b,2)}−${f(V.mu,2)})÷${f(V.sd,2)}＝<b>${f(V.zb,3)}</b>`;
+const how=k==="between"?`Φ(${f(V.zb,3)})−Φ(${f(V.za,3)})＝${f(V.phiB)}−${f(V.phiA)}`:k==="le"?`Φ(${f(V.zb,3)})`:k==="ge"?`1−Φ(${f(V.za,3)})＝1−${f(V.phiA)}`:`Φ(${f(V.za,3)})＋1−Φ(${f(V.zb,3)})＝${f(V.phiA)}＋${f(1-V.phiB)}`;
+const lab=k==="between"?`P(${f(V.a,2)}≦X≦${f(V.b,2)})`:k==="le"?`P(X≦${f(V.b,2)})`:k==="ge"?`P(X≧${f(V.a,2)})`:`P(X＜${f(V.a,2)} または X＞${f(V.b,2)})`;
+$("nsum").innerHTML=`${k!=="le"?`<div>${za}</div>`:""}${k!=="ge"?`<div>${zb}</div>`:""}<div>${lab}＝${how}＝<b>${f(V.p)}</b>（${pc(V.p)}）${once(V.p)}</div><div class="mut">Φ(z) は z 以下の面積。上側は 1−Φ(z)、負の z は Φ(−z)＝1−Φ(z) で引ける。</div>`;
+$("ntab").innerHTML=`<table><tr><th>平均からの幅</th><th>値の範囲</th><th>入る確率</th></tr>${[1,1.96,2,3].map(k2=>`<tr><td>±${k2}σ</td><td>${f(V.mu-k2*V.sd,2)}〜${f(V.mu+k2*V.sd,2)}</td><td>${pc(2*Phi(k2)-1)}</td></tr>`).join("")}</table>`;}
+LK.register("norm",{name:"正規分布の確率",
+init(){["nm","ns","na","nb"].forEach(id=>LK.stepper($(id),nRender));$("nkind").onchange=nRender;nRender();},
+apply(s){if(s.mu!==undefined)LK.setRange("nm",s.mu);if(s.sd!==undefined)LK.setRange("ns",s.sd);nFix();if(s.a!==undefined)LK.setRange("na",s.a);if(s.b!==undefined)LK.setRange("nb",s.b);if(s.kind)$("nkind").value=s.kind;nRender();},
+render:nRender,
+value(key){const V=nVals(),v=V[key];return {v,text:key==="pct"?f(v,2)+"%":f(v)};}});
+function qVals(){const mu=+$("qm").value,sd=+$("qs").value,pp=+$("qp").value,side=$("qside").value,p=pp/100;
+const z=side==="upper"?qnorm(1-p):side==="lower"?qnorm(p):qnorm(1-p/2);const x=mu+z*sd;return {mu,sd,pp,side,z,x,xlo:mu-Math.abs(z)*sd,xhi:mu+Math.abs(z)*sd};}
+function qRender(){const Q=qVals(),lo=Q.mu-4*Q.sd,hi=Q.mu+4*Q.sd;
+const sh=Q.side==="upper"?[[Q.x,1e9]]:Q.side==="lower"?[[-1e9,Q.x]]:[[-1e9,Q.xlo],[Q.xhi,1e9]];
+const lines=Q.side==="both"?[{x:Q.xlo,label:f(Q.xlo,2)},{x:Q.xhi,label:f(Q.xhi,2)}]:[{x:Q.x,label:`${f(Q.x,2)}`}];
+const ticks=[-3,-2,-1,0,1,2,3].map(z=>({x:Q.mu+z*Q.sd,label:f(Q.mu+z*Q.sd,2),sub:z?(z>0?"+":"")+z:"z＝0"}));
+$("qplot").innerHTML=curve(x=>dn(x,Q.mu,Q.sd),lo,hi,{shade:sh,ticks,lines,sub:"上段：値　下段：z",label:"正規分布"})+`<div class="legend mut"><span><i class="sw" style="background:var(--acc2);opacity:.6"></i>${Q.side==="both"?"外側の合計":Q.side==="upper"?"上側":"下側"} ${f(Q.pp,2)}%</span></div>`;
+const zs=Q.side==="both"?`±${f(Math.abs(Q.z),3)}`:f(Q.z,3);
+$("qsum").innerHTML=`<div>${Q.side==="upper"?`上側 ${f(Q.pp,2)}%（Φ(z)＝${f(1-Q.pp/100)}）`:Q.side==="lower"?`下側 ${f(Q.pp,2)}%（Φ(z)＝${f(Q.pp/100)}）`:`両側で ${f(Q.pp,2)}%（片側 ${f(Q.pp/2,3)}%）`} になる z＝<b>${zs}</b></div>`+
+(Q.side==="both"?`<div>値＝${f(Q.mu,2)}±${f(Math.abs(Q.z),3)}×${f(Q.sd,2)}＝<b>${f(Q.xlo,2)}</b>〜<b>${f(Q.xhi,2)}</b></div>`:`<div>値＝μ＋z×σ＝${f(Q.mu,2)}＋(${f(Q.z,3)})×${f(Q.sd,2)}＝<b>${f(Q.x,2)}</b></div>`)+`<div class="mut">よく使う z：上側5%→1.645、上側2.5%→1.96、上側1%→2.326。</div>`;
+$("qtab").innerHTML=`<table><tr><th>上側の割合</th><th>z</th><th>値</th></tr>${[10,5,2.5,1,0.5].map(p=>{const z=qnorm(1-p/100);return `<tr><td>${p}%</td><td>${f(z,3)}</td><td>${f(Q.mu+z*Q.sd,2)}</td></tr>`;}).join("")}</table>`;}
+LK.register("q",{name:"上位 p% の値",
+init(){["qm","qs","qp"].forEach(id=>LK.stepper($(id),qRender));$("qside").onchange=qRender;qRender();},
+apply(s){if(s.mu!==undefined)LK.setRange("qm",s.mu);if(s.sd!==undefined)LK.setRange("qs",s.sd);if(s.p!==undefined)LK.setRange("qp",s.p);if(s.side)$("qside").value=s.side;qRender();},
+render:qRender,
+value(key){const Q=qVals(),v=Q[key];return {v,text:f(v,key==="z"?3:2)};}});
+let UU="";
+function uFix(){let a=+$("ua").value,b=+$("ub").value;if(b<=a){b=a+0.5;LK.setRange("ub",b);}
+["uc","ud"].forEach(id=>{const e=$(id);e.min=a;e.max=b;if(+e.value<a)e.value=a;if(+e.value>b)e.value=b;e._lkUpd&&e._lkUpd();});
+if(+$("ud").value<+$("uc").value)LK.setRange("ud",+$("uc").value);}
+function uVals(){const a=+$("ua").value,b=+$("ub").value,c=+$("uc").value,d=+$("ud").value,w=b-a;
+return {a,b,c,d,width:w,h:1/w,p:Math.max(0,d-c)/w,mean:(a+b)/2,var:w*w/12,sd:w/Math.sqrt(12)};}
+function uRender(){uFix();const U=uVals(),pad=U.width*0.12,x0=U.a-pad,x1=U.b+pad;
+const pdf=x=>x>=U.a&&x<=U.b?U.h:0;
+$("uplot").innerHTML=curve(pdf,x0,x1,{shade:[[U.c,U.d]],ticks:[{x:U.a,label:f(U.a,2)},{x:U.b,label:f(U.b,2)},{x:U.mean,label:"▲"+f(U.mean,2)}],lines:[{x:U.c,label:`c＝${f(U.c,2)}`},{x:U.d,label:`d＝${f(U.d,2)}`}].filter((t,i,a)=>!(i===1&&Math.abs(a[0].x-a[1].x)<U.width*0.15)),ymax:U.h*1.35,yaxis:true,label:"一様分布"})+LEG;
+$("usum").innerHTML=`<div>高さ＝1÷(${f(U.b,2)}−${f(U.a,2)})＝<b>${f(U.h)}</b>${UU?"（1"+esc(UU)+"あたり）":""}</div><div>P(${f(U.c,2)}≦X≦${f(U.d,2)})＝幅 ${f(U.d-U.c,2)}÷全体 ${f(U.width,2)}＝<b>${f(U.p)}</b>（${pc(U.p)}）</div><div>平均 (a＋b)÷2＝<b>${f(U.mean)}</b>　分散 (b−a)²÷12＝<b>${f(U.var)}</b>　標準偏差＝${f(U.sd)}</div><div class="mut">長方形の面積＝幅×高さ。全体の面積はいつも1。</div>`;}
+LK.register("unif",{name:"一様分布",
+init(){["ua","ub","uc","ud"].forEach(id=>LK.stepper($(id),uRender));uRender();},
+apply(s){if(s.unit){UU=s.unit;["ua","ub","uc","ud"].forEach(id=>{$(id).dataset.unit=s.unit;$(id)._lkUpd&&$(id)._lkUpd();});}
+if(s.a!==undefined)LK.setRange("ua",s.a);if(s.b!==undefined)LK.setRange("ub",s.b);uFix();if(s.c!==undefined)LK.setRange("uc",s.c);if(s.d!==undefined)LK.setRange("ud",s.d);uRender();},
+render:uRender,
+value(key){const U=uVals(),v=U[key];return {v,text:f(v)};}});
+let EU="時間";
+function eFix(){const m=+$("em").value,st=nice(m/20);reRange("et",0,6*m,st);reRange("es",0,6*m,st);}
+function eVals(){const m=+$("em").value,t=+$("et").value,s=+$("es").value,l=1/m,pgt=Math.exp(-l*t);
+return {m,t,s,lambda:l,pgt,ple:1-pgt,mean:m,var:m*m,sd:m,ps:Math.exp(-l*s),pst:Math.exp(-l*(s+t)),cond:Math.exp(-l*(s+t))/Math.exp(-l*s),med:m*Math.LN2};}
+function eRender(){eFix();const E=eVals(),x1=Math.max(E.s+E.t,4*E.m)*1.08;
+const sh=E.s>0?[[E.s,E.s+E.t,"var(--acc)",0.3],[E.s+E.t,1e9]]:[[E.t,1e9]];
+const ticks=[0,1,2,3,4].map(k=>({x:k*E.m,label:f(k*E.m,2)}));const lines=[];if(E.s>0)lines.push({x:E.s,label:`s＝${f(E.s,2)}`});lines.push({x:E.s+E.t,label:E.s>0?`s＋t＝${f(E.s+E.t,2)}`:`t＝${f(E.t,2)}`});
+if(lines.length===2&&Math.abs(lines[0].x-lines[1].x)<x1*0.25)lines[0].label="s";
+$("eplot").innerHTML=curve(x=>x<0?0:E.lambda*Math.exp(-E.lambda*x),0,x1,{shade:sh,ticks,lines,label:"指数分布"})+`<div class="legend mut"><span><i class="sw" style="background:var(--acc2);opacity:.6"></i>${E.s>0?"s＋t より長く待つ":"t より長く待つ"}</span>${E.s>0?`<span><i class="sw" style="background:var(--acc);opacity:.3"></i>s から s＋t の間</span>`:""}</div>`;
+$("esum").innerHTML=`<div>λ＝1÷平均＝1÷${f(E.m,2)}＝<b>${f(E.lambda)}</b>（1${EU}あたりの件数）</div><div>P(待ち＞${f(E.t,2)})＝e^(−λt)＝e^(−${f(E.lambda*E.t)})＝<b>${f(E.pgt)}</b>　${f(E.t,2)}${EU}以内に来る＝${f(E.ple)}</div>`+
+(E.s>0?`<div>すでに ${f(E.s,2)}${EU}待ったとき、さらに ${f(E.t,2)}${EU}より長く待つ：${f(E.pst)}÷${f(E.ps)}＝<b>${f(E.cond)}</b>（待つ前と同じ）</div>`:"")+
+`<div>平均＝<b>${f(E.mean)}</b>　分散＝平均²＝<b>${f(E.var)}</b>　中央値＝平均×0.693＝${f(E.med)}</div><div class="mut">平均より短く待つことの方が多い（中央値＜平均）。率が時間帯で変わるときは当てはまらない。</div>`;}
+LK.register("expo",{name:"指数分布",
+init(){["em","et","es"].forEach(id=>LK.stepper($(id),eRender));eRender();},
+apply(s){if(s.unit){EU=s.unit;["em","et","es"].forEach(id=>{$(id).dataset.unit=s.unit;$(id)._lkUpd&&$(id)._lkUpd();});}
+if(s.mean!==undefined)LK.setRange("em",s.mean);eFix();if(s.t!==undefined)LK.setRange("et",s.t);if(s.s!==undefined)LK.setRange("es",s.s);eRender();},
+render:eRender,
+value(key){const E=eVals(),v=E[key];return {v,text:f(v)};}});
+function dFix(){const s=+$("ds").value;reRange("dx",-3*s,3*s,nice(s/10));reRange("dw",0,2*s,nice(s/50));}
+function dVals(){const sd=+$("ds").value,x=+$("dx").value,w=+$("dw").value,fx=dn(x,0,sd),p=Phi((x+w/2)/sd)-Phi((x-w/2)/sd);
+return {sd,x,w,fx,p,approx:fx*w,over1:fx>1?"超える":"超えない",peak:dn(0,0,sd)};}
+function dRender(){dFix();const D=dVals(),lo=-4*D.sd,hi=4*D.sd;
+$("dplot").innerHTML=curve(x=>dn(x,0,D.sd),lo,hi,{shade:[[D.x-D.w/2,D.x+D.w/2]],ticks:[-3,-2,-1,0,1,2,3].map(z=>({x:z*D.sd,label:f(z*D.sd,2)})),lines:[{x:D.x,label:`高さ ${f(D.fx,3)}`}],yaxis:true,label:"確率密度"})+LEG;
+$("dsum").innerHTML=`<div>点 x＝${f(D.x,2)} の高さ f(x)＝<b>${f(D.fx)}</b>（これは確率ではない）</div><div>幅 ${f(D.w,2)} の面積＝P(${f(D.x-D.w/2,3)}≦X≦${f(D.x+D.w/2,3)})＝<b>${f(D.p)}</b>　高さ×幅≒${f(D.approx)}</div><div class="mut">${D.w===0?"幅0（1点ちょうど）の確率は0。":"幅を0に近づけると確率も0に近づく。"}σ を小さくすると山が高くなり、高さは1を超えることもある（面積の合計はいつも1）。</div>`;}
+LK.register("dens",{name:"高さと面積",
+init(){["ds","dx","dw"].forEach(id=>LK.stepper($(id),dRender));dRender();},
+apply(s){if(s.sd!==undefined)LK.setRange("ds",s.sd);dFix();if(s.x!==undefined)LK.setRange("dx",s.x);if(s.w!==undefined)LK.setRange("dw",s.w);dRender();},
+render:dRender,
+value(key){const D=dVals(),v=D[key];return {v,text:typeof v==="string"?v:f(v)};}});
+LK.start("norm");
+window.__LAB__={LK,nVals,qVals,uVals,eVals,dVals,Phi,qnorm};
+</script>
+</body></html>
