@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>標本平均ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.card{overflow-wrap:anywhere}
+.mode .lk-step .lk-name{max-width:6.4em}
+.vals input{font-size:15px;min-height:40px;width:100%;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+</style></head><body>
+<h1>🧪 標本平均ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-se" class="mode">
+<p class="mut" style="margin:0">1個ずつの値は平均 μ・標準偏差 σ でばらつく。n 個の平均 x̄ は、取り直すたびに μ のまわりで σ÷√n（標準誤差）ほどぶれる。</p>
+<input type="range" id="sm" min="0" max="1000" step="1" value="50" data-name="平均 μ">
+<input type="range" id="ss" min="0.5" max="2000" step="0.5" value="12" data-name="1個の σ">
+<input type="range" id="sn" min="1" max="900" step="1" value="9" data-name="個数 n">
+<div class="row ctl"><button type="button" class="sub" id="ssim">200回取り直す</button></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="splot"></div>
+<div class="card res key" id="ssum"></div>
+<div class="res det" id="stab"></div>
+</div>
+<div id="m-prop" class="mode">
+<p class="mut" style="margin:0">「買った＝1・買わない＝0」の平均が比率 p̂。p̂ も平均なので、ぶれは √(p(1−p)÷n)。</p>
+<input type="range" id="pp" min="0.01" max="0.99" step="0.01" value="0.2" data-name="比率 p">
+<input type="range" id="pn" min="1" max="3000" step="1" value="100" data-name="人数 n">
+<input type="range" id="pe" min="0.005" max="0.2" step="0.005" value="0.02" data-name="目標の SE">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="pplot"></div>
+<div class="card res key" id="psum"></div>
+</div>
+<div id="m-unb" class="mode">
+<p class="mut" style="margin:0">小さな母集団から、戻しながら n 個取る標本を全部並べる。偏差の2乗和を n で割る分散 v は平均すると σ² より小さく、n−1 で割る不偏分散 s² は平均するとちょうど σ²。</p>
+<div class="row ctl vals"><label style="flex:1">母集団の値 <input id="uv" value="1,3,5" inputmode="decimal" aria-label="母集団の値（カンマ区切り、2〜6個）"></label></div>
+<input type="range" id="un" min="2" max="4" step="1" value="2" data-name="個数 n">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="uplot"></div>
+<div class="card res key" id="usum"></div>
+<div class="res det" id="utab"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-se": {"mode": "se", "set": {"mu": 50, "sd": 12, "n": 36}, "task": "商品1個の重さは平均50g・標準偏差12g。36個の平均重量の標準誤差（SE）は何gか。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "g"}, "why": "12÷√36＝12÷6＝2g。1個ずつのばらつき12gはそのまま。n を9にすると4g、144にすると1g。n を4倍で SE は半分。"}, "s1-unb": {"mode": "unb", "set": {"vals": "1,3,5", "n": 2}, "task": "3つの値 1・3・5（母分散 σ²＝8/3≒2.667）から、戻しながら2個取る標本は9通り。n で割る分散 v を9通り平均するといくつか（小数で）。", "predict": {"type": "number", "key": "meanV", "label": "v の平均"}, "why": "(n−1)/n×σ²＝1/2×8/3≒1.333 で、σ² の半分しかない。n−1 で割る s² なら平均はちょうど 2.667。n を3・4と増やすと v の不足は小さくなる。"}, "s3-free": {"mode": "se", "modes": ["se", "prop", "unb"], "task": "解いてから、問題が聞いていること（平均のぶれか、比率のぶれか、分散の割り方か）に合うモードで確かめる。"}, "s4-free": {"mode": "se", "modes": ["se", "prop"], "task": "自分の売場の数字（1客の購入額の標準偏差と客数、購入率と調べる人数）を入れ、平均や比率がどれだけぶれるかを読む。"}, "s5-free": {"mode": "unb", "modes": ["unb", "se"], "task": "「不偏分散」で n を2→3→4と変え、v の平均が (n−1)/n×σ² になることを確かめる（発展1）。「平均のぶれ」で「200回取り直す」を押し、取り直した x̄ の標準偏差が SE に近いことを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（平均のぶれ、比率のぶれ、不偏分散）。"}, "Q-U18-001": {"mode": "se", "set": {"mu": 0, "sd": 10, "n": 25}, "task": "標準偏差10（母分散100）の母集団から25個。x̄ の分散はいくつか。", "predict": {"type": "number", "key": "var", "label": "x̄ の分散"}, "why": "σ²÷n＝100÷25＝4、SE は √4＝2。n を100にすると分散1・SE1。分散は n に反比例、SE は √n に反比例。"}, "Q-U18-002": {"mode": "prop", "set": {"p": 0.3, "n": 400, "e": 0.02}, "task": "比率 p＝0.3、400人で調べる。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.3×0.7÷400)≒0.023。n を1600にすると半分の約0.011。p を0.5に近づけると SE は大きくなる。"}, "Q-U18-003": {"mode": "se", "set": {"mu": 1000, "sd": 2000, "n": 16}, "task": "1人の購入額の標準偏差は2000円。16人の平均の標準誤差は何円か。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "円"}, "why": "2000÷√16＝500円。1人ずつのばらつき2000円は変わらない。人数を64人にすると250円。"}, "Q-U18-004": {"mode": "se", "set": {"mu": 0, "sd": 10, "n": 100}, "task": "標準偏差10の母集団から100個取る。平均の標準誤差はいくつか。", "predict": {"type": "number", "key": "se", "label": "SE"}, "why": "10÷√100＝1。25個の2から半分になるのに4倍の個数が要る。n を400にすると0.5。"}, "Q-U18-005": {"mode": "se", "set": {"mu": 50, "sd": 12, "n": 36}, "task": "1個の重さは平均50g・標準偏差12g。36個の合計の標準偏差は何gか。", "predict": {"type": "number", "key": "sdsum", "label": "合計の標準偏差", "unit": "g"}, "why": "分散が36倍の5184で、標準偏差は 12×6＝72g。平均にすると36で割って2g。合計のぶれは大きくなるが、平均のぶれは小さくなる。"}, "Q-U18-010": {"mode": "prop", "set": {"p": 0.5, "n": 100, "e": 0.02}, "task": "比率 p＝0.5、100人に聞く。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.25÷100)＝0.05。p を0.2にすると0.04、0.1にすると0.03。同じ人数でも、p が0.5に近いほどぶれは大きい。"}, "Q-U18-011": {"mode": "unb", "set": {"vals": "2,4,9", "n": 2}, "task": "3つの値 2・4・9 から戻しながら2個取る9通りで、不偏分散 s² の平均は（小数で）？", "predict": {"type": "number", "key": "meanS2", "label": "s² の平均"}, "why": "σ²＝26/3≒8.67 とちょうど一致する。n で割る v の平均は半分の4.33。n−1 で割るのは、x̄ から測った偏差が小さく出る分を補うため。"}, "Q-U18-020": {"mode": "se", "set": {"mu": 50, "sd": 10, "n": 30}, "task": "1日の売上は平均50万円・標準偏差10万円。30日間の1日平均売上の標準誤差は（万円・小数で）？", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "万円"}, "why": "10÷√30≒1.83万円。1日ずつの標準偏差10万円とは別もの。「先月の平均売上が2万円下がった」は、SE の1倍ほどで、偶然でも起こりうる大きさ。"}, "Q-U18-021": {"mode": "prop", "set": {"p": 0.5, "n": 100, "e": 0.02}, "task": "p＝0.5 のとき、SE(p̂) を0.02以下にする人数は何人か。", "predict": {"type": "number", "key": "nFor", "label": "必要な人数", "unit": "人"}, "why": "0.25÷0.02²＝625人。目標の SE を0.01にすると2500人（4倍）。p＝0.2 が分かっていれば 0.16÷0.0004＝400人で済む。"}, "Q-U18-022": {"mode": "se", "set": {"mu": 50, "sd": 24, "n": 144}, "task": "1個の標準偏差が24gの商品で、144個の平均の標準誤差は何gか。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "g"}, "why": "24÷12＝2g。ばらつきの大きい商品ほど、平均を安定させるのに多くの個数が要る（σ² に比例）。"}, "Q-U18-023": {"mode": "se", "set": {"mu": 50, "sd": 12, "n": 36}, "task": "σ＝12 の母集団から36個。標本平均の分散 σ²/n はいくつか。", "predict": {"type": "number", "key": "var", "label": "x̄ の分散"}, "why": "144÷36＝4（SE は2）。n を144にすると分散は1で1/4、SE は1で1/2。"}, "Q-U18-030": {"mode": "se", "set": {"mu": 1000, "sd": 1200, "n": 400}, "task": "1客の購入額の標準偏差は1200円。400客の平均（客単価）の標準誤差は何円か。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "円"}, "why": "1200÷20＝60円。客数が100の小さな店なら120円で、客単価はもっと大きく上下する。"}, "Q-U18-031": {"mode": "prop", "set": {"p": 0.6, "n": 150, "e": 0.02}, "task": "比率 p＝0.6、150人。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.24÷150)＝0.04。±2SE で ±8ポイント。600人に聞けば ±4ポイントになる。"}, "Q-U18-040": {"mode": "unb", "set": {"vals": "1,2,6", "n": 3}, "task": "3つの値 1・2・6 から戻しながら3個取る27通りで、n で割る分散 v の平均は（小数で）？", "predict": {"type": "number", "key": "meanV", "label": "v の平均"}, "why": "2/3×14/3≒3.11。n を2にすると1/2倍の2.33、4にすると3/4倍の3.5。いつも (n−1)/n 倍。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc;
+const W=340;
+const f=(v,d=4)=>{if(!isFinite(v))return "—";const r=+v.toFixed(d);return String(Object.is(r,-0)?0:r);};
+function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return s*y;}
+const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
+const dn=(x,m,s)=>Math.exp(-0.5*((x-m)/s)**2)/(s*Math.sqrt(2*Math.PI));
+let seed=11;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};
+const gauss=()=>{const u=rnd()||1e-12,v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+let sims=null;
+function sVals(){const mu=+$("sm").value,sd=+$("ss").value,n=+$("sn").value,se=sd/Math.sqrt(n);
+const out={mu,sd,n,se,var:se*se,popvar:sd*sd,sdsum:sd*Math.sqrt(n),varsum:n*sd*sd,ratio:1/Math.sqrt(n),se4:sd/Math.sqrt(4*n),in1:2*Phi(1)-1};
+if(sims){const m=sims.reduce((a,b)=>a+b,0)/sims.length;out.simsd=Math.sqrt(sims.reduce((a,b)=>a+(b-m)**2,0)/(sims.length-1));out.simmean=m;}
+return out;}
+function sRender(){const S=sVals(),lo=S.mu-4*S.sd,hi=S.mu+4*S.sd,H=170,L=12,R=W-12,base=H-34,top=18,N=200;
+const X=x=>L+(x-lo)/(hi-lo)*(R-L),mx=dn(S.mu,S.mu,S.se),Y=y=>base-Math.min(1,y/mx)*(base-top);
+const path=(s)=>{let p="";for(let i=0;i<=N;i++){const x=lo+(hi-lo)*i/N;p+=(i?"L":"M")+X(x).toFixed(1)+" "+Y(dn(x,S.mu,s)).toFixed(1);}return p;};
+const pop=dn(S.mu,S.mu,S.sd)/mx; // 母集団の曲線は高さを比べやすいよう縦に拡大して描く
+const Yp=y=>base-y/dn(S.mu,S.mu,S.sd)*Math.max(0.28,pop)*(base-top);
+let pp="";for(let i=0;i<=N;i++){const x=lo+(hi-lo)*i/N;pp+=(i?"L":"M")+X(x).toFixed(1)+" "+Yp(dn(x,S.mu,S.sd)).toFixed(1);}
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="1個の分布と平均の分布">`;
+s+=`<path d="${pp}" fill="var(--mut)" fill-opacity=".12" stroke="var(--mut)" stroke-width="1.5"/>`;
+if(sims){const bw=(hi-lo)/60,cnt={};sims.forEach(m=>{const k=Math.floor((m-lo)/bw);cnt[k]=(cnt[k]||0)+1;});const cm=Math.max(...Object.values(cnt));
+Object.entries(cnt).forEach(([k,c])=>{const x0=lo+k*bw;if(x0<lo||x0>hi)return;const h=c/cm*(base-top)*0.9;s+=`<rect x="${X(x0)}" y="${base-h}" width="${Math.max(1,X(x0+bw)-X(x0)-0.5)}" height="${h}" fill="var(--acc2)" fill-opacity=".45"/>`;});}
+s+=`<path d="${path(S.se)}" fill="none" stroke="var(--acc)" stroke-width="2"/>`;
+s+=`<line x1="${L}" y1="${base}" x2="${R}" y2="${base}" stroke="var(--fg)" stroke-opacity=".5"/>`;
+[-3,-2,-1,0,1,2,3].forEach(k=>{const x=S.mu+k*S.sd;s+=`<text x="${X(x)}" y="${base+14}" font-size="10" text-anchor="middle" fill="var(--fg)">${f(x,2)}</text>`;});
+s+=`<line x1="${X(S.mu-S.se)}" y1="${base+20}" x2="${X(S.mu+S.se)}" y2="${base+20}" stroke="var(--acc)" stroke-width="3"/><text x="${X(S.mu)}" y="${base+32}" font-size="10" text-anchor="middle" fill="var(--acc)">±SE</text></svg>`;
+$("splot").innerHTML=s+`<div class="legend mut"><span><i class="sw" style="background:var(--mut);opacity:.3"></i>1個ずつの値（σ）</span><span><i class="sw" style="background:var(--acc)"></i>n 個の平均 x̄</span>${sims?`<span><i class="sw" style="background:var(--acc2);opacity:.5"></i>取り直した x̄</span>`:""}</div>`;
+$("ssum").innerHTML=`<div>標準誤差 SE＝σ÷√n＝${f(S.sd,2)}÷√${S.n}＝<b>${f(S.se)}</b>　x̄ の分散＝σ²÷n＝<b>${f(S.var)}</b></div><div>x̄ の平均（期待値）＝μ＝${f(S.mu,2)}（n を変えても中心は動かない）</div><div>n 個の合計の標準偏差＝σ×√n＝${f(S.sdsum)}　n を4倍にすると SE は ${f(S.se4)}（半分）</div>${sims?`<div>200回取り直した x̄ の標準偏差＝<b>${f(S.simsd)}</b>（理論の SE ${f(S.se)} に近い）</div>`:""}<div class="mut">1個ずつのばらつき σ は n を増やしても変わらない。小さくなるのは平均のぶれ（SE）だけ。</div>`;
+$("stab").innerHTML=`<table><tr><th>n</th><th>SE＝σ÷√n</th></tr>${[1,4,9,16,25,36,100,400].map(k=>`<tr><td>${k}</td><td>${f(S.sd/Math.sqrt(k))}</td></tr>`).join("")}</table>`;}
+LK.register("se",{name:"平均のぶれ",
+init(){["sm","ss","sn"].forEach(id=>LK.stepper($(id),()=>{sims=null;sRender();}));
+$("ssim").onclick=()=>{const S=sVals();seed=11;sims=[];for(let r=0;r<200;r++){let t=0;for(let i=0;i<S.n;i++)t+=S.mu+S.sd*gauss();sims.push(t/S.n);}sRender();};sRender();},
+apply(s){if(s.mu!==undefined)LK.setRange("sm",s.mu);if(s.sd!==undefined)LK.setRange("ss",s.sd);if(s.n!==undefined)LK.setRange("sn",s.n);sims=null;sRender();},
+render:sRender,
+value(key){const S=sVals(),v=S[key];return {v,text:f(v)};}});
+function pVals(){const p=+$("pp").value,n=+$("pn").value,e=+$("pe").value,se=Math.sqrt(p*(1-p)/n);
+return {p,n,e,se,var:se*se,margin:2*se,lo:p-2*se,hi:p+2*se,nFor:Math.ceil(p*(1-p)/(e*e)-1e-9),nWorst:Math.ceil(0.25/(e*e)-1e-9)};}
+function pRender(){const P=pVals(),H=150,L=14,R=W-14,base=H-30,top=16,N=200,X=x=>L+x*(R-L);
+const sdx=Math.max(P.se,1e-4),mx=dn(P.p,P.p,sdx),Y=y=>base-Math.min(1,y/mx)*(base-top);
+let p="";for(let i=0;i<=N;i++){const x=i/N;p+=(i?"L":"M")+X(x).toFixed(1)+" "+Y(dn(x,P.p,sdx)).toFixed(1);}
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="比率のぶれ"><rect x="${X(Math.max(0,P.lo))}" y="${top}" width="${X(Math.min(1,P.hi))-X(Math.max(0,P.lo))}" height="${base-top}" fill="var(--acc2)" fill-opacity=".12"/><path d="${p}" fill="none" stroke="var(--acc)" stroke-width="2"/><line x1="${L}" y1="${base}" x2="${R}" y2="${base}" stroke="var(--fg)" stroke-opacity=".5"/>`;
+[0,0.2,0.4,0.6,0.8,1].forEach(x=>s+=`<text x="${X(x)}" y="${base+14}" font-size="10" text-anchor="middle" fill="var(--fg)">${x*100}%</text>`);
+s+=`<line x1="${X(P.p)}" y1="${top-4}" x2="${X(P.p)}" y2="${base}" stroke="var(--fg)" stroke-dasharray="3 3"/></svg>`;
+$("pplot").innerHTML=s+`<div class="legend mut"><span><i class="sw" style="background:var(--acc)"></i>p̂ の散らばり</span><span><i class="sw" style="background:var(--acc2);opacity:.3"></i>p±2SE</span></div>`;
+$("psum").innerHTML=`<div>SE(p̂)＝√(${f(P.p,2)}×${f(1-P.p,2)}÷${P.n})＝<b>${f(P.se)}</b>（${f(P.se*100,2)}ポイント）　分散＝${f(P.var,6)}</div><div>±2SE＝±${f(P.margin)}：p̂ はおよそ ${f(Math.max(0,P.lo)*100,1)}%〜${f(Math.min(1,P.hi)*100,1)}% に入る</div><div>SE を ${f(P.e,3)} 以下にする人数：p(1−p)÷SE²＝<b>${P.nFor}</b> 人（p が分からないときは p＝0.5 で ${P.nWorst} 人）</div><div class="mut">p(1−p) は p＝0.5 で最大。n を4倍にすると SE は半分。</div>`;}
+LK.register("prop",{name:"比率のぶれ",
+init(){["pp","pn","pe"].forEach(id=>LK.stepper($(id),pRender));pRender();},
+apply(s){if(s.p!==undefined)LK.setRange("pp",s.p);if(s.n!==undefined)LK.setRange("pn",s.n);if(s.e!==undefined)LK.setRange("pe",s.e);pRender();},
+render:pRender,
+value(key){const P=pVals(),v=P[key];return {v,text:key==="nFor"||key==="nWorst"?String(v):f(v)};}});
+function uParse(){return $("uv").value.split(/[,、，\s]+/).map(Number).filter(x=>isFinite(x)).slice(0,6);}
+function uVals(){const xs=uParse(),N=xs.length,n=+$("un").value;if(N<2)return {N,n,list:[],sigma2:NaN,meanV:NaN,meanS2:NaN,ratio:NaN,count:0};
+const mu=xs.reduce((a,b)=>a+b,0)/N,sigma2=xs.reduce((a,b)=>a+(b-mu)**2,0)/N,list=[];
+const rec=(c)=>{if(c.length===n){const m=c.reduce((a,b)=>a+b,0)/n,q=c.reduce((a,b)=>a+(b-m)**2,0);list.push({c:c.slice(),m,v:q/n,s2:q/(n-1)});return;}for(const x of xs){c.push(x);rec(c);c.pop();}};rec([]);
+const K=list.length,meanV=list.reduce((a,o)=>a+o.v,0)/K,meanS2=list.reduce((a,o)=>a+o.s2,0)/K,meanM=list.reduce((a,o)=>a+o.m,0)/K;
+return {N,n,xs,mu,list,count:K,sigma2,meanV,meanS2,meanM,ratio:meanV/sigma2,theory:(n-1)/n*sigma2,varM:list.reduce((a,o)=>a+(o.m-meanM)**2,0)/K};}
+function uRender(){const U=uVals();if(!U.count){$("uplot").innerHTML=`<div class="mut">値を2〜6個、カンマで区切って入れる。</div>`;$("usum").innerHTML="";$("utab").innerHTML="";return;}
+const H=130,L=60,R=W-14,mx=Math.max(U.sigma2,U.meanS2,U.meanV)*1.15||1,X=v=>L+v/mx*(R-L);
+const rows=[["σ²（母分散）",U.sigma2,"var(--fg)"],["v の平均（n で割る）",U.meanV,"var(--acc2)"],["s² の平均（n−1 で割る）",U.meanS2,"var(--acc)"]];
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="分散の平均の比較">`;
+rows.forEach(([lab,v,c],i)=>{const y=14+i*38;s+=`<text x="${L-6}" y="${y+12}" font-size="10" text-anchor="end" fill="var(--fg)">${lab.split("（")[0]}</text><text x="${L-6}" y="${y+24}" font-size="9" text-anchor="end" fill="var(--mut)">${lab.includes("（")?"（"+lab.split("（")[1]:""}</text><rect x="${L}" y="${y}" width="${X(v)-L}" height="22" rx="4" fill="${c}" fill-opacity="${i?.6:.25}"/><text x="${X(v)+4}" y="${y+15}" font-size="11" fill="var(--fg)">${f(v,3)}</text>`;});
+s+=`<line x1="${X(U.sigma2)}" y1="8" x2="${X(U.sigma2)}" y2="${H-4}" stroke="var(--fg)" stroke-dasharray="3 3"/></svg>`;
+$("uplot").innerHTML=s;
+$("usum").innerHTML=`<div>戻しながら ${U.n} 個取る標本は ${U.N}^${U.n}＝${U.count} 通り（どれも同じ確率）</div><div>母分散 σ²＝<b>${f(U.sigma2)}</b>　v（n で割る）の平均＝<b>${f(U.meanV)}</b>＝(n−1)/n×σ²　s²（n−1 で割る）の平均＝<b>${f(U.meanS2)}</b></div><div>x̄ の平均＝${f(U.meanM)}（＝μ）　x̄ の分散＝${f(U.varM)}（＝σ²÷n）</div><div class="mut">標本の中の偏差は x̄ から測るので、μ から測るより小さく出る。その分を n−1 で割って補うと、平均して σ² に当たる（不偏）。</div>`;
+$("utab").innerHTML=`<table><tr><th>標本</th><th>x̄</th><th>v</th><th>s²</th></tr>${U.list.slice(0,40).map(o=>`<tr><td>${o.c.join("・")}</td><td>${f(o.m,3)}</td><td>${f(o.v,3)}</td><td>${f(o.s2,3)}</td></tr>`).join("")}</table>${U.count>40?`<div class="mut">（${U.count} 通りのうち最初の40通り）</div>`:""}`;}
+LK.register("unb",{name:"不偏分散",
+init(){LK.stepper($("un"),uRender);$("uv").addEventListener("input",uRender);uRender();},
+apply(s){if(s.vals!==undefined)$("uv").value=String(s.vals);if(s.n!==undefined)LK.setRange("un",s.n);uRender();},
+render:uRender,
+value(key){const U=uVals(),v=U[key];return {v,text:f(v)};}});
+LK.start("se");
+window.__LAB__={LK,sVals,pVals,uVals};
+</script>
+</body></html>
