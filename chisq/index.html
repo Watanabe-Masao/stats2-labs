@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>カイ二乗検定ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
+:root{--c3:#8a6a00}
+@media (prefers-color-scheme:dark){:root{--c3:#d9a82c}}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.card{overflow-wrap:anywhere}
+.grid input{width:5.4em;font-size:16px;min-height:40px;padding:2px 6px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);text-align:right}
+.grid td,.grid th{padding:3px 4px;border-bottom:0;vertical-align:middle}
+.grid th{font-weight:400;font-size:13px;color:var(--mut)}
+.hit{color:var(--ng);font-weight:700}
+</style></head><body>
+<h1>🧪 カイ二乗検定ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-gof" class="mode">
+<p class="mut" style="margin:0">適合度：観測度数 O が、決めた比率どおりか。期待度数 E＝総数×比率、χ²＝Σ(O−E)²÷E。自由度＝区分の数−1−データから推定した母数の数。</p>
+<div class="row ctl"><label>区分の数 <select id="gk" data-key="k"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label><label>α <select id="galpha" data-key="alpha"><option value="0.1">10%</option><option value="0.05" selected>5%</option><option value="0.01">1%</option></select></label></div>
+<div class="row ctl"><label>推定した母数 <select id="gm" data-key="m"><option value="0" selected>0個</option><option value="1">1個</option><option value="2">2個</option></select></label></div>
+<table class="grid ctl" id="gtab"></table>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="gbar"></div>
+<div class="card res key" id="gsum"></div>
+<div class="res det" id="gplot"></div>
+<div class="res det" id="gdet"></div>
+</div>
+<div id="m-indep" class="mode">
+<p class="mut" style="margin:0">独立性：クロス集計表の2つの分類に関係があるか。独立なら期待度数 E＝行計×列計÷総計で、どの行も割合（帯の区切り）がそろう。自由度＝(行の数−1)×(列の数−1)。</p>
+<div class="row ctl"><label>行 <select id="ir" data-key="r"><option selected>2</option><option>3</option></select></label><label>列 <select id="ic" data-key="c"><option selected>2</option><option>3</option></select></label><label>α <select id="ialpha" data-key="alpha"><option value="0.1">10%</option><option value="0.05" selected>5%</option><option value="0.01">1%</option></select></label></div>
+<table class="grid ctl" id="itab"></table>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="iband"></div>
+<div class="card res key" id="isum"></div>
+<div class="res det" id="iplot"></div>
+<div class="res det" id="idet"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-indep": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[30, 20], [20, 30]]}, "task": "チラシA（購入30・なし20）とB（購入20・なし30）。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "期待度数はどのセルも50×50÷100＝25。(5²÷25)×4＝4 が自由度1の点3.841 を超えるので、独立を棄却する。帯の区切りが行ごとにずれている。"}, "s1-gof": {"mode": "gof", "set": {"alpha": 0.05, "k": 2, "m": 0, "o": [60, 40], "w": [1, 1]}, "task": "2つの区分を50対50 と決めた。観測は60と40。p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "期待度数50・50、χ²＝100÷50＋100÷50＝4、自由度1。比率の検定の z＝2 の2乗と同じ。"}, "s1-half": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[15, 10], [10, 15]]}, "task": "例題Aと同じ割合（60%と40%）で、人数を半分（各25人）にした。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "割合が同じでも、件数が半分なら χ² も半分の2。境目3.841 に届かない。各500人なら χ²＝40。"}, "s3-free": {"mode": "indep", "modes": ["indep", "gof"], "task": "解いてから、何の検定か（2つの分類の関係か、決めた比率どおりか）に合うモードで確かめる。"}, "s4-free": {"mode": "indep", "modes": ["indep", "gof"], "task": "自分の売場の集計（店×支払い方法、曜日ごとの客数など）を入れ、帯グラフと χ² を読む。"}, "s5-free": {"mode": "gof", "modes": ["gof", "indep"], "task": "「適合度」で推定した母数の数を0→1にして自由度と境目の変化を見る（発展1）。「独立性」で2×2 の表の χ² を2つの比率の z² と比べる（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（適合度、独立性）。"}, "Q-U27-001": {"mode": "gof", "set": {"alpha": 0.05, "k": 4, "m": 0, "o": [26, 14, 22, 18], "w": [1, 1, 1, 1]}, "task": "4つの売場で 26・14・22・18 人、どこも同じ割合のはず。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "期待度数20、ずれの2乗の和80÷20＝4。自由度3の点7.815 に届かない。同じ χ²＝4 でも、自由度1なら棄却、自由度3なら棄却しない。"}, "Q-U27-002": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[50, 150], [70, 130]]}, "task": "旧200人中50人購入、新200人中70人購入。5%で H₀（独立）をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "χ²≒4.76 が3.841 を超える。帯グラフで、新の「購入」の帯が全体の区切りより長い。"}, "Q-U27-003": {"mode": "gof", "set": {"alpha": 0.05, "k": 3, "m": 0, "o": [54, 36, 30], "w": [2, 1, 1]}, "task": "見込み 2：1：1、120個で 54・36・30。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "期待度数は60・30・30。比率の欄に 2・1・1 と入れれば、合計が1でなくても割合として扱われる。"}, "Q-U27-004": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 3, "t": [[30, 40, 30], [20, 40, 40]]}, "task": "A店 30・40・30、B店 20・40・40。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "期待度数は 25・40・35。カードの列はずれがなく、現金とスマホのずれだけが χ² に効く。自由度は2。"}, "Q-U27-005": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[3, 7], [8, 2]]}, "task": "新 3・7、従来 8・2（各10人）。いちばん小さい期待度数は（小数で）？", "predict": {"type": "number", "key": "emin", "label": "最小の期待度数"}, "why": "4.5 は目安の5より小さい。ラボの χ²≒5.05・p≒0.025 は近似の値で、件数が少ないと当てにならない。"}, "Q-U27-010": {"mode": "gof", "set": {"alpha": 0.05, "k": 5, "m": 0, "o": [48, 35, 42, 30, 45], "w": [1, 1, 1, 1, 1]}, "task": "平日5日で 48・35・42・30・45 人。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "期待度数40、ずれの2乗の和218÷40＝5.45。木曜の少なさがいちばん効く（100÷40＝2.5）。"}, "Q-U27-011": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[20, 80], [30, 70]]}, "task": "A店 20・80、B店 30・70。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "z≒−1.633 の2乗と同じ2.667。p≒0.10 も z 検定と一致する。"}, "Q-U27-012": {"mode": "gof", "set": {"alpha": 0.05, "k": 2, "m": 0, "o": [60, 40], "w": [1, 1]}, "task": "50対50 のはずが 60 と 40。p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "χ²＝4（自由度1）の上側の確率は、z＝2 の両側の確率と同じ約0.046。"}, "Q-U27-020": {"mode": "gof", "set": {"alpha": 0.05, "k": 4, "m": 1, "o": [35, 38, 19, 8], "w": [0.3679, 0.3679, 0.1839, 0.0803]}, "task": "4区分、λ をデータから推定。比べる境目（上側5%点）は（小数で）？", "predict": {"type": "number", "key": "crit", "label": "境目"}, "why": "自由度＝4−1−1＝2 なので5.991。「推定した母数」を0個にすると自由度3・境目7.815 になる。棒グラフでは観測と期待がほぼ重なる。"}, "Q-U27-021": {"mode": "indep", "set": {"alpha": 0.05, "r": 3, "c": 3, "t": [[50, 30, 20], [40, 35, 25], [25, 35, 40]]}, "task": "3年代×3商品の表。5%で H₀（独立）をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "χ²≒16.41 が9.488 を大きく超える。帯の区切りが年代ごとに大きくずれている。"}, "Q-U27-022": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[300, 200], [200, 300]]}, "task": "各500人で A 300・200、B 200・300。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "例題Aの10倍の件数で χ² も10倍。帯グラフの形は例題Aとまったく同じ。"}, "Q-U27-023": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[30, 20], [20, 30]]}, "task": "例題Aの表。行1列1の期待度数は（小数で）？", "predict": {"type": "number", "key": "e11", "label": "E₁₁"}, "why": "50×50÷100＝25。帯グラフの点線（全体の区切り）が50%の位置にある。"}, "Q-U27-030": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 3, "t": [[60, 30, 10], [45, 35, 20]]}, "task": "A店 60・30・10、B店 45・35・20。p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "χ²≒5.86、p≒0.053。わずかに5%を超える。いちばん効いているのは「不満」の列。"}, "Q-U27-031": {"mode": "gof", "set": {"alpha": 0.05, "k": 3, "m": 0, "o": [62, 48, 40], "w": [1, 1, 1]}, "task": "3台で 62・48・40 人。5%で H₀（均等）をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "χ²＝4.96 は5.991 に届かない（p≒0.084）。同じ割合で300人なら χ²＝9.92 で棄却する。"}, "Q-U27-032": {"mode": "indep", "set": {"alpha": 0.05, "r": 2, "c": 2, "t": [[120, 80], [60, 90]]}, "task": "会員 120・80、非会員 60・90。χ² は（小数で）？", "predict": {"type": "number", "key": "chi2", "label": "χ²"}, "why": "χ²≒13.73 で強い関連。ただし関連は原因を示さない。帯の区切りのずれは、どちらが原因でも同じように出る。"}, "Q-U27-040": {"mode": "indep", "set": {"alpha": 0.05, "r": 3, "c": 3, "t": [[50, 30, 20], [40, 35, 25], [25, 35, 40]]}, "task": "3×3 の表。独立性の検定の自由度は？", "predict": {"type": "number", "key": "df", "label": "自由度"}, "why": "(3−1)×(3−1)＝4。行や列を2に減らすと、自由度は2や1になる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc;
+const W=340;
+const f=(v,d=4)=>{if(!isFinite(v))return "—";const r=+v.toFixed(d);return String(Object.is(r,-0)?0:r);};
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(const ci of c)s+=ci/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function gammp(a,x){if(x<=0)return 0;if(x<a+1){let ap=a,s=1/a,d=s;for(let n=0;n<1000;n++){ap++;d*=x/ap;s+=d;if(Math.abs(d)<Math.abs(s)*3e-15)break;}return s*Math.exp(-x+a*Math.log(x)-lgam(a));}
+let b=x+1-a,c=1/1e-300,d=1/b,h=d;for(let i=1;i<1000;i++){const an=-i*(i-a);b+=2;d=an*d+b;if(Math.abs(d)<1e-300)d=1e-300;c=b+an/c;if(Math.abs(c)<1e-300)c=1e-300;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-15)break;}return 1-Math.exp(-x+a*Math.log(x)-lgam(a))*h;}
+const chiCdf=(q,k)=>gammp(k/2,q/2);
+function inv(cdf,p,lo,hi){for(let i=0;i<200;i++){const m=(lo+hi)/2;if(cdf(m)<p)lo=m;else hi=m;}return (lo+hi)/2;}
+const r3=v=>Math.round(v*1000)/1000,g3=v=>v.toFixed(3);
+const chiCrit=(k,a)=>r3(inv(x=>chiCdf(x,k),1-a,0,k+60*Math.sqrt(2*k)+60));   // 数表と同じ3桁の上側の点
+const COLS=["var(--acc)","var(--acc2)","var(--c3)"];
+const num=v=>{const x=Number(v);return isFinite(x)&&x>=0?x:0;};
+function vlines(lines,X,x0,x1,top,base){let s="";const placed=[];lines.forEach(t=>{const x=Math.max(x0,Math.min(x1,t.x)),lx=X(x),near=t.label&&placed.some(p=>Math.abs(p-lx)<40),ly=near?top-15:top-3;if(t.label&&!near)placed.push(lx);s+=`<line x1="${lx}" y1="${top}" x2="${lx}" y2="${base}" stroke="${t.col}" stroke-dasharray="${t.dash||"4 3"}" stroke-width="1.5"/><text x="${lx}" y="${ly}" font-size="10.5" text-anchor="${lx>W*0.75?"end":lx<W*0.25?"start":"middle"}" fill="${t.col}">${esc(t.label)}</text>`;});return s;}
+function chiPlot(k,stat,hi){const H=150,L=12,R=W-12,base=H-26,top=26,xmax=Math.max(8,Math.ceil(Math.max(hi,stat,k+4*Math.sqrt(2*k))*1.08)),X=x=>L+x/xmax*(R-L);
+const pdf=x=>Math.exp((k/2-1)*Math.log(x)-x/2-k/2*Math.log(2)-lgam(k/2));let mx=0;const pts=[];for(let i=1;i<=200;i++){const x=xmax*i/200,y=pdf(x);pts.push([x,y]);if(isFinite(y)&&i>4&&y>mx)mx=y;}mx*=1.15;const Y=y=>base-Math.min(y,mx)/mx*(base-top);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="χ²(${k}) の分布と棄却域">`;
+const a=Math.min(hi,xmax);let p=`M${X(a).toFixed(1)} ${base}`;for(let i=0;i<=60;i++){const x=a+(xmax-a)*i/60;p+=` L${X(x).toFixed(1)} ${Y(pdf(Math.max(x,1e-6))).toFixed(1)}`;}s+=`<path d="${p} L${X(xmax).toFixed(1)} ${base} Z" fill="var(--acc2)" fill-opacity=".45"/>`;
+s+=`<path d="${pts.map((q,i)=>(i?"L":"M")+X(q[0]).toFixed(1)+" "+Y(q[1]).toFixed(1)).join("")}" fill="none" stroke="var(--acc)" stroke-width="2"/>`;
+s+=`<line x1="${L}" y1="${base}" x2="${R}" y2="${base}" stroke="var(--fg)" stroke-opacity=".5"/>`;
+const step=xmax>40?10:xmax>16?5:xmax>8?2:1;for(let x=0;x<=xmax+1e-9;x+=step)s+=`<text x="${X(x)}" y="${base+14}" font-size="10" text-anchor="middle" fill="var(--fg)">${x}</text>`;
+s+=vlines([{x:stat,label:`χ²＝${f(stat,2)}`,col:"var(--fg)",dash:"2 2"},{x:hi,label:g3(hi),col:"var(--acc)"}],X,0,xmax,top,base);
+return s+`</svg><div class="legend mut"><span><i class="sw" style="background:var(--acc2);opacity:.5"></i>棄却域</span><span><i class="sw" style="background:var(--acc)"></i>χ²(${k}) と境目（数表の点）</span></div>`;}
+let gO=[26,14,22,18,0,0],gW=[1,1,1,1,1,1];
+function gBuild(){const k=+$("gk").value;let h=`<tr><th>区分</th><th>観測 O</th><th>比率</th></tr>`;for(let i=0;i<k;i++)h+=`<tr><td>${i+1}</td><td><input type="number" min="0" step="1" inputmode="numeric" id="go${i}" value="${gO[i]}" aria-label="区分${i+1}の観測度数"></td><td><input type="number" min="0" step="any" inputmode="decimal" id="gw${i}" value="${gW[i]}" aria-label="区分${i+1}の比率"></td></tr>`;
+$("gtab").innerHTML=h;for(let i=0;i<k;i++){$("go"+i).oninput=e=>{gO[i]=num(e.target.value);gRender();};$("gw"+i).oninput=e=>{gW[i]=num(e.target.value);gRender();};}}
+function gVals(){const k=+$("gk").value,a=+$("galpha").value,m=+$("gm").value,O=gO.slice(0,k),Wt=gW.slice(0,k),n=O.reduce((s,x)=>s+x,0),ws=Wt.reduce((s,x)=>s+x,0)||1,E=Wt.map(w=>n*w/ws),C=O.map((o,i)=>E[i]>0?(o-E[i])**2/E[i]:0),chi2=C.reduce((s,x)=>s+x,0),df=Math.max(1,k-1-m),crit=chiCrit(df,a),p=1-chiCdf(chi2,df),emin=Math.min(...E);
+const o={k,alpha:a,m,n,O,E,C,chi2,df,crit,p,decision:chi2>crit?"棄却する":"棄却しない",emin,nsmall:E.filter(e=>e<5).length};E.forEach((e,i)=>o["e"+(i+1)]=e);return o;}
+function gRender(){const G=gVals(),mx=Math.max(1,...G.O,...G.E),H=130,L=30,R=W-6,base=H-22,top=8,bw=(R-L)/G.k,Y=v=>base-v/mx*(base-top);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="観測度数と期待度数">`;
+[0,mx/2,mx].forEach(v=>s+=`<line x1="${L}" y1="${Y(v)}" x2="${R}" y2="${Y(v)}" stroke="var(--line)"/><text x="${L-4}" y="${Y(v)+4}" font-size="10" text-anchor="end" fill="var(--mut)">${f(v,0)}</text>`);
+G.O.forEach((o,i)=>{const x=L+i*bw,w=Math.min(22,bw/2-4);s+=`<rect x="${(x+bw/2-w-1).toFixed(1)}" y="${Y(o).toFixed(1)}" width="${w}" height="${(base-Y(o)).toFixed(1)}" rx="3" fill="var(--acc)"><title>区分${i+1} 観測 ${o}</title></rect><rect x="${(x+bw/2+1).toFixed(1)}" y="${Y(G.E[i]).toFixed(1)}" width="${w}" height="${(base-Y(G.E[i])).toFixed(1)}" rx="3" fill="var(--mut)" fill-opacity=".55"><title>区分${i+1} 期待 ${f(G.E[i],2)}</title></rect><text x="${x+bw/2}" y="${base+14}" font-size="10.5" text-anchor="middle" fill="var(--fg)">${i+1}</text>`;});
+$("gbar").innerHTML=s+`</svg><div class="legend mut"><span><i class="sw" style="background:var(--acc)"></i>観測 O</span><span><i class="sw" style="background:var(--mut);opacity:.55"></i>期待 E</span></div>`;
+$("gsum").innerHTML=`<div>総数 ${G.n}、期待度数 E＝${G.E.map(e=>f(e,2)).join("・")}</div><div>χ²＝Σ(O−E)²÷E＝<b>${f(G.chi2,3)}</b>　自由度＝${G.k}−1${G.m?`−${G.m}`:""}＝<b>${G.df}</b></div><div>境目 ${g3(G.crit)}（上側${G.alpha*100}%）　p 値＝<b>${f(G.p)}</b>　→ H₀（比率どおり）を <b>${G.decision}</b></div>${G.nsmall?`<div class="hit">期待度数が5未満の区分が ${G.nsmall} つある。χ² 近似は粗い（区分をまとめる）。</div>`:""}<div class="mut">χ² には割合ではなく件数を入れる。比率が同じでも件数が10倍なら χ² も10倍。</div>`;
+$("gplot").innerHTML=chiPlot(G.df,G.chi2,G.crit);
+$("gdet").innerHTML=`<table><tr><th>区分</th><th>O</th><th>E</th><th>(O−E)²÷E</th></tr>${G.O.map((o,i)=>`<tr><td>${i+1}</td><td>${o}</td><td>${f(G.E[i],2)}</td><td>${f(G.C[i],3)}</td></tr>`).join("")}</table>`;}
+LK.register("gof",{name:"適合度",
+init(){gBuild();$("gk").onchange=()=>{gBuild();gRender();};["galpha","gm"].forEach(id=>$(id).onchange=gRender);gRender();},
+apply(s){if(s.k!==undefined)$("gk").value=String(s.k);if(s.alpha!==undefined)$("galpha").value=String(s.alpha);if(s.m!==undefined)$("gm").value=String(s.m);if(s.o)s.o.forEach((v,i)=>gO[i]=v);if(s.w)s.w.forEach((v,i)=>gW[i]=v);gBuild();gRender();},
+render:gRender,
+value(key){const G=gVals(),v=G[key];return {v,text:typeof v==="string"?v:f(v)};}});
+let iT=[[30,20,0],[20,30,0],[0,0,0]];
+function iBuild(){const r=+$("ir").value,c=+$("ic").value;let h=`<tr><th></th>${[...Array(c)].map((_,j)=>`<th>列${j+1}</th>`).join("")}</tr>`;for(let i=0;i<r;i++)h+=`<tr><th>行${i+1}</th>${[...Array(c)].map((_,j)=>`<td><input type="number" min="0" step="1" inputmode="numeric" id="it${i}${j}" value="${iT[i][j]}" aria-label="行${i+1}列${j+1}"></td>`).join("")}</tr>`;
+$("itab").innerHTML=h;for(let i=0;i<r;i++)for(let j=0;j<c;j++)$("it"+i+j).oninput=e=>{iT[i][j]=num(e.target.value);iRender();};}
+function iVals(){const r=+$("ir").value,c=+$("ic").value,a=+$("ialpha").value,T=iT.slice(0,r).map(row=>row.slice(0,c)),rs=T.map(row=>row.reduce((s,x)=>s+x,0)),cs=[...Array(c)].map((_,j)=>T.reduce((s,row)=>s+row[j],0)),n=rs.reduce((s,x)=>s+x,0)||1;
+const E=T.map((row,i)=>row.map((_,j)=>rs[i]*cs[j]/n)),C=T.map((row,i)=>row.map((o,j)=>E[i][j]>0?(o-E[i][j])**2/E[i][j]:0)),chi2=C.flat().reduce((s,x)=>s+x,0),df=(r-1)*(c-1),crit=chiCrit(df,a),p=1-chiCdf(chi2,df),flat=E.flat();
+const o={r,c,alpha:a,T,rs,cs,n,E,C,chi2,df,crit,p,decision:chi2>crit?"棄却する":"棄却しない",emin:Math.min(...flat),nsmall:flat.filter(e=>e<5).length};E.forEach((row,i)=>row.forEach((e,j)=>o[`e${i+1}${j+1}`]=e));return o;}
+function band(I){const rows=I.T.map((row,i)=>({name:`行${i+1}`,v:row,t:I.rs[i]})).concat([{name:"全体",v:I.cs,t:I.n}]),L=40,R=W-8,bh=22,gap=10,top=6,H=top+rows.length*(bh+gap)+16;
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="行ごとの割合の帯グラフ">`;
+let acc=0;const cut=I.cs.slice(0,-1).map(v=>(acc+=v)/I.n);
+rows.forEach((rw,i)=>{const y=top+i*(bh+gap)+(i===rows.length-1?4:0);let x=L;s+=`<text x="${L-6}" y="${y+bh/2+4}" font-size="11" text-anchor="end" fill="var(--fg)">${rw.name}</text>`;
+rw.v.forEach((v,j)=>{const w=rw.t>0?v/rw.t*(R-L):0;if(w>0){s+=`<rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(0,w-2).toFixed(1)}" height="${bh}" rx="3" fill="${COLS[j]}"${i===rows.length-1?' fill-opacity=".7"':""}><title>${rw.name}・列${j+1}：${v}（${f(rw.t?v/rw.t*100:0,1)}%）</title></rect>`;if(w>34)s+=`<text x="${(x+w/2-1).toFixed(1)}" y="${y+bh/2+4}" font-size="10.5" text-anchor="middle" fill="#fff">${f(v/rw.t*100,0)}%</text>`;}x+=w;});});
+const yb=top+(rows.length-1)*(bh+gap)+bh+4;cut.forEach(q=>{const x=L+q*(R-L);s+=`<line x1="${x.toFixed(1)}" y1="${top-2}" x2="${x.toFixed(1)}" y2="${yb+2}" stroke="var(--fg)" stroke-dasharray="3 3" stroke-width="1.2"/>`;});
+s+=`<text x="${L}" y="${H-2}" font-size="10" fill="var(--mut)">0%</text><text x="${R}" y="${H-2}" font-size="10" text-anchor="end" fill="var(--mut)">100%</text>`;
+return s+`</svg><div class="legend mut">${I.cs.map((_,j)=>`<span><i class="sw" style="background:${COLS[j]}"></i>列${j+1}</span>`).join("")}<span>点線＝全体の区切り（独立ならどの行もここにそろう）</span></div>`;}
+function iRender(){const I=iVals();$("iband").innerHTML=band(I);
+$("isum").innerHTML=`<div>総計 ${I.n}　期待度数 E₁₁＝${f(I.rs[0],0)}×${f(I.cs[0],0)}÷${I.n}＝${f(I.E[0][0],2)}　最小の E＝${f(I.emin,2)}</div><div>χ²＝<b>${f(I.chi2,3)}</b>　自由度＝(${I.r}−1)×(${I.c}−1)＝<b>${I.df}</b>　境目 ${g3(I.crit)}</div><div>p 値＝<b>${f(I.p)}</b>　→ H₀（独立）を <b>${I.decision}</b></div>${I.nsmall?`<div class="hit">期待度数が5未満のセルが ${I.nsmall} つある。χ² 近似は粗い。</div>`:""}<div class="mut">棄却しても「関連がある」まで。どちらが原因かは言えない。どの向きの関連かは帯（行ごとの割合）で見る。</div>`;
+$("iplot").innerHTML=chiPlot(I.df,I.chi2,I.crit);
+$("idet").innerHTML=`<table><tr><th>セル</th><th>O</th><th>E</th><th>(O−E)²÷E</th></tr>${I.T.map((row,i)=>row.map((o,j)=>`<tr><td>行${i+1}列${j+1}</td><td>${o}</td><td>${f(I.E[i][j],2)}</td><td>${f(I.C[i][j],3)}</td></tr>`).join("")).join("")}</table>`;}
+LK.register("indep",{name:"独立性",
+init(){iBuild();["ir","ic"].forEach(id=>$(id).onchange=()=>{iBuild();iRender();});$("ialpha").onchange=iRender;iRender();},
+apply(s){if(s.r!==undefined)$("ir").value=String(s.r);if(s.c!==undefined)$("ic").value=String(s.c);if(s.alpha!==undefined)$("ialpha").value=String(s.alpha);if(s.t)s.t.forEach((row,i)=>row.forEach((v,j)=>iT[i][j]=v));iBuild();iRender();},
+render:iRender,
+value(key){const I=iVals(),v=I[key];return {v,text:typeof v==="string"?v:f(v)};}});
+LK.start("indep");
+window.__LAB__={LK,gVals,iVals,chiCdf,chiCrit,setG:(o,w)=>{o.forEach((v,i)=>gO[i]=v);if(w)w.forEach((v,i)=>gW[i]=v);gBuild();gRender();},setT:t=>{t.forEach((row,i)=>row.forEach((v,j)=>iT[i][j]=v));iBuild();iRender();}};
+</script>
+</body></html>
