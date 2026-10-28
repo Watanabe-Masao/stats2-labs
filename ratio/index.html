@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>割合ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+</style></head><body>
+<h1>🧪 割合ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-base" class="mode">
+<p class="mut" style="margin:0">割合＝部分÷基準量。3つのうち2つが分かれば、残りの1つが決まる。「〇〇の何%」の〇〇が基準量。</p>
+<div class="row ctl"><label>求めるもの <select id="bfind" data-key="find"><option value="rate">割合</option><option value="base">基準量</option><option value="part">部分</option></select></label></div>
+<input type="range" id="bpart" min="0" max="2000" step="1" value="800" data-name="部分">
+<input type="range" id="bbase" min="1" max="3000" step="1" value="1000" data-name="基準量">
+<input type="range" id="brate" min="1" max="200" step="1" value="80" data-name="割合" data-unit="%">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="bplot"></div>
+<div class="card res key" id="bsum"></div>
+</div>
+<div id="m-chain" class="mode">
+<p class="mut" style="margin:0">2回続けて増減する。2回目の基準は1回目のあとの値なので、率を足さずに倍率（1＋率）を掛ける。</p>
+<input type="range" id="cx" min="10" max="2000" step="10" value="1000" data-name="最初">
+<input type="range" id="cr1" min="-50" max="50" step="1" value="20" data-name="1回目" data-unit="%">
+<input type="range" id="cr2" min="-50" max="50" step="1" value="-20" data-name="2回目" data-unit="%">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="cplot"></div>
+<div class="card res key" id="csum"></div>
+<div id="cform"></div>
+</div>
+<div id="m-point" class="mode">
+<p class="mut" style="margin:0">割合どうしの差は「ポイント」、前の割合を基準にした変化は「%」。同じ変化でも言い方で数が違う。</p>
+<input type="range" id="pp1" min="1" max="100" step="1" value="10" data-name="前" data-unit="%">
+<input type="range" id="pp2" min="0" max="100" step="1" value="12" data-name="後" data-unit="%">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="pplot"></div>
+<div class="card res key" id="psum"></div>
+</div>
+<div id="m-eq" class="mode">
+<p class="mut" style="margin:0">a×x＋b＝c を x について解く。両辺から b を引き、両辺を a で割る。両辺に同じ操作をすれば等式は保たれる。</p>
+<input type="range" id="ea" min="0.1" max="10" step="0.1" value="3" data-name="a">
+<input type="range" id="eb" min="-100" max="200" step="1" value="6" data-name="b">
+<input type="range" id="ec" min="-100" max="300" step="1" value="21" data-name="c">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="eplot"></div>
+<div class="card res key" id="esum"></div>
+</div>
+<div id="m-margin" class="mode">
+<p class="mut" style="margin:0">売価と原価から、売価を基準にした率（原価率・値入率）と、原価を基準にした率（マークアップ率）を出す。同じ「利益」でも分母で数が変わる。</p>
+<input type="range" id="mp" min="10" max="3000" step="10" value="1000" data-name="売価" data-unit="円">
+<input type="range" id="mc" min="0" max="3000" step="10" value="700" data-name="原価" data-unit="円">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="mplot"></div>
+<div class="card res key" id="msum"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-base": {"mode": "base", "set": {"find": "base", "part": 800, "rate": 80}, "task": "原価800円が「売価の80%」になるように売価を決める。売価はいくらか。", "predict": {"type": "number", "key": "base", "label": "売価", "unit": "円"}, "why": "「売価の80%」なので基準量は売価。0.8×売価＝800 から、売価＝800÷0.8＝1,000円。800×1.2＝960円 は「原価の120%」で、基準が違う。"}, "s1-chain": {"mode": "chain", "set": {"x0": 1000, "r1": 20, "r2": -20}, "task": "1,000円の売価を20%上げてから20%下げる。最初と比べて全体で何%か。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "1,000×1.2＝1,200円、1,200×0.8＝960円。倍率 1.2×0.8＝0.96 で4%減。下げるときの基準は上げた後の1,200円。"}, "s4-margin": {"mode": "margin", "modes": ["margin", "base"], "task": "売価と原価を動かし、原価率・値入率（売価基準）とマークアップ率（原価基準）がどう違うかを見る。次に「割合と基準量」で、粗利率から必要な売上を逆算する。"}, "s5-chain": {"mode": "chain", "modes": ["chain", "point"], "task": "1回目の率を動かし、元に戻すのに必要な2回目の率（くわしくの式）がどう変わるかを見る。次に「%とポイント」で差と変化を言い分ける。"}, "s6-free": {"task": "自分の店の数字で、割合の基準を5つのモードで確かめる（割合と基準量、増減を重ねる、%とポイント、式の変形、原価率・値入率）。"}, "Q-U01-001": {"mode": "base", "set": {"find": "base", "part": 900, "rate": 75}, "task": "原価900円が「売価の75%」になる売価はいくらか。", "predict": {"type": "number", "key": "base", "label": "売価", "unit": "円"}, "why": "「売価の75%」なので基準量は売価。売価＝900÷0.75＝1,200円。帯の全体が売価、色の部分が原価900円。"}, "Q-U01-002": {"mode": "point", "set": {"p1": 10, "p2": 12}, "task": "購入率が10%から12%になった。前の購入率を基準にすると何%増か。", "predict": {"type": "number", "key": "rel", "label": "前を基準にした変化", "unit": "%"}, "why": "差は2ポイント。それを前の10で割ると 2÷10＝0.2 で20%増。差（ポイント）と変化（%）は別の数になる。"}, "Q-U01-003": {"mode": "base", "set": {"find": "rate", "part": 50, "base": 200}, "task": "客200人のうち50人が購入した。購入率は何%か。", "predict": {"type": "number", "key": "rate", "label": "購入率", "unit": "%"}, "why": "基準量は来店客200人、部分は購入した50人。50÷200＝0.25＝25%。"}, "Q-U01-004": {"mode": "chain", "set": {"x0": 1000, "r1": 20, "r2": -10}, "task": "1,000万円が20%増えてから10%減った。最初と比べて全体で何%か。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "1,000×1.2＝1,200、1,200×0.9＝1,080。倍率 1.2×0.9＝1.08 で8%増。率を足した10%にはならない。"}, "Q-U01-005": {"mode": "chain", "set": {"x0": 200, "r1": -10, "r2": 10}, "task": "200 が10%減ってから10%増えた。最初と比べて全体で何%か。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "200×0.9＝180、180×1.1＝198。倍率 0.9×1.1＝0.99 で1%減。増やすときの基準は減った後の180。"}, "Q-U01-010": {"mode": "eq", "set": {"a": 3, "b": 6, "c": 21}, "task": "3x＋6＝21 を x について解く。", "predict": {"type": "number", "key": "x", "label": "x"}, "why": "両辺から6を引いて 3x＝15、両辺を3で割って x＝5。元の式に戻すと 3×5＋6＝21 で合う。"}, "Q-U01-011": {"mode": "chain", "set": {"x0": 1000, "r1": 25, "r2": -20}, "task": "売価を25%上げた。元に戻すには、上げた後から何%下げればよいか。", "predict": {"type": "number", "key": "back", "label": "元に戻す率", "unit": "%"}, "why": "1÷1.25−1＝−0.2 で20%下げる。1,000×1.25＝1,250、1,250×0.8＝1,000 で元に戻る。"}, "Q-U01-020": {"mode": "margin", "set": {"price": 1000, "cost": 700}, "task": "売価1,000円・原価700円。値入率（利益÷売価）は何%か。", "predict": {"type": "number", "key": "margin", "label": "値入率", "unit": "%"}, "why": "利益300円を売価1,000円で割って30%。原価700円で割ると約42.9%（マークアップ率）。分母を書き添えないと、どちらの率か分からない。"}, "Q-U01-021": {"mode": "base", "set": {"find": "base", "part": 300, "rate": 25}, "task": "粗利率25%で粗利300万円を得るには、売上がいくら必要か。", "predict": {"type": "number", "key": "base", "label": "売上", "unit": "万円"}, "why": "「売上の25%が粗利」なので基準量は売上。300÷0.25＝1,200万円。"}, "Q-U01-022": {"mode": "chain", "set": {"x0": 1000, "r1": -20, "r2": -10}, "task": "1,000円を20%引きにしてから、さらに10%引きにした。全体で何%か。", "predict": {"type": "number", "key": "total", "label": "全体の増減率", "unit": "%"}, "why": "1,000×0.8＝800円、800×0.9＝720円。倍率 0.72 で28%引き。"}, "Q-U01-023": {"mode": "point", "set": {"p1": 20, "p2": 25}, "task": "会員の割合が20%から25%になった。差は何ポイントか。", "predict": {"type": "number", "key": "pt", "label": "差", "unit": "ポイント"}, "why": "25−20＝5ポイント。前の20で割ると25%増。同じ変化でも、差と相対的な変化で数が違う。"}, "Q-U01-030": {"mode": "chain", "set": {"x0": 100, "r1": 10, "r2": -5}, "task": "客数が10%増え、客単価が5%減った。売上は全体で何%か（前年を100として見る）。", "predict": {"type": "number", "key": "total", "label": "売上の増減率", "unit": "%"}, "why": "売上＝客数×客単価なので倍率を掛ける。1.1×0.95＝1.045 で4.5%増。"}, "Q-U01-031": {"mode": "base", "set": {"find": "rate", "part": 30, "base": 200}, "task": "平均200万円・標準偏差30万円。標準偏差は平均の何%か。", "predict": {"type": "number", "key": "rate", "label": "変動係数", "unit": "%"}, "why": "基準量は平均200、部分は標準偏差30。30÷200＝15%。変動係数も割合の1つ。"}, "Q-U01-032": {"mode": "base", "set": {"find": "part", "base": 500, "rate": 35}, "task": "売上500万円で粗利率35%（原価率65%）。粗利はいくらか。", "predict": {"type": "number", "key": "part", "label": "粗利", "unit": "万円"}, "why": "部分＝基準量×割合＝500×0.35＝175万円。原価は 500×0.65＝325万円。"}, "Q-U01-040": {"mode": "chain", "set": {"x0": 1000, "r1": 50, "r2": -50}, "task": "50%値上げした後、元に戻すには何%下げればよいか（くわしくの「元に戻す率」）。", "predict": {"type": "number", "key": "back", "label": "元に戻す率", "unit": "%"}, "why": "1÷1.5−1≒−0.333 で約33.3%下げる。2回目を−50%にすると750円で、元の75%になる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc,f=LK.fmtNum;
+const W=340;
+const r2=v=>+v.toFixed(2),yen=v=>Math.round(v).toLocaleString("ja-JP");
+const pct=v=>(v>=0?"＋":"−")+f(Math.abs(r2(v)))+"%";
+function bar(parts,total,H=56){ // parts:[[値,色,ラベル]] を total の幅に並べる
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="割合の帯">`,x=10;const w=W-20;
+s+=`<rect x="10" y="12" width="${w}" height="26" rx="4" fill="var(--card)" stroke="var(--line)"/>`;
+parts.forEach(([v,c,t])=>{const ww=Math.max(0,Math.min(w-(x-10),v/total*w));s+=`<rect x="${x}" y="12" width="${ww}" height="26" rx="4" fill="${c}" fill-opacity=".7"/>`;if(t)s+=`<text x="${x+ww/2}" y="30" font-size="11" text-anchor="middle" fill="var(--fg)" font-weight="700">${esc(t)}</text>`;x+=ww;});
+return s+"</svg>";}
+function bVals(){const find=$("bfind").value;let part=+$("bpart").value,base=+$("bbase").value,rate=+$("brate").value/100;
+if(find==="rate")rate=part/base;else if(find==="base")base=part/rate;else part=base*rate;return {find,part,base,rate};}
+function bRender(){const B=bVals();["bpart","bbase","brate"].forEach(id=>{const w=$(id).closest(".lk-step");if(w)w.style.display=({rate:"brate",base:"bbase",part:"bpart"}[B.find]===id)?"none":"";});
+$("bplot").innerHTML=bar([[Math.min(B.part,B.base),"var(--acc)",`部分 ${f(r2(B.part))}`]],Math.max(B.base,B.part))+`<div class="mut">帯の全体＝基準量 ${f(r2(B.base))}、色の部分＝部分 ${f(r2(B.part))}</div>`;
+const line={rate:`割合＝${f(r2(B.part))}÷${f(r2(B.base))}＝<b>${f(r2(B.rate*100))}%</b>`,base:`基準量＝${f(r2(B.part))}÷${f(r2(B.rate))}＝<b>${f(r2(B.base))}</b>`,part:`部分＝${f(r2(B.base))}×${f(r2(B.rate))}＝<b>${f(r2(B.part))}</b>`}[B.find];
+$("bsum").innerHTML=`<div>${line}</div><div class="mut">割合＝部分÷基準量 を、求めたいものについて変形している。基準量で割る・掛けるのどちらかを取り違えないよう、「何の何%か」を先に言う。</div>`;}
+LK.register("base",{name:"割合と基準量",
+init(){$("bfind").onchange=bRender;["bpart","bbase","brate"].forEach(id=>LK.stepper($(id),bRender));bRender();},
+apply(s){if(s.find)$("bfind").value=s.find;if(s.part!==undefined)LK.setRange("bpart",s.part);if(s.base!==undefined)LK.setRange("bbase",s.base);if(s.rate!==undefined)LK.setRange("brate",s.rate);bRender();},
+render:bRender,
+value(key){const B=bVals(),v={rate:B.rate*100,base:B.base,part:B.part}[key];return {v,text:f(r2(v))+(key==="rate"?"%":"")};}});
+function cVals(){const x0=+$("cx").value,r1=+$("cr1").value/100,r2_=+$("cr2").value/100,x1=x0*(1+r1),x2=x1*(1+r2_);return {x0,r1,r2:r2_,x1,x2,total:(x2/x0-1)*100,back:(1/(1+r1)-1)*100};}
+function cRender(){const C=cVals(),H=150,mx=Math.max(C.x0,C.x1,C.x2)*1.15,Y=v=>H-24-v/mx*(H-40),xs=[60,170,280],vals=[C.x0,C.x1,C.x2],lab=["最初","1回目のあと","2回目のあと"];
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="増減の推移"><line x1="10" y1="${H-24}" x2="${W-10}" y2="${H-24}" stroke="var(--line)"/>`;
+vals.forEach((v,i)=>{s+=`<rect x="${xs[i]-28}" y="${Y(v)}" width="56" height="${H-24-Y(v)}" rx="3" fill="${i===0?"var(--mut)":"var(--acc)"}" fill-opacity=".6"/><text x="${xs[i]}" y="${Y(v)-6}" font-size="12" text-anchor="middle" fill="var(--fg)" font-weight="700">${f(r2(v))}</text><text x="${xs[i]}" y="${H-8}" font-size="11" text-anchor="middle" fill="var(--mut)">${lab[i]}</text>`;});
+s+=`<line x1="10" y1="${Y(C.x0)}" x2="${W-10}" y2="${Y(C.x0)}" stroke="var(--mut)" stroke-dasharray="4 4"/>`;
+$("cplot").innerHTML=s+"</svg>";
+$("csum").innerHTML=`<div>倍率 ${f(1+C.r1)}×${f(1+C.r2)}＝<b>${f(+((1+C.r1)*(1+C.r2)).toFixed(4))}</b> → 全体で <b>${pct(C.total)}</b>（${f(r2(C.x0))}→${f(r2(C.x2))}）</div><div class="mut">率を足すと ${pct((C.r1+C.r2)*100)}。元に戻すには、1回目のあとから ${pct(C.back)} が必要（基準が大きくなっているから）。</div>`;
+$("cform").innerHTML=LK.formula([`${f(r2(C.x0))}×${f(1+C.r1)}＝${f(r2(C.x1))}`,`${f(r2(C.x1))}×${f(1+C.r2)}＝${f(r2(C.x2))}`,`元に戻す率＝1÷${f(1+C.r1)}−1＝${f(+(C.back/100).toFixed(4))}`]);}
+LK.register("chain",{name:"増減を重ねる",
+init(){["cx","cr1","cr2"].forEach(id=>LK.stepper($(id),cRender));cRender();},
+apply(s){if(s.x0!==undefined)LK.setRange("cx",s.x0);if(s.r1!==undefined)LK.setRange("cr1",s.r1);if(s.r2!==undefined)LK.setRange("cr2",s.r2);cRender();},
+render:cRender,
+value(key){const C=cVals(),v={total:C.total,final:C.x2,mid:C.x1,back:C.back}[key];return {v,text:key==="total"||key==="back"?pct(v):f(r2(v))};}});
+function pVals(){const p1=+$("pp1").value,p2=+$("pp2").value;return {p1,p2,pt:p2-p1,rel:(p2-p1)/p1*100};}
+function pRender(){const P=pVals(),H=130,Y=v=>H-24-v/Math.max(P.p1,P.p2,1)/1.25*(H-40);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="割合の比較"><line x1="10" y1="${H-24}" x2="${W-10}" y2="${H-24}" stroke="var(--line)"/>`;
+[[P.p1,"前",90],[P.p2,"後",250]].forEach(([v,t,x])=>{s+=`<rect x="${x-35}" y="${Y(v)}" width="70" height="${H-24-Y(v)}" rx="3" fill="var(--acc)" fill-opacity="${t==="前"?".35":".7"}"/><text x="${x}" y="${Y(v)-6}" font-size="12" text-anchor="middle" fill="var(--fg)" font-weight="700">${v}%</text><text x="${x}" y="${H-8}" font-size="11" text-anchor="middle" fill="var(--mut)">${t}</text>`;});
+$("pplot").innerHTML=s+"</svg>";
+$("psum").innerHTML=`<div>差：${P.p2}−${P.p1}＝<b>${P.pt>=0?"＋":"−"}${Math.abs(P.pt)}ポイント</b>　前を基準にした変化：${P.pt}÷${P.p1}＝<b>${pct(P.rel)}</b></div><div class="mut">「2%改善」と言うと、どちらの意味か分からない。差はポイント、相対的な変化は%と言い分ける。</div>`;}
+LK.register("point",{name:"%とポイント",
+init(){LK.stepper($("pp1"),pRender);LK.stepper($("pp2"),pRender);pRender();},
+apply(s){if(s.p1!==undefined)LK.setRange("pp1",s.p1);if(s.p2!==undefined)LK.setRange("pp2",s.p2);pRender();},
+render:pRender,
+value(key){const P=pVals();if(key==="pt")return {v:P.pt,text:f(P.pt)+"ポイント"};return {v:P.rel,text:pct(P.rel)};}});
+function eVals(){const a=+$("ea").value,b=+$("eb").value,c=+$("ec").value;return {a,b,c,ax:c-b,x:(c-b)/a};}
+function eRender(){const E=eVals();
+const step=(t,d)=>`<div class="card" style="margin:4px 0;padding:6px 10px"><b>${t}</b>　<span class="mut">${d}</span></div>`;
+$("eplot").innerHTML=step(`${f(E.a)}x＋${f(E.b)}＝${f(E.c)}`,"はじめ")+step(`${f(E.a)}x＝${f(E.c)}−${f(E.b)}＝${f(r2(E.ax))}`,"両辺から b を引く")+step(`x＝${f(r2(E.ax))}÷${f(E.a)}＝${f(r2(E.x))}`,"両辺を a で割る");
+$("esum").innerHTML=`<div>x＝<b>${f(r2(E.x))}</b>　確かめ：${f(E.a)}×${f(r2(E.x))}＋${f(E.b)}＝${f(r2(E.a*E.x+E.b))}</div><div class="mut">a は0にできない（0で割れない）。解いたら元の式に戻して確かめる。</div>`;}
+LK.register("eq",{name:"式の変形",
+init(){["ea","eb","ec"].forEach(id=>LK.stepper($(id),eRender));eRender();},
+apply(s){if(s.a!==undefined)LK.setRange("ea",s.a);if(s.b!==undefined)LK.setRange("eb",s.b);if(s.c!==undefined)LK.setRange("ec",s.c);eRender();},
+render:eRender,
+value(){const E=eVals();return {v:E.x,text:f(r2(E.x))};}});
+function mVals(){const p=+$("mp").value,c=+$("mc").value,g=p-c;return {p,c,g,cost:c/p*100,margin:g/p*100,markup:c>0?g/c*100:NaN};}
+function mRender(){const M=mVals();
+$("mplot").innerHTML=bar([[Math.max(0,Math.min(M.c,M.p)),"var(--mut)",`原価 ${yen(M.c)}`],[Math.max(0,M.g),"var(--acc)",M.g>0?`値入 ${yen(M.g)}`:""]],Math.max(M.p,M.c))+`<div class="mut">帯の全体＝売価 ${yen(M.p)}円</div>`;
+$("msum").innerHTML=`<div>原価率＝${yen(M.c)}÷${yen(M.p)}＝<b>${f(r2(M.cost))}%</b>　値入率（売価基準）＝${yen(M.g)}÷${yen(M.p)}＝<b>${f(r2(M.margin))}%</b></div><div>マークアップ率（原価基準）＝${yen(M.g)}÷${yen(M.c)}＝<b>${isNaN(M.markup)?"—":f(r2(M.markup))+"%"}</b></div><div class="mut">同じ値入額でも、売価で割るか原価で割るかで率が違う。会議や資料では分母を書き添える。</div>`;}
+LK.register("margin",{name:"原価率・値入率",
+init(){LK.stepper($("mp"),mRender);LK.stepper($("mc"),mRender);mRender();},
+apply(s){if(s.price!==undefined)LK.setRange("mp",s.price);if(s.cost!==undefined)LK.setRange("mc",s.cost);mRender();},
+render:mRender,
+value(key){const M=mVals(),v={costRate:M.cost,margin:M.margin,markup:M.markup}[key];return {v,text:f(r2(v))+"%"};}});
+LK.start("base");
+window.__LAB__={LK,bVals,cVals,pVals,eVals,mVals};
+</script>
+</body></html>
