@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>標準化ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+</style></head><body>
+<h1>🧪 標準化ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-z" class="mode">
+<p class="mut" style="margin:0">平均もばらつきも違う2つの集団の値を、z＝(値−平均)÷標準偏差 で同じ物差しに乗せる。σ＝標準偏差。</p>
+<input type="range" id="zma" min="0" max="300" step="1" value="50" data-name="Aの平均">
+<input type="range" id="zsa" min="1" max="60" step="1" value="10" data-name="Aの σ">
+<input type="range" id="zxa" min="0" max="400" step="1" value="70" data-name="Aの値">
+<input type="range" id="zmb" min="0" max="300" step="1" value="80" data-name="Bの平均">
+<input type="range" id="zsb" min="1" max="60" step="1" value="5" data-name="Bの σ">
+<input type="range" id="zxb" min="0" max="400" step="1" value="90" data-name="Bの値">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="zplot"></div>
+<div class="card res key" id="zsum"></div>
+<div id="zform"></div>
+</div>
+<div id="m-inv" class="mode">
+<p class="mut" style="margin:0">z得点から元の値に戻す：x＝平均＋z×標準偏差。偏差値は 50＋10×z（平均50・標準偏差10にそろえた値）。</p>
+<input type="range" id="im" min="0" max="200" step="1" value="30" data-name="平均">
+<input type="range" id="is" min="1" max="50" step="1" value="6" data-name="標準偏差">
+<input type="range" id="iz" min="-3" max="3" step="0.1" value="-1.5" data-name="z得点">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="iplot"></div>
+<div class="card res key" id="isum"></div>
+</div>
+<div id="m-skew" class="mode">
+<p class="mut" style="margin:0">裾の向きを変えると歪度の符号が変わる。標準化（平均0・標準偏差1）しても、目盛りが変わるだけで形は変わらない。</p>
+<input type="range" id="ksk" min="-10" max="10" step="1" value="6" data-name="裾の向き">
+<div class="row ctl"><label><input type="checkbox" id="kstd"> 標準化した目盛りで見る</label></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="kplot"></div>
+<div class="card res key" id="ksum"></div>
+</div>
+<div id="m-fence" class="mode">
+<p class="mut" style="margin:0">箱ひげ図の柵：Q₁−1.5×IQR より小さいか、Q₃＋1.5×IQR より大きい値を外れ値候補とする。候補になっても、削除する前に原因を確かめる。</p>
+<input type="range" id="fq1" min="0" max="100" step="1" value="10" data-name="Q₁">
+<input type="range" id="fq3" min="0" max="100" step="1" value="14" data-name="Q₃">
+<input type="range" id="fx" min="0" max="120" step="1" value="21" data-name="調べる値">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="fplot"></div>
+<div class="card res key" id="fsum"></div>
+</div>
+<div id="m-normal" class="mode">
+<p class="mut" style="margin:0">分布が正規分布に近いとき、z得点から「その値以上・以下になる割合」が分かる（標準正規分布）。</p>
+<input type="range" id="nz" min="-3.5" max="3.5" step="0.05" value="2" data-name="z">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="nplot"></div>
+<div class="card res key" id="nsum"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-z": {"mode": "z", "set": {"mA": 50, "sA": 10, "xA": 70, "mB": 80, "sB": 5, "xB": 90, "nameA": "店舗A", "nameB": "店舗B"}, "task": "店舗Aは平均50万円・標準偏差10万円で70万円の日、店舗Bは平均80万円・標準偏差5万円で90万円の日。店舗Bの日の z得点はいくつか。", "predict": {"type": "number", "key": "zB", "label": "店舗Bの z"}, "why": "(90−80)÷5＝2。店舗Aも (70−50)÷10＝2 で、金額の差（20万円と10万円）は違っても、それぞれの店の中での位置は同じ。"}, "s1-sigma": {"mode": "z", "set": {"mA": 50, "sA": 20, "xA": 70, "mB": 50, "sB": 10, "xB": 70, "nameA": "広がった店", "nameB": "もとの店"}, "task": "平均50・標準偏差10 で70 なら z＝2。標準偏差が20に広がった店で、同じ70 の z得点はいくつか。", "predict": {"type": "number", "key": "zA", "label": "標準偏差20のときの z"}, "why": "(70−50)÷20＝1。ばらつきが大きい店では、同じ20万円の差でも珍しさが下がる。値や平均を動かして z の変わり方も見る。"}, "s4-normal": {"mode": "normal", "modes": ["normal", "inv"], "task": "z を動かし、正規分布で z 以上になる割合と、±z の内側の割合を見る。次に「z から値へ」で、平均・標準偏差と z から元の値と偏差値を出す。"}, "s5-skew": {"mode": "skew", "modes": ["skew", "normal"], "task": "裾の向きを動かして歪度・尖度の変わり方を見る。「標準化した目盛りで見る」を入れても、形と歪度が変わらないことを確かめる。"}, "s6-free": {"task": "自分の店の数字で、標準化の使い方を5つのモードで確かめる（z得点で比べる、z から値へ、歪度・尖度、外れ値の柵、正規分布の割合）。"}, "Q-U08-001": {"mode": "z", "set": {"mA": 60, "sA": 10, "xA": 75, "mB": 70, "sB": 5, "xB": 80, "nameA": "数学", "nameB": "英語"}, "task": "数学は平均60点・標準偏差10点で75点、英語は平均70点・標準偏差5点で80点。クラスの中で相対的に良いのはどちらか。", "predict": {"type": "choice", "key": "better", "label": "相対的に良いのは", "options": ["数学", "英語", "同じ"]}, "why": "数学は z＝1.5、英語は z＝2。点の差（15点と10点）は数学が大きいが、英語の標準偏差5で割ると標準偏差2つ分上になる。"}, "Q-U08-002": {"mode": "fence", "set": {"q1": 10, "q3": 14, "x": 21}, "task": "Q₁＝10、Q₃＝14 のデータで、21 は外れ値候補か。", "predict": {"type": "choice", "key": "isOut", "label": "外れ値候補か", "options": ["はい", "いいえ"]}, "why": "上の柵は 14＋1.5×4＝20。21 は柵の外。値を20にすると柵の内側に入る。候補になっても、削除する前に原因を確かめる。"}, "Q-U08-003": {"mode": "z", "set": {"mA": 100, "sA": 20, "xA": 130, "mB": 100, "sB": 20, "xB": 100}, "task": "平均100・標準偏差20の分布（A）で、130 の z得点はいくつか。", "predict": {"type": "number", "key": "zA", "label": "z得点"}, "why": "平均より30大きく、30÷20＝1.5。平均より標準偏差1.5つ分上。"}, "Q-U08-004": {"mode": "inv", "set": {"m": 30, "s": 6, "z": -1.5}, "task": "平均30・標準偏差6の分布で、z＝−1.5 に当たる値はいくつか。", "predict": {"type": "number", "key": "x", "label": "値"}, "why": "30＋(−1.5)×6＝21。z の式を x について解くと x＝平均＋z×標準偏差。"}, "Q-U08-005": {"mode": "z", "set": {"mA": 40, "sA": 8, "xA": 28, "mB": 60, "sB": 5, "xB": 52, "nameA": "店舗C", "nameB": "店舗D"}, "task": "店舗C（平均40・標準偏差8）の28万円と、店舗D（平均60・標準偏差5）の52万円。店舗Dの z得点はいくつか。", "predict": {"type": "number", "key": "zB", "label": "店舗Dの z"}, "why": "(52−60)÷5＝−1.6。店舗Cは −1.5。z が負の方が「平均より下」、|z| が大きい方が珍しい。"}, "Q-U08-010": {"mode": "inv", "set": {"m": 45, "s": 12, "z": 2.5}, "task": "平均45分・標準偏差12分で、z＝2.5 の通勤時間は何分か。予想したら z を −0.5 にもする。", "predict": {"type": "number", "key": "x", "label": "通勤時間", "unit": "分"}, "why": "45＋2.5×12＝75。z＝−0.5 なら 45−6＝39分。"}, "Q-U08-020": {"mode": "inv", "set": {"m": 62, "s": 8, "z": 1.5}, "task": "平均62点・標準偏差8点の試験で74点（z＝1.5）。偏差値はいくつか。", "predict": {"type": "number", "key": "dev", "label": "偏差値"}, "why": "50＋10×1.5＝65。偏差値は z だけで決まるので、平均や標準偏差を変えても z が同じなら偏差値も同じ。"}, "Q-U08-021": {"mode": "skew", "set": {"skew": 6, "std": true}, "task": "右に裾が長い分布を、標準化した目盛りで見る。歪度の符号はどうなるか。", "predict": {"type": "choice", "key": "g1sign", "label": "歪度の符号", "options": ["正", "ほぼ0", "負"]}, "why": "標準化しても形は同じなので、右に裾が長ければ歪度は正のまま。「標準化した目盛りで見る」を外しても棒の形は変わらない。"}, "Q-U08-022": {"mode": "normal", "set": {"z": 2}, "task": "正規分布で z≧2 になる割合は何%か。", "predict": {"type": "number", "key": "pUp", "label": "z≧2 の割合", "unit": "%"}, "why": "約2.3%。±2 の外側（上と下）を合わせると約4.6%、内側は約95%。z を3にすると上側は約0.13%。"}, "Q-U08-023": {"mode": "fence", "set": {"q1": 10, "q3": 10, "x": 30}, "task": "Q₁＝10、Q₃＝10（IQR＝0）のとき、30 は柵の外か。", "predict": {"type": "choice", "key": "isOut", "label": "外れ値候補か", "options": ["はい", "いいえ"]}, "why": "IQR＝0 なので柵は10と10。30 は柵の外。z（＝3）では見逃すが、四分位数は30の大きさに引っ張られないので外れ値をとらえる。"}, "Q-U08-030": {"mode": "normal", "set": {"z": -3}, "task": "正規分布で z≦−3 になる割合は何%か。", "predict": {"type": "number", "key": "pDown", "label": "z≦−3 の割合", "unit": "%"}, "why": "約0.13%。z を −1.5 にすると約6.7%。標準偏差が大きいと同じ488g でも z が0に近づき、不良が増える。"}, "Q-U08-031": {"mode": "z", "set": {"mA": 50, "sA": 10, "xA": 30, "mB": 200, "sB": 40, "xB": 150, "nameA": "店A", "nameB": "店B"}, "task": "店A（平均50・標準偏差10）の30万円と、店B（平均200・標準偏差40）の150万円。その店にとってより異常（|z| が大きい）なのはどちらか。", "predict": {"type": "choice", "key": "rare", "label": "より異常なのは", "options": ["店A", "店B", "同じ"]}, "why": "店Aは z＝−2、店Bは −1.25。金額ではなく、その店の標準偏差いくつ分下がったかで比べる。"}, "Q-U08-032": {"mode": "inv", "set": {"m": 62, "s": 8, "z": 1}, "task": "平均62点・標準偏差8点で、偏差値60（z＝1）に当たる点数は何点か。", "predict": {"type": "number", "key": "x", "label": "点数", "unit": "点"}, "why": "偏差値60 → z＝1 → 62＋8＝70点。標準偏差が大きい試験ほど、同じ偏差値に必要な点の差が大きい。"}, "Q-U08-040": {"mode": "normal", "set": {"z": 2}, "task": "正規分布で |z|≦2（±2 標準偏差の内側）の割合は何%か。", "predict": {"type": "number", "key": "pIn", "label": "±2 の内側", "unit": "%"}, "why": "約95.45%。チェビシェフの不等式は「どんな分布でも少なくとも75%」。形を仮定するほど強いことが言える。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc,f=LK.fmtNum;
+const W=340;
+const r2=v=>+v.toFixed(2);
+function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);return s*y;}
+const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
+const pdf=z=>Math.exp(-z*z/2)/Math.sqrt(2*Math.PI);
+let names={A:"A",B:"B"};
+function zVals(){const mA=+$("zma").value,sA=+$("zsa").value,xA=+$("zxa").value,mB=+$("zmb").value,sB=+$("zsb").value,xB=+$("zxb").value;return {mA,sA,xA,mB,sB,xB,zA:(xA-mA)/sA,zB:(xB-mB)/sB};}
+function line1(m,s,x,y,col,name){const lo=m-3.5*s,hi=m+3.5*s,X=v=>20+(Math.min(hi,Math.max(lo,v))-lo)/(hi-lo)*(W-40);let s1=`<text x="6" y="${y-16}" font-size="11" fill="var(--mut)">${esc(name)}（元の単位）</text><line x1="20" y1="${y}" x2="${W-20}" y2="${y}" stroke="var(--line)"/>`;
+for(let k=-3;k<=3;k++){const v=m+k*s;s1+=`<line x1="${X(v)}" y1="${y-4}" x2="${X(v)}" y2="${y+4}" stroke="var(--mut)"/><text x="${X(v)}" y="${y+15}" font-size="9" text-anchor="middle" fill="var(--mut)">${f(r2(v))}</text>`;}
+s1+=`<circle cx="${X(x)}" cy="${y}" r="6" fill="${col}"/>`;return s1;}
+function zRender(){const Z=zVals(),H=210,X=z=>20+(Math.max(-3.5,Math.min(3.5,z))+3.5)/7*(W-40);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="z得点で比べる">`+line1(Z.mA,Z.sA,Z.xA,34,"var(--acc)",names.A)+line1(Z.mB,Z.sB,Z.xB,94,"var(--acc2)",names.B);
+s+=`<text x="6" y="140" font-size="11" fill="var(--fg)" font-weight="700">z得点（同じ物差し）</text><line x1="20" y1="166" x2="${W-20}" y2="166" stroke="var(--fg)"/>`;
+for(let k=-3;k<=3;k++)s+=`<line x1="${X(k)}" y1="162" x2="${X(k)}" y2="170" stroke="var(--fg)"/><text x="${X(k)}" y="184" font-size="10" text-anchor="middle" fill="var(--mut)">${k}</text>`;
+s+=`<circle cx="${X(Z.zA)}" cy="160" r="6" fill="var(--acc)"/><circle cx="${X(Z.zB)}" cy="172" r="6" fill="var(--acc2)"/>`;
+$("zplot").innerHTML=s+`</svg><div class="legend mut"><span><i class="sw" style="background:var(--acc)"></i>${esc(names.A)}</span><span><i class="sw" style="background:var(--acc2)"></i>${esc(names.B)}</span><span>目盛り＝平均±標準偏差の1〜3つ分</span></div>`;
+const b=zBetter(Z);
+$("zsum").innerHTML=`<div>${esc(names.A)}：z＝<b>${f(r2(Z.zA))}</b>　${esc(names.B)}：z＝<b>${f(r2(Z.zB))}</b></div><div class="mut">差（値−平均）は ${esc(names.A)} ${f(r2(Z.xA-Z.mA))}、${esc(names.B)} ${f(r2(Z.xB-Z.mB))}。標準偏差で割ると、${b==="同じ"?"集団の中での位置は同じ":`集団の中で上にあるのは ${esc(b)}`}。</div>`;
+$("zform").innerHTML=LK.formula([`${names.A}：(${Z.xA}−${Z.mA})÷${Z.sA}＝${f(r2(Z.zA))}`,`${names.B}：(${Z.xB}−${Z.mB})÷${Z.sB}＝${f(r2(Z.zB))}`]);}
+function zBetter(Z){return Math.abs(Z.zA-Z.zB)<1e-9?"同じ":Z.zA>Z.zB?names.A:names.B;}
+LK.register("z",{name:"z得点で比べる",
+init(){["zma","zsa","zxa","zmb","zsb","zxb"].forEach(id=>LK.stepper($(id),zRender));zRender();},
+apply(s){if(s.nameA)names.A=s.nameA;if(s.nameB)names.B=s.nameB;
+document.querySelectorAll("#m-z .lk-name").forEach(e=>{e.textContent=e.textContent.replace(/^[AB]の/,m=>(m[0]==="A"?names.A:names.B)+"の");});
+[["mA","zma"],["sA","zsa"],["xA","zxa"],["mB","zmb"],["sB","zsb"],["xB","zxb"]].forEach(([k,id])=>{if(s[k]!==undefined)LK.setRange(id,s[k]);});zRender();},
+render:zRender,
+value(key){const Z=zVals();if(key==="better"){const t=zBetter(Z);return {v:Z.zA-Z.zB,text:t};}
+if(key==="rare"){const t=Math.abs(Math.abs(Z.zA)-Math.abs(Z.zB))<1e-9?"同じ":Math.abs(Z.zA)>Math.abs(Z.zB)?names.A:names.B;return {v:Math.abs(Z.zA)-Math.abs(Z.zB),text:t};}
+const v=key==="zB"?Z.zB:Z.zA;return {v,text:f(r2(v))};}});
+function iVals(){const m=+$("im").value,s=+$("is").value,z=+$("iz").value;return {m,s,z,x:m+z*s,dev:50+10*z};}
+function iRender(){const I=iVals(),H=120,X=z=>20+(z+3.5)/7*(W-40);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="z と値"><path d="M${Array.from({length:71},(_,i)=>{const z=-3.5+i*0.1;return `${X(z).toFixed(1)} ${(80-pdf(z)*150).toFixed(1)}`;}).join(" L")}" fill="none" stroke="var(--mut)" stroke-width="1.5"/>`;
+s+=`<line x1="20" y1="80" x2="${W-20}" y2="80" stroke="var(--line)"/>`;
+for(let k=-3;k<=3;k++)s+=`<text x="${X(k)}" y="95" font-size="10" text-anchor="middle" fill="var(--mut)">${f(r2(I.m+k*I.s))}</text><text x="${X(k)}" y="110" font-size="9" text-anchor="middle" fill="var(--mut)">z=${k}</text>`;
+s+=`<line x1="${X(I.z)}" y1="10" x2="${X(I.z)}" y2="80" stroke="var(--acc)" stroke-width="2.5"/><text x="${Math.min(W-30,Math.max(30,X(I.z)))}" y="10" font-size="11" text-anchor="middle" fill="var(--acc)" font-weight="700">${f(r2(I.x))}</text>`;
+$("iplot").innerHTML=s+"</svg>";
+$("isum").innerHTML=`<div>x＝${I.m}＋(${f(I.z)})×${I.s}＝<b>${f(r2(I.x))}</b>　偏差値＝50＋10×(${f(I.z)})＝<b>${f(r2(I.dev))}</b></div><div class="mut">z が負なら平均より下。偏差値は z を「平均50・標準偏差10」の目盛りに直したもの。</div>`;}
+LK.register("inv",{name:"z から値へ",
+init(){["im","is","iz"].forEach(id=>LK.stepper($(id),iRender));iRender();},
+apply(s){[["m","im"],["s","is"],["z","iz"]].forEach(([k,id])=>{if(s[k]!==undefined)LK.setRange(id,s[k]);});iRender();},
+render:iRender,
+value(key){const I=iVals(),v=key==="dev"?I.dev:I.x;return {v,text:f(r2(v))};}});
+function kCounts(k){const a=4*Math.exp(-0.13*k),b=4*Math.exp(0.13*k),p=Array.from({length:21},(_,i)=>Math.pow((i+0.5)/21,a-1)*Math.pow(1-(i+0.5)/21,b-1)),t=p.reduce((x,y)=>x+y,0);return p.map(x=>Math.round(200*x/t));}
+function moments(c){const n=c.reduce((a,b)=>a+b,0),m=c.reduce((a,x,i)=>a+x*i,0)/n;let m2=0,m3=0,m4=0;c.forEach((x,i)=>{const d=i-m;m2+=x*d*d;m3+=x*d**3;m4+=x*d**4;});m2/=n;m3/=n;m4/=n;return {n,m,sd:Math.sqrt(m2),g1:m3/m2**1.5,g2:m4/m2**2};}
+function kVals(){const k=+$("ksk").value,c=kCounts(k);return {k,c,...moments(c),std:$("kstd").checked};}
+const sgn=g=>Math.abs(g)<0.05?"ほぼ0":g>0?"正":"負";
+function kRender(){const K=kVals(),H=150,mx=Math.max(...K.c),bw=(W-30)/21;
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="分布と歪度"><line x1="12" y1="${H-24}" x2="${W-12}" y2="${H-24}" stroke="var(--line)"/>`;
+K.c.forEach((c,i)=>{const h=c/mx*(H-50);s+=`<rect x="${15+i*bw+1}" y="${H-24-h}" width="${bw-2}" height="${h}" fill="var(--acc)" fill-opacity=".45"/>`;});
+const X=v=>15+(v+0.5)*bw;
+s+=`<line x1="${X(K.m)}" y1="10" x2="${X(K.m)}" y2="${H-24}" stroke="var(--acc2)" stroke-width="2"/>`;
+[0,5,10,15,20].forEach(t=>{const lab=K.std?f(r2((t-K.m)/K.sd)):t;s+=`<text x="${X(t)}" y="${H-8}" font-size="10" text-anchor="middle" fill="var(--mut)">${lab}</text>`;});
+$("kplot").innerHTML=s+`</svg><div class="mut">${K.std?"目盛り＝z得点（平均0・標準偏差1）。形は同じ。":"目盛り＝元の値（0〜20）。"}縦線＝平均</div>`;
+$("ksum").innerHTML=`<div>歪度 g₁＝<b>${f(r2(K.g1))}</b>（${sgn(K.g1)}）　尖度 g₂＝<b>${f(r2(K.g2))}</b>（超過尖度 ${f(r2(K.g2-3))}）</div><div class="mut">右に裾が長いと歪度は正、左なら負。標準化しても g₁・g₂ は変わらない（形の数だから）。</div>`;}
+LK.register("skew",{name:"歪度・尖度",
+init(){LK.stepper($("ksk"),kRender);$("kstd").onchange=kRender;kRender();},
+apply(s){if(s.skew!==undefined)LK.setRange("ksk",s.skew);if(s.std!==undefined)$("kstd").checked=!!s.std;kRender();},
+render:kRender,
+value(key){const K=kVals();if(key==="g1sign")return {v:K.g1,text:sgn(K.g1)};const v=key==="g2"?K.g2:K.g1;return {v,text:f(r2(v))};}});
+function fVals(){let q1=+$("fq1").value,q3=+$("fq3").value;if(q3<q1)q3=q1;const x=+$("fx").value,iqr=q3-q1,lo=q1-1.5*iqr,hi=q3+1.5*iqr;return {q1,q3,x,iqr,lo,hi,out:x<lo||x>hi};}
+function fRender(){const F=fVals(),lo=Math.min(F.lo,F.x,F.q1)-2,hi=Math.max(F.hi,F.x,F.q3)+2,X=v=>20+(v-lo)/(hi-lo)*(W-40),H=110,y=50;
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="外れ値の柵"><line x1="20" y1="${y+30}" x2="${W-20}" y2="${y+30}" stroke="var(--line)"/>`;
+s+=`<rect x="${X(F.q1)}" y="${y-12}" width="${Math.max(1,X(F.q3)-X(F.q1))}" height="24" fill="var(--acc)" fill-opacity=".18" stroke="var(--acc)" stroke-width="2" rx="3"/>`;
+[F.lo,F.hi].forEach(v=>{s+=`<line x1="${X(v)}" y1="${y-24}" x2="${X(v)}" y2="${y+24}" stroke="var(--ng)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${X(v)}" y="${y-28}" font-size="10" text-anchor="middle" fill="var(--ng)">柵 ${f(r2(v))}</text>`;});
+s+=`<circle cx="${X(F.x)}" cy="${y}" r="6" fill="${F.out?"var(--ng)":"var(--fg)"}"/><text x="${X(F.x)}" y="${y+45}" font-size="11" text-anchor="middle" fill="var(--fg)" font-weight="700">${F.x}</text>`;
+[[F.q1,"Q₁"],[F.q3,"Q₃"]].forEach(([v,t])=>{s+=`<text x="${X(v)}" y="${y+45}" font-size="10" text-anchor="middle" fill="var(--mut)">${t} ${v}</text>`;});
+$("fplot").innerHTML=s+"</svg>";
+$("fsum").innerHTML=`<div>IQR＝${F.q3}−${F.q1}＝${F.iqr}、柵＝${F.q1}−1.5×${F.iqr}＝<b>${f(r2(F.lo))}</b> と ${F.q3}＋1.5×${F.iqr}＝<b>${f(r2(F.hi))}</b></div><div>${F.x} は <b>${F.out?"外れ値候補":"柵の内側"}</b></div><div class="mut">外れ値候補は「原因を調べる合図」。入力ミス・別の条件・本当にまれな出来事のどれかを確かめてから扱う。</div>`;}
+LK.register("fence",{name:"外れ値の柵",
+init(){["fq1","fq3","fx"].forEach(id=>LK.stepper($(id),fRender));fRender();},
+apply(s){[["q1","fq1"],["q3","fq3"],["x","fx"]].forEach(([k,id])=>{if(s[k]!==undefined)LK.setRange(id,s[k]);});fRender();},
+render:fRender,
+value(key){const F=fVals();if(key==="isOut")return {v:F.out?1:0,text:F.out?"はい":"いいえ"};const v=key==="lo"?F.lo:F.hi;return {v,text:f(r2(v))};}});
+function nVals(){const z=+$("nz").value,az=Math.abs(z);return {z,up:(1-Phi(z))*100,down:Phi(z)*100,inn:(2*Phi(az)-1)*100,out:2*(1-Phi(az))*100};}
+function nRender(){const N=nVals(),H=140,X=z=>20+(z+3.8)/7.6*(W-40),Y=p=>H-26-p*250;
+let area=`M${X(N.z)} ${Y(0)}`;for(let z=N.z;z<=3.8;z+=0.05)area+=` L${X(z).toFixed(1)} ${Y(pdf(z)).toFixed(1)}`;area+=` L${X(3.8)} ${Y(0)} Z`;
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="標準正規分布"><path d="${area}" fill="var(--acc2)" fill-opacity=".35"/>`;
+s+=`<path d="M${Array.from({length:77},(_,i)=>{const z=-3.8+i*0.1;return `${X(z).toFixed(1)} ${Y(pdf(z)).toFixed(1)}`;}).join(" L")}" fill="none" stroke="var(--fg)" stroke-width="1.8"/>`;
+s+=`<line x1="20" y1="${Y(0)}" x2="${W-20}" y2="${Y(0)}" stroke="var(--line)"/>`;
+for(let k=-3;k<=3;k++)s+=`<text x="${X(k)}" y="${H-10}" font-size="10" text-anchor="middle" fill="var(--mut)">${k}</text>`;
+s+=`<line x1="${X(N.z)}" y1="${Y(0.42)}" x2="${X(N.z)}" y2="${Y(0)}" stroke="var(--acc2)" stroke-width="2"/>`;
+$("nplot").innerHTML=s+`</svg><div class="mut">色の部分＝z 以上になる割合</div>`;
+const once=N.up>0?Math.round(100/N.up):"—";
+$("nsum").innerHTML=`<div>z≧${f(N.z)}：<b>${f(+N.up.toFixed(3))}%</b>（約${once}回に1回）　z≦${f(N.z)}：<b>${f(+N.down.toFixed(3))}%</b></div><div>|z|≦${f(Math.abs(N.z))}：<b>${f(+N.inn.toFixed(2))}%</b>　|z|＞${f(Math.abs(N.z))}：<b>${f(+N.out.toFixed(2))}%</b></div><div class="mut">正規分布に近いときだけ使える。歪んだ分布では、同じ z でも割合は違う。</div>`;}
+LK.register("normal",{name:"正規分布の割合",
+init(){LK.stepper($("nz"),nRender);nRender();},
+apply(s){if(s.z!==undefined)LK.setRange("nz",s.z);nRender();},
+render:nRender,
+value(key){const N=nVals(),v={pUp:N.up,pDown:N.down,pIn:N.inn,pOut:N.out}[key];return {v,text:f(+v.toFixed(3))+"%"};}});
+LK.start("z");
+window.__LAB__={LK,Phi,zVals,iVals,kVals,kCounts,moments,fVals,nVals};
+</script>
+</body></html>
