@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 :root{--off:#c9cfd6}
 @media (prefers-color-scheme:dark){:root{--off:#4a5058}}
 .die{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:18px;cursor:pointer}
@@ -136,6 +143,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-rand": {"mode": "rand", "set": {"n": 10}, "task": "n＝10 のまま「10回続けて」を押すと、x̄ は毎回同じか、変わるか。", "predict": {"type": "choice", "key": "varies", "label": "x̄ は", "options": ["毎回同じ", "毎回変わる"]}, "why": "x̄ は選んだ店で決まる統計量なので、取り直すたびに変わり μ のまわりに散らばる。n を100にすると全数調査になり、毎回 μ と一致する。"}, "s2-frame": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "漏れ20%のまま n を10→60に増やして「20回取り直す」を押す。x̄ の平均は μ（2.54%）に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿に載っていない店（廃棄率が高め）は選ばれないので、x̄ は名簿内の平均（2.36%）に集まる。n を増やしても μ には近づかない。"}, "s4-bias": {"mode": "frame", "modes": ["frame", "resp"], "task": "「名簿の漏れ」と「自分から回答」を順に動かし、上の表のどの場面がどちらの偏りに当たるかを考える。"}, "s5-rand": {"mode": "rand", "set": {"n": 10}, "task": "n を 10 → 50 → 90 → 100 と増やして「10回続けて」を押し、x̄ のばらつき（標準偏差）がどう小さくなるかを見る。"}, "s6-free": {"mode": "rand", "modes": ["rand", "frame", "resp"], "task": "自分の設計や考え方を、3つのモードで確かめる（無作為なら μ のまわりに集まるか、偏りがあればどちらにずれるか）。"}, "Q-U03-020": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "アプリを使わない客が名簿から漏れるのと同じ形。漏れ20%のまま n を増やして「20回取り直す」を押すと、x̄ の平均は μ に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿にいない店（廃棄率が高め）は選ばれないので、n を増やしても x̄ は名簿内の平均に集まり、μ には近づかない。"}, "Q-U03-021": {"mode": "resp", "set": {"k": 6}, "task": "廃棄率の低い店ほど返事をしやすい（偏りの強さ6）。「20回続けて」を押すと、返事の平均は μ と比べてどうなるか。", "predict": {"type": "choice", "key": "direction", "label": "返事の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "返事をする店が偏っていると、何回集めてもずれは消えない（口コミの件数を増やしても同じ）。偏りの強さを0にすると μ のまわりに集まる。"}, "Q-U03-024": {"mode": "space", "set": {"ev": "4,5,6"}, "task": "事象「4以上」の確率 P(A) はいくつか（小数で）。", "predict": {"type": "number", "key": "prob", "label": "P(A)"}, "why": "4以上＝{4, 5, 6} の3通り。「偶数」を押すと {2, 4, 6} も3通りで、同じ 1/2 になる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -174,7 +183,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -191,6 +200,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -200,9 +210,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -212,10 +232,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$;
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}

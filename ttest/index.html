@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -130,6 +137,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-t": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 104, "mu0": 100, "s": 8, "n": 16}, "task": "16店の平均104・s＝8、基準100。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t＝4÷2＝2.0、自由度15。p≒0.064 で5%を超える。正規なら p≒0.046 で棄却してしまうが、s で代わりにしたぶん t 分布の裾が重い。"}, "s1-df": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 104, "mu0": 100, "s": 8, "n": 16}, "task": "16店（自由度15）、両側5%。t の境目は（小数で）？", "predict": {"type": "number", "key": "crit", "label": "境目 t"}, "why": "約2.131。正規の1.96より外側。n を5に減らすと2.776、100に増やすと1.984 に近づく。"}, "s3-free": {"mode": "one", "modes": ["one", "paired", "two"], "task": "解いてから、データの取り方（基準と比べる1標本・同じ対象の前後・別々の2群）に合うモードで確かめる。"}, "s4-free": {"mode": "two", "modes": ["two", "paired", "one"], "task": "自分の売場の数字（2店の平均・標準偏差・日数、施策前後の差）を入れ、p 値と判断を読む。2群ではウェルチと等分散を切り替えて比べる。"}, "s5-free": {"mode": "one", "modes": ["one", "two"], "task": "「1標本」で n を増やし、境目が1.96 に近づく様子を見る（発展1）。「2群」でばらつきと人数を変え、ウェルチの自由度がどう変わるかを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（1標本、対応あり、2群）。"}, "Q-U25-001": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 2, "sd": 5, "n": 25}, "task": "同じ25店の前後の差は平均2万円、差の標準偏差5万円。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t＝2、自由度24で p≒0.057。5%をわずかに超えるので棄却しない。差の区間が0を含むのと同じ判断。"}, "Q-U25-002": {"mode": "two", "set": {"method": "welch", "side": "two", "alpha": 0.05, "x1": 30, "s1": 2, "n1": 10, "x2": 25, "s2": 8, "n2": 20}, "task": "店A（10日・平均30・s＝2）と店B（20日・平均25・s＝8）。ウェルチの t 検定（両側5%）で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t≒2.64、p≒0.015。方法を「等分散を仮定」に変えると t≒1.93・p≒0.064 で棄却しない。"}, "Q-U25-003": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 53, "mu0": 48, "s": 6, "n": 9}, "task": "9店の平均53・s＝6、目標48。t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝2、t＝2.5。自由度8の境目2.306を超え、p≒0.037 で棄却する。"}, "Q-U25-004": {"mode": "two", "set": {"method": "pooled", "side": "two", "alpha": 0.05, "x1": 12, "s1": 2, "n1": 10, "x2": 10, "s2": 2, "n2": 10}, "task": "10店ずつ、平均12と10、どちらも s＝2。等分散を仮定した t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE≒0.8944、t≒2.236。ウェルチに切り替えても同じ値になる（人数とばらつきが同じとき）。"}, "Q-U25-005": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 3, "sd": 2.4, "n": 8}, "task": "同じ8店の前後の差は平均3・標準偏差2.4。対応ありの t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "t≒3.54、p≒0.010 で棄却する。「2群」で 53・s10・8店 と 50・s10・8店 を入れると t＝0.6 で棄却しない。"}, "Q-U25-010": {"mode": "one", "set": {"side": "upper", "alpha": 0.05, "xbar": 104, "mu0": 100, "s": 8, "n": 16}, "task": "例題Aの数で、右片側5%。H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "右側だけの面積で p≒0.032。両側に戻すと p≒0.064 で棄却しない。"}, "Q-U25-011": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 1.2, "sd": 2, "n": 10}, "task": "同じ10人の前後の差は平均1.2・標準偏差2。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t≒1.90、自由度9で p≒0.090。人数を増やすと、同じ平均差でも有意になりやすい。"}, "Q-U25-012": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 2, "sd": 1.5, "n": 8}, "task": "同じ8店の前後の差は平均2・標準偏差1.5。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t≒3.77、p≒0.007。区間（0.746〜3.254）が0を含まないことと同じ結論。"}, "Q-U25-020": {"mode": "two", "set": {"method": "welch", "side": "two", "alpha": 0.05, "x1": 68, "s1": 3, "n1": 12, "x2": 62, "s2": 9, "n2": 8}, "task": "店A（12日・平均68・s＝3）と店B（8日・平均62・s＝9）。ウェルチの両側 p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "p≒0.11 で棄却しない。等分散に切り替えると p≒0.044 で棄却してしまう。"}, "Q-U25-021": {"mode": "one", "set": {"side": "lower", "alpha": 0.05, "xbar": 57, "mu0": 60, "s": 6, "n": 12}, "task": "12回の平均57秒・s＝6、従来60秒。左片側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t≒−1.73、p≒0.056。境目は t(11) の−1.796 で、正規の−1.645 より外側。"}, "Q-U25-022": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 105, "mu0": 100, "s": 5, "n": 6}, "task": "6店の平均105・s＝5、基準100。両側5%の t の境目は（小数で）？", "predict": {"type": "number", "key": "crit", "label": "境目 t"}, "why": "約2.571。t≒2.45 は1.96 は超えるが、この境目には届かない。"}, "Q-U25-023": {"mode": "two", "set": {"method": "pooled", "side": "two", "alpha": 0.05, "x1": 68, "s1": 3, "n1": 12, "x2": 62, "s2": 9, "n2": 8}, "task": "店A（12日・平均68・s＝3）と店B（8日・平均62・s＝9）を、等分散を仮定して検定。H₀ をどうするか（このあとウェルチに切り替えて比べる）。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "等分散では p≒0.044 で棄却するが、ウェルチでは p≒0.11 で棄却しない。ばらつきの違いを無視すると差を言いすぎる。"}, "Q-U25-030": {"mode": "two", "set": {"method": "welch", "side": "two", "alpha": 0.05, "x1": 1250, "s1": 300, "n1": 40, "x2": 1120, "s2": 200, "n2": 50}, "task": "店A（40日・1250円・s＝300）と店B（50日・1120円・s＝200）。ウェルチの t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "t≒2.35、p≒0.022。自由度≒65 で、境目は1.997。日数が多いと t と正規の差は小さい。"}, "Q-U25-031": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": -4, "sd": 6, "n": 20}, "task": "同じ20人の差（新−旧）は平均−4秒・標準偏差6秒。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t≒−2.98、p≒0.008。差の平均が負でも、両側なら |t| で判断する。"}, "Q-U25-032": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 498.5, "mu0": 500, "s": 3, "n": 25}, "task": "25袋の平均498.5g・s＝3、表示500g。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t＝−2.5、p≒0.020。平均を499 にすると t≒−1.67 で棄却しない。"}, "Q-U25-040": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 102.1, "mu0": 100, "s": 8, "n": 64}, "task": "64店の平均102.1・s＝8、基準100（t＝2.1、自由度63）。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "p≒0.040 で棄却する。n を16、平均を104.2 にすると同じ t＝2.1 でも p≒0.053 で棄却しない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -168,7 +177,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -185,6 +194,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -194,9 +204,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -206,10 +226,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;

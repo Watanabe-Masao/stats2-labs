@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .bar{height:14px;border-radius:3px;background:var(--acc);display:inline-block;vertical-align:middle}
 .bar.b{background:var(--acc2)}
 .chip{display:inline-block;border:1px solid var(--line);border-radius:12px;padding:1px 8px;margin:2px;font-size:13px;background:var(--card)}
@@ -141,6 +148,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-temp": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "unlock": ["kind"], "task": "10℃と20℃を、絶対温度（K）で表すと B÷A は何倍になるか。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "単位を変えると0の位置が動くので、何倍の値が変わる（℃では2倍、Kでは約1.035倍）。"}, "s1-exA": {"mode": "judge", "set": {"items": ["店番", "満足度（不満・普通・満足）", "気温（℃）", "販売個数"]}, "task": "例題Aの4つを、4つの質問に上から答えて判定し直す。表を見ずに、どの質問で止まるかを確かめる。"}, "s2-judge": {"mode": "judge", "task": "10問続けて判定する。間違えたら「どこで取り違えたか」を読み、どの質問で「はい／いいえ」を取り違えたかを書く。"}, "s4-judge": {"mode": "judge", "modes": ["judge", "bin"], "task": "15件を一通り判定し、上の表の各場面のデータを、どの質問で止めたかで4つの段に分ける。次に「階級にまとめる」で10歳ごとを選び、比例尺度の年齢が、まとめると順序尺度のように扱われることを確かめる。"}, "s5-unit": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "気温・重さ・売上金額・年を切り替え、「何倍が単位で変わる換算」と「変わらない換算」の式の違いを見つける。"}, "s6-free": {"task": "自分の判定や設計を、5つのモードで確かめる（判定は「尺度を判定」、何倍の扱いは「単位を変える」、アンケートの比べ方は「満足度の平均」、まとめ方は「階級にまとめる」、番号の扱いは「数字のラベル」）。"}, "Q-U04-002": {"mode": "unit", "set": {"kind": "money", "a": 10, "b": 20}, "task": "昨日10万円・今日20万円の売上を、ドルに直すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "ドルで B÷A", "unit": "倍"}, "why": "円→ドルは掛け算だけの換算で、0円はどの単位でも「売上が無い」。だから何倍はどの単位でも2倍のまま。"}, "Q-U04-003": {"mode": "judge", "set": {"item": "血液型（A・B・O・AB）"}, "task": "血液型を、4つの質問に上から答えて判定する。続けて「次のデータ」で、ほかの名義尺度と見分ける練習をする。"}, "Q-U04-004": {"mode": "judge", "set": {"item": "売上ランキングの順位"}, "task": "売上ランキングの順位を、4つの質問に上から答えて判定する。質問3（差に同じ意味があるか）で「いいえ」になる理由を確かめる。"}, "Q-U04-010": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 15}, "task": "10℃と15℃。℃では15÷10＝1.5倍。絶対温度（K）で表すと B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:1", "label": "K で B÷A", "unit": "倍"}, "why": "「1.5倍」は℃という単位を選んだから出た数字にすぎない。どの単位でも同じ情報を持つのは差（5℃）のほう。"}, "Q-U04-020": {"mode": "likert", "set": {"s5": 4.1, "s1": 1}, "task": "「とても満足」を5点ではなく4.1点として平均すると、平均点で上になるのはどちらの店か。", "predict": {"type": "choice", "key": "winner", "label": "平均点で上になる店", "options": ["A店", "B店", "同じ"]}, "why": "1〜5点なら B店（3.80）が上、4.1点にすると A店（3.40）が上。中央値と「満足」以上の割合（40%・70%）は変わらない。"}, "Q-U04-023": {"mode": "code", "set": {"pair": "1,2", "n2": 42}, "task": "男性を1、女性を2と記録した100人の「性別の平均」が1.42。女性の割合は何%か。", "predict": {"type": "number", "key": "prop", "label": "女性の割合", "unit": "%"}, "why": "数字の振り方を変えると平均は変わるが、2つの値しかないなら割合は逆算できる。3つ以上の例も下で見る。"}, "Q-U04-025": {"mode": "bin", "set": {"w": 10}, "task": "20人の年齢を年代（20代・30代…）にまとめ、各年代の真ん中（25歳・35歳…）で平均すると何歳か。", "predict": {"type": "number", "key": "classMean", "label": "年代で計算した平均", "unit": "歳", "tol": 0.05}, "why": "元のデータの平均は41.6歳。まとめると近い値は出るが、同じ年代の中の違いは消える。"}, "Q-U04-040": {"mode": "unit", "set": {"kind": "temp", "a": 10, "b": 20}, "task": "10℃と20℃を華氏（℉）で表すと、B÷A は何倍か。", "predict": {"type": "number", "key": "ratio:2", "label": "℉ で B÷A", "unit": "倍"}, "why": "y＝1.8x＋32 のように足し算の入った変換では比が保たれない。差は 10℃→18℉ と、換算の分（×1.8）だけ変わる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -179,7 +188,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -196,6 +205,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -205,9 +215,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -217,10 +237,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const SCALES=["名義","順序","間隔","比例"];

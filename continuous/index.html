@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -148,6 +155,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-norm": {"mode": "norm", "set": {"mu": 100, "sd": 10, "a": 120, "b": 130, "kind": "ge"}, "task": "1日の来店客数は平均100人・標準偏差10人の正規分布。120人以上になる確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≧120)"}, "why": "z＝(120−100)÷10＝2。1−Φ(2)＝1−0.9772≒0.023。50日に1日くらい。a を90、求めるを「a 以上 b 以下」、b を110にすると約68%になる。"}, "s1-dens": {"mode": "dens", "set": {"sd": 0.2, "x": 0, "w": 0.1}, "task": "標準偏差0.2の正規分布（真ん中は0）。真ん中の高さ f(0) は1を超えるか。", "predict": {"type": "choice", "key": "over1", "label": "f(0) は1を", "options": ["超える", "超えない"]}, "why": "f(0)≒1.99。高さは確率ではないので1を超えてよい。確率は面積で、幅0.1なら約0.2。幅を0にすると確率は0になる。"}, "s1-band": {"mode": "norm", "set": {"mu": 100, "sd": 10, "a": 80, "b": 120, "kind": "between"}, "task": "平均100・標準偏差10の正規分布で、80以上120以下（μ±2σ）に入る確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(80≦X≦120)"}, "why": "z は −2 と 2。Φ(2)−Φ(−2)≒0.954。σ を変えても、a・b を μ±2σ に合わせ直せば同じ約95%になる。確率は z だけで決まる。"}, "s3-free": {"mode": "norm", "modes": ["norm", "q", "unif", "expo"], "task": "解いてから、問題の分布（正規・一様・指数）と、求めるもの（区間の確率か、上位 p% の値か）に合うモードで確かめる。"}, "s4-free": {"mode": "norm", "modes": ["norm", "q", "expo"], "task": "自分の売場の数字（販売数・重さ・待ち時間の平均と標準偏差）を入れ、「〇〇以上」の確率や、上位 p% の値を読む。"}, "s5-free": {"mode": "expo", "modes": ["expo", "unif", "dens"], "task": "「指数分布」で s（すでに待った時間）を動かし、その先の確率が変わらないことを見る（発展1）。「高さと面積」で σ を小さくし、高さが1を超えても面積は1のままなのを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（正規分布の確率、上位 p% の値、一様分布、指数分布、高さと面積）。"}, "Q-U16-001": {"mode": "norm", "set": {"mu": 60, "sd": 4, "a": 52, "b": 66, "kind": "between"}, "task": "卵の重さは平均60g・標準偏差4gの正規分布。52g以上66g以下の割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(52≦X≦66)"}, "why": "z は −2 と 1.5。Φ(1.5)−Φ(−2)≒0.910。左右で z が違うときは、両端それぞれの Φ を引く。"}, "Q-U16-002": {"mode": "unif", "set": {"unit": "分", "a": 0, "b": 15, "c": 5, "d": 15}, "task": "待ち時間は0分から15分の一様分布。5分以上待つ確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≧5)"}, "why": "幅10÷全体15≒0.667。一様分布では、確率は区間の幅に比例する。平均は真ん中の7.5分。"}, "Q-U16-003": {"mode": "norm", "set": {"mu": 50, "sd": 5, "a": 40, "b": 60, "kind": "le"}, "task": "X は N(50, 5²)。60 を標準化した z（z_b）はいくつか。", "predict": {"type": "number", "key": "zb", "label": "60 の z"}, "why": "(60−50)÷5＝2。N(50, 5²) の「5²」は分散なので、標準偏差は5。分散25で割ると z＝0.4 と間違える。"}, "Q-U16-004": {"mode": "unif", "set": {"a": 2, "b": 8, "c": 3, "d": 5}, "task": "X は U(2, 8)。P(3≦X≦5) は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(3≦X≦5)"}, "why": "幅2÷全体の幅6＝1/3。高さ1/6×幅2 と同じ。区間が全体のどこにあっても、幅が同じなら確率は同じ。"}, "Q-U16-005": {"mode": "expo", "set": {"unit": "時間", "mean": 0.5, "t": 1, "s": 0.5}, "task": "待ち時間は平均0.5時間の指数分布。すでに0.5時間待ったとき、さらに1時間を超えて待つ確率は（小数で）？", "predict": {"type": "number", "key": "cond", "label": "P(さらに1時間超)"}, "why": "待つ前の P(待ち＞1)＝e⁻²≒0.135 と同じ。「もうすぐ来るはず」とはならない。s を動かしても変わらない。"}, "Q-U16-010": {"mode": "norm", "set": {"mu": 400, "sd": 8, "a": 380, "b": 390, "kind": "le"}, "task": "弁当の重さは平均400g・標準偏差8gの正規分布。390g 以下の割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≦390)"}, "why": "z＝−1.25。表は正の z しかないことが多いので、左右対称を使って 1−Φ(1.25)。連続分布なので「未満」と「以下」は同じ。"}, "Q-U16-011": {"mode": "q", "set": {"mu": 60, "sd": 10, "p": 5, "side": "upper"}, "task": "点数は平均60・標準偏差10の正規分布。上位5%の境目の点数は？", "predict": {"type": "number", "key": "x", "label": "境目の点数", "unit": "点"}, "why": "上側5%の z＝1.645 を、値＝μ＋z×σ で元の点数に戻す。確率から値を求めるときは、標準化を逆にたどる。"}, "Q-U16-012": {"mode": "expo", "set": {"unit": "分", "mean": 20, "t": 20, "s": 0}, "task": "待ち時間は平均20分の指数分布。20分以上待つ確率は（小数で）？", "predict": {"type": "number", "key": "pgt", "label": "P(待ち＞20)"}, "why": "e⁻¹≒0.368。平均と同じ時間より長く待つのは約37%で、半分より少ない。平均より短く待つことの方が多い。"}, "Q-U16-020": {"mode": "unif", "set": {"unit": "秒", "a": 0, "b": 60, "c": 0, "d": 10}, "task": "秒針の位置は0〜60秒の一様分布。0秒から10秒の間にある確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(0≦X≦10)"}, "why": "幅10÷全体60＝1/6。どの位置も同じくらい起きやすいなら一様分布。"}, "Q-U16-021": {"mode": "norm", "set": {"mu": 0, "sd": 1, "a": -1.5, "b": 1.5, "kind": "between"}, "task": "標準正規分布で −1.5 以上 1.5 以下の確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(−1.5≦Z≦1.5)"}, "why": "外側は左右に0.0668ずつ。1から2つ分を引く。上側確率の表をそのまま答えにしない。"}, "Q-U16-022": {"mode": "norm", "set": {"mu": 500, "sd": 3, "a": 494, "b": 506, "kind": "out"}, "task": "重さは平均500g・標準偏差3gの正規分布。494g未満か506gを超える割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "規格外の割合"}, "why": "z＝±2 の外側で約4.6%（表の4桁で計算すると0.0456）。σ を2に下げると約0.3%になる。平均をずらすより、ばらつきを減らす方が効くことが多い。"}, "Q-U16-023": {"mode": "dens", "set": {"sd": 0.2, "x": 0, "w": 0}, "task": "標準偏差0.2の正規分布で、x＝0 ちょうど（幅0）の確率はいくつか。", "predict": {"type": "number", "key": "p", "label": "P(X＝0)"}, "why": "幅0の面積は0。高さ f(0)≒1.99 は1を超えているが、確率ではない。幅を少し広げると、確率≒高さ×幅 になる。"}, "Q-U16-030": {"mode": "q", "set": {"mu": 80, "sd": 12, "p": 5, "side": "upper"}, "task": "販売数は平均80・標準偏差12の正規分布。上側5%の境目（これより多く売れる日が5%）は何個か。", "predict": {"type": "number", "key": "x", "label": "境目の個数", "unit": "個"}, "why": "80＋1.645×12≒99.7。平均に上乗せする 1.645×12≒20個 が、欠品を5%に抑えるための余裕（安全在庫）。"}, "Q-U16-031": {"mode": "norm", "set": {"mu": 502, "sd": 2, "a": 495, "b": 500, "kind": "le"}, "task": "内容量は平均502g・標準偏差2gの正規分布。500g 以下の割合は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(X≦500)"}, "why": "z＝−1 で約16%。μ を504に動かすと約2%。平均を上げるか、σ を下げるか、どちらの手でも割合を下げられる。"}, "Q-U16-032": {"mode": "expo", "set": {"unit": "分", "mean": 3, "t": 5, "s": 0}, "task": "待ち時間は平均3分の指数分布。5分を超えて待つ割合は（小数で）？", "predict": {"type": "number", "key": "pgt", "label": "P(待ち＞5)"}, "why": "e^(−5/3)≒0.189。t を3（平均）にすると0.368で、半分より少ない。右に長い裾があるので、平均は中央値（約2.1分）より大きい。"}, "Q-U16-040": {"mode": "unif", "set": {"unit": "分", "a": 0, "b": 15, "c": 0, "d": 15}, "task": "待ち時間は U(0, 15)。分散はいくつか。", "predict": {"type": "number", "key": "var", "label": "分散"}, "why": "(b−a)²÷12＝225÷12。12で割るのは、一様分布の平均からの距離の2乗を平均するとこうなるから（発展2）。"}, "Q-U18-012": {"mode": "norm", "set": {"mu": 500, "sd": 2, "a": 494, "b": 496, "kind": "le"}, "task": "25袋の平均 x̄ は平均500g・標準偏差（SE）2g の正規分布。x̄ が496g以下になる確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(x̄≦496)"}, "why": "z＝−2 で約2.3%。標準偏差を1袋の10にすると約34%。平均の分布は、1個の分布より ÷√n だけ細い。"}, "Q-U18-032": {"mode": "norm", "set": {"mu": 500, "sd": 1, "a": 495, "b": 498, "kind": "le"}, "task": "16袋の平均 x̄ は平均500g・標準偏差（SE）1g の正規分布。x̄ が498g以下になる確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(x̄≦498)"}, "why": "z＝−2 で約2.3%。標準偏差を1袋の4gにすると約31%。平均で判断すると、正常なのに調整する空振りが減る。"}, "Q-U19-031": {"mode": "norm", "set": {"mu": 8, "sd": 0.5, "a": 9, "b": 10, "kind": "ge"}, "task": "144客の平均購入点数は近似的に平均8・標準偏差（SE）0.5 の正規分布。9点以上になる確率は（小数で）？", "predict": {"type": "number", "key": "p", "label": "P(x̄≧9)"}, "why": "z＝2 で約2.3%。平均購入点数が9点を超えた日は、偶然では50日に1日ほど。続くなら売場の変化を疑う。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -186,7 +195,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -203,6 +212,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -212,9 +222,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -224,10 +244,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;

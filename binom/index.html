@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -127,6 +134,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-path": {"mode": "path", "set": {"n": 4, "p": 0.25, "k": 1}, "task": "購入率25%の売場に客が4人。ちょうど1人が買う確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝1)"}, "why": "誰が買うかの並びは4通り（₄C₁）、どれも 0.25×0.75³≒0.105。4×0.105≒0.422。0.25 だけ、0.105 だけだと並び方を数え忘れている。"}, "s1-n": {"mode": "pmf", "set": {"n": 20, "p": 0.25, "k": 5, "kind": "eq"}, "unlock": ["kind"], "task": "購入率25%の売場に客が20人。いちばん起きやすい「買う人数」は何人か。", "predict": {"type": "number", "key": "mode", "label": "いちばん起きやすい人数", "unit": "人"}, "why": "平均 np＝20×0.25＝5人の近くが山になる。n を増やすと山は右へ動き、左右対称に近づく。"}, "s3-free": {"mode": "pmf", "modes": ["pmf", "path", "bern"], "task": "解いてから、「二項分布 B(n, p)」で n・p・k と「求める」を問題に合わせて確かめる。式の ₙCₖ の意味は「並びを書き出す」、平均・分散は「ベルヌーイと np」で見る。"}, "s4-free": {"mode": "pmf", "modes": ["pmf", "bern"], "task": "自分の売場の数字（人数 n と購入率・利用率 p）を入れ、「k 人以上」「1人もいない」の確率を読む。平均 np のまわりにどれくらい散らばるかも見る。"}, "s5-norm": {"mode": "pmf", "modes": ["pmf", "bern"], "set": {"n": 60, "p": 0.3, "k": 18, "kind": "eq", "norm": "yes"}, "task": "「重ねる」を正規分布にしたまま n を小さく・大きくし、正規分布で近似できるのはどんなときかを見る。p を0.05のように小さくすると形がどう崩れるかも見る。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（二項分布 B(n, p)、並びを書き出す、ベルヌーイと np）。"}, "Q-U14-001": {"mode": "path", "set": {"n": 3, "p": 0.5, "k": 2}, "task": "コインを3回投げ、ちょうど2回表（🛒を表とする）。確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝2)"}, "why": "表表裏・表裏表・裏表表の3通り、どれも 0.5³＝0.125。3×0.125＝0.375。"}, "Q-U14-002": {"mode": "pmf", "set": {"n": 5, "p": 0.2, "k": 2, "kind": "eq"}, "task": "n＝5、p＝0.2。ちょうど2回成功する確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝2)"}, "why": "10×0.04×0.512＝0.2048。平均は1回なので、いちばん起きやすいのは1回で、2回はその次。"}, "Q-U14-003": {"mode": "pmf", "set": {"n": 4, "p": 0.25, "k": 1, "kind": "ge"}, "task": "n＝4、p＝0.25。少なくとも1人（1人以上）が買う確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧1)"}, "why": "1人以上は「0人ではない」。1−0.75⁴＝0.6836。1〜4人の4本を足しても同じになる。"}, "Q-U14-004": {"mode": "pmf", "set": {"n": 4, "p": 0.25, "k": 2, "kind": "ge"}, "task": "n＝4、p＝0.25。少なくとも2人（2人以上）が買う確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧2)"}, "why": "2人以上＝1−(0人＋1人)＝1−0.3164−0.4219＝0.2617。0人を引き忘れると0.5781になる。"}, "Q-U14-005": {"mode": "pmf", "set": {"n": 20, "p": 0.05, "k": 2, "kind": "le"}, "task": "不良率5%、20個抜き取り。不良が2個以下になる確率は（小数で）？", "predict": {"type": "number", "key": "le", "label": "P(X≦2)"}, "why": "0個・1個・2個の3本を足して約0.92。p を0.1にすると合格の確率は約0.68に下がる。"}, "Q-U14-010": {"mode": "pmf", "set": {"n": 6, "p": 0.3, "k": 2, "kind": "eq"}, "task": "n＝6、p＝0.3。ちょうど2人が提示する確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝2)"}, "why": "15×0.09×0.2401≒0.324。平均 1.8人に近い2人がいちばん起きやすい。"}, "Q-U14-011": {"mode": "bern", "set": {"p": 0.1, "n": 50}, "task": "p＝0.1、n＝50。購入する人数の標準偏差は（小数で）？", "predict": {"type": "number", "key": "sd", "label": "標準偏差", "unit": "人"}, "why": "分散 50×0.1×0.9＝4.5、√4.5≒2.12人。1人の分散0.09を50倍して平方根。"}, "Q-U14-012": {"mode": "bern", "set": {"p": 0.25, "n": 4}, "task": "1人の購入（1/0）は p＝0.25。独立な4人分の合計の分散は（小数で）？", "predict": {"type": "number", "key": "var", "label": "合計の分散"}, "why": "1人の分散 p(1−p)＝0.1875 を4人分足して0.75。二項分布の分散 np(1−p) はこの足し算から出てくる。"}, "Q-U14-020": {"mode": "pmf", "set": {"n": 20, "p": 0.1, "k": 3, "kind": "ge"}, "task": "n＝20、p＝0.1。3人以上が使う確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧3)"}, "why": "3〜20人を足す代わりに、1−(0人＋1人＋2人)。平均2人なので、3人以上は3回に1回くらい。"}, "Q-U14-021": {"mode": "pmf", "set": {"n": 9, "p": 0.25, "k": 1, "kind": "ge"}, "task": "n＝9、p＝0.25。少なくとも1人が買う確率は（小数で）？ 0.9を超えているか。", "predict": {"type": "number", "key": "atleast1", "label": "P(X≧1)"}, "why": "1−0.75⁹≒0.925 で0.9を超える。n を8にすると0.8999で、わずかに届かない。"}, "Q-U14-022": {"mode": "pmf", "set": {"n": 20, "p": 0.3, "k": 6, "kind": "eq"}, "task": "B(20, 0.3) の分散は（小数で）？ 平均6・分散4.2 になっているか確かめる。", "predict": {"type": "number", "key": "var", "label": "分散 np(1−p)"}, "why": "20×0.3×0.7＝4.2。分散を平均で割ると 1−p が出る。分散は平均より必ず小さい（1−p＜1）。"}, "Q-U14-023": {"mode": "pmf", "set": {"n": 10, "p": 0.5, "k": 5, "kind": "eq"}, "task": "コインを10回投げる。表がちょうど5回の確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝5)"}, "why": "₁₀C₅×0.5¹⁰＝252÷1024≒0.246。平均5回でも、ちょうど5回は4回に1回くらい。"}, "Q-U14-030": {"mode": "pmf", "set": {"n": 20, "p": 0.1, "k": 0, "kind": "eq"}, "task": "n＝20、p＝0.1。ちょうど0人が使う確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝0)"}, "why": "0.9²⁰≒0.12。平均2人でも、0人は珍しくない。偶然かどうかの判断は検定の単元で正式に扱う。"}, "Q-U14-031": {"mode": "pmf", "set": {"n": 50, "p": 0.02, "k": 1, "kind": "ge"}, "task": "n＝50、p＝0.02。不良が1個以上見つかる確率は（小数で）？", "predict": {"type": "number", "key": "atleast1", "label": "P(X≧1)"}, "why": "1−0.98⁵⁰≒0.64。n を100にすると約0.87まで上がる。抜き取る数を増やすほど見逃しは減る。"}, "Q-U14-032": {"mode": "pmf", "set": {"n": 22, "p": 0.9, "k": 21, "kind": "ge"}, "task": "予約22人、来店率0.9。21人以上来る確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧21)"}, "why": "21人と22人の2本を足して約0.34。n を21にすると約0.11まで下がる。"}, "Q-U14-040": {"mode": "pmf", "set": {"n": 100, "p": 0.5, "k": 60, "kind": "ge", "norm": "yes"}, "task": "B(100, 0.5)。X≧60 の正確な確率は（小数で）？ 重ねた正規分布の曲線と比べる。", "predict": {"type": "number", "key": "ge", "label": "P(X≧60)"}, "why": "二項分布の正確な値は約0.0284。正規近似（連続修正あり）は約0.0287。n が大きいと棒の形が曲線にほぼ重なる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -165,7 +174,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -182,6 +191,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -191,9 +201,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -203,10 +223,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;

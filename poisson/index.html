@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -135,6 +142,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-pois": {"mode": "pois", "set": {"rate": 2, "t": 1, "k": 3, "kind": "ge"}, "task": "問い合わせは1時間に平均2件（ポアソン分布）。ある1時間に3件以上来る確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧3)"}, "why": "0件0.135・1件0.271・2件0.271 を1から引いて約0.32。平均2件でも、3時間に1回くらいは3件以上来る。"}, "s1-t": {"mode": "pois", "set": {"rate": 2, "t": 2, "k": 0, "kind": "eq"}, "task": "1時間に平均2件。2時間続けて1件も来ない確率は（小数で）？", "predict": {"type": "number", "key": "p0", "label": "P(X＝0)"}, "why": "2時間なので λ＝4。e⁻⁴≒0.018。1時間0件（e⁻²≒0.135）の2乗とも同じ。時間 t を2倍にすると λ も2倍になる。"}, "s3-free": {"mode": "pois", "modes": ["pois", "approx", "geom", "hyper"], "task": "解いてから、問題が数えているもの（区間の件数・n 回中・成功まで・戻さない）に合うモードで確かめる。"}, "s4-free": {"mode": "pois", "modes": ["pois", "hyper"], "task": "自分の売場の数字（1時間あたりの来店や問い合わせ、箱の中の不良の数）を入れ、「k 件以上」「0件」の確率を読む。"}, "s5-free": {"mode": "pois", "modes": ["pois", "approx", "hyper"], "task": "「ポアソン分布」で k＝0 にし、時間を延ばすと0件の確率（＝待ち時間がそれより長い確率）がどう下がるかを見る（発展1）。「戻さず取り出す」で N を大きくして二項分布に近づくのを見る（発展3）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（ポアソン分布、二項とポアソン、成功するまで、戻さず取り出す）。"}, "Q-U15-001": {"mode": "pois", "set": {"unit": "日", "rate": 3, "t": 1, "k": 1, "kind": "le"}, "task": "1日に平均3件の返品。ある日に返品が1件以下の確率は（小数で）？", "predict": {"type": "number", "key": "le", "label": "P(X≦1)"}, "why": "0件0.0498＋1件0.1494≒0.199。平均3件なので、1件以下で済む日は5日に1日くらい。"}, "Q-U15-002": {"mode": "approx", "set": {"n": 1000, "p": 0.002, "k": 2}, "task": "B(1000, 0.002) をポアソン分布で近似する。ちょうど2個の確率（ポアソン）は（小数で）？", "predict": {"type": "number", "key": "poi", "label": "ポアソンの P(X＝2)"}, "why": "λ＝np＝2、e⁻²×4÷2≒0.2707。二項分布の正確な値0.2709とほとんど同じ。p を0.2のように大きくすると差が開く。"}, "Q-U15-003": {"mode": "pois", "set": {"rate": 2, "t": 1, "k": 1, "kind": "eq"}, "task": "1時間に平均2件。ちょうど1件の確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝1)"}, "why": "e⁻²×2¹÷1!≒0.271。λ＝2 では1件と2件がちょうど同じ確率になる。"}, "Q-U15-004": {"mode": "pois", "set": {"rate": 2, "t": 0.5, "k": 2, "kind": "ge"}, "task": "1時間に平均2件。30分間に2件以上来る確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧2)"}, "why": "λ＝2×0.5＝1。1−e⁻¹−e⁻¹≒0.264。λ を2のまま計算すると0.594になり、2倍以上に見積もってしまう。"}, "Q-U15-005": {"mode": "pois", "set": {"unit": "日", "rate": 3, "t": 2, "k": 0, "kind": "eq"}, "task": "1日に平均3件の返品。2日間で返品が0件の確率は（小数で）？", "predict": {"type": "number", "key": "p0", "label": "P(X＝0)"}, "why": "λ＝3×2＝6、e⁻⁶≒0.0025。1日0件（e⁻³）を2回掛けても同じ。区間を延ばすと0件はどんどん起きにくくなる。"}, "Q-U15-010": {"mode": "pois", "set": {"rate": 4, "t": 0.25, "k": 0, "kind": "eq"}, "task": "1時間に平均4人。15分間に0人の確率は（小数で）？", "predict": {"type": "number", "key": "p0", "label": "P(X＝0)"}, "why": "λ＝4×0.25＝1、e⁻¹≒0.368。15分の3回に1回くらいは誰も並ばない。"}, "Q-U15-011": {"mode": "geom", "set": {"p": 0.2, "r": 1, "k": 3}, "task": "当たり確率0.2。3回目で初めて当たる確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝3)"}, "why": "はずれ0.8を2回、当たり0.2を1回で 0.128。平均は5回だが、1回目で当たる（0.2）のがいちばん起きやすい。"}, "Q-U15-012": {"mode": "approx", "set": {"n": 200, "p": 0.01, "k": 0}, "task": "B(200, 0.01)。返品が0件になる確率（二項の正確な値）は（小数で）？", "predict": {"type": "number", "key": "bin", "label": "二項の P(X＝0)"}, "why": "0.99²⁰⁰≒0.134。ポアソン近似 e⁻²≒0.135 との差は0.001ほど。"}, "Q-U15-020": {"mode": "geom", "set": {"p": 0.1, "r": 1, "k": 10}, "task": "(c) 当たり確率0.1のくじを当たるまで引く。平均何回か。", "predict": {"type": "number", "key": "mean", "label": "平均回数", "unit": "回"}, "why": "幾何分布の平均は 1/p＝10回。ただし10回までに当たる確率は約65%で、10回を超えることも3回に1回以上ある。"}, "Q-U15-021": {"mode": "geom", "set": {"p": 0.5, "r": 2, "k": 3}, "task": "成功率0.5。2回目の成功がちょうど3回目に起きる確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝3)"}, "why": "3回目は必ず成功。前の2回のどちらで1回成功するかが2通りで、2×0.5³＝0.25。"}, "Q-U15-022": {"mode": "hyper", "set": {"N": 10, "K": 2, "n": 3, "k": 1}, "task": "10個中2個が不良、戻さず3個。不良がちょうど1個の確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝1)"}, "why": "56÷120＝7/15。戻す（二項）と0.384で、箱が小さいと差が大きい。N を100倍にすると二項に近づく。"}, "Q-U15-023": {"mode": "pois", "set": {"rate": 2, "t": 0.5, "k": 1, "kind": "eq"}, "task": "1時間に平均2件。30分間の件数の分散はいくつか。", "predict": {"type": "number", "key": "var", "label": "分散"}, "why": "λ＝2×0.5＝1。ポアソン分布は平均＝分散＝λ。"}, "Q-U15-030": {"mode": "pois", "set": {"rate": 12, "t": 0.25, "k": 5, "kind": "ge"}, "task": "15分間に平均3人（1時間に12人）。5人以上来る確率は（小数で）？", "predict": {"type": "number", "key": "ge", "label": "P(X≧5)"}, "why": "λ＝3、1−(0〜4人)≒0.185。基準を6人以上にすると約0.084まで下がる。"}, "Q-U15-031": {"mode": "hyper", "set": {"N": 20, "K": 2, "n": 4, "k": 0}, "task": "20個中2個が不良、戻さず4個。不良が0個（見逃し）の確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝0)"}, "why": "3060÷4845≒0.632。抜く数 n を8にすると約0.37まで下がる。"}, "Q-U15-032": {"mode": "pois", "set": {"unit": "日", "rate": 0.5, "t": 7, "k": 0, "kind": "eq"}, "task": "1日に平均0.5件、7日間で0件の確率は（小数で）？", "predict": {"type": "number", "key": "p0", "label": "P(X＝0)"}, "why": "λ＝3.5、e⁻³·⁵≒0.030。偶然かどうかの判断は検定の単元で正式に扱う。"}, "Q-U15-040": {"mode": "pois", "set": {"rate": 2, "t": 0.5, "k": 0, "kind": "eq"}, "task": "1時間に平均2件。30分間に0件（＝30分以上待つ）確率は（小数で）？", "predict": {"type": "number", "key": "p0", "label": "P(X＝0)"}, "why": "待ち時間が t を超える＝t の間に0件。e^(−λt) で、時間を延ばすと指数的に小さくなる（指数分布）。"}, "Q-U17-012": {"mode": "hyper", "set": {"N": 10, "K": 3, "n": 4, "k": 1}, "task": "10店のうち赤字3店。4店を戻さず選ぶとき、赤字店がちょうど1店入る確率は（小数で）？", "predict": {"type": "number", "key": "pk", "label": "P(X＝1)"}, "why": "3×35÷210＝0.5。単純無作為抽出の確率は、どの組み合わせも同じ確率であることから場合の数で出せる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -173,7 +182,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -190,6 +199,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -199,9 +209,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -211,10 +231,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;

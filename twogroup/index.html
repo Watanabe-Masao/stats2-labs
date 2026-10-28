@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -155,6 +162,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-var": {"mode": "var", "set": {"level": 0.95, "n": 10, "s2": 4}, "task": "袋詰め10回の重さの不偏分散 s²＝4。母分散の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "(n−1)s²＝36 を χ²(9) の大きい方の点19.023で割って約1.89。上の端は36÷2.700≒13.33。s²＝4 は真ん中にない。"}, "s1-paired": {"mode": "paired", "set": {"dbar": 3, "sd": 4, "n": 16}, "task": "同じ16店の施策前後の差は平均3万円、差の標準偏差4万円。差の平均の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "SE＝4÷√16＝1、t(15) の点2.131。3−2.131≒0.869、上の端は5.131。0を含まないので、施策の前後で差があると言える。"}, "s1-diff": {"mode": "diff", "set": {"method": "welch", "x1": 30, "s1": 2, "n1": 10, "x2": 25, "s2": 8, "n2": 20}, "task": "店A（10日、平均30・s＝2）と店B（20日、平均25・s＝8）の平均の差。ウェルチの95%信頼区間は0を含むか。", "predict": {"type": "choice", "key": "contains0", "label": "ウェルチの区間は", "options": ["0を含む", "0を含まない"]}, "why": "SE≒1.90、自由度≒23.3 で、区間は約1.08〜8.92。等分散を仮定すると、ばらつきの大きい B に引っぱられて SE≒2.59 になり、区間は0を含む。"}, "s3-free": {"mode": "diff", "modes": ["diff", "paired", "prop2", "var", "ratio", "corr"], "task": "解いてから、問題が推定しているもの（母分散、平均の差、対応ありの差、比率の差、分散の比、相関）に合うモードで確かめる。"}, "s4-free": {"mode": "paired", "modes": ["paired", "diff", "prop2", "ratio"], "task": "自分の売場の数字（施策前後の差、2店の平均、2つのキャンペーンの購入率）を入れ、区間が0（比なら1）を含むかを読む。"}, "s5-free": {"mode": "var", "modes": ["var", "corr", "ratio"], "task": "「母分散」で n を10→100 と変え、上限÷下限の倍率がどう縮むかを見る（発展1）。「相関係数」で r と n を動かし、区間が左右非対称になることを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（母分散、平均の差、対応あり、比率の差、分散の比、相関係数）。"}, "Q-U23-001": {"mode": "var", "set": {"level": 0.95, "n": 16, "s2": 9}, "task": "n＝16、s²＝9。母分散の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "135÷6.262≒21.56。下の端は約4.91。標準偏差なら平方根を取って約2.22〜4.64秒。"}, "Q-U23-002": {"mode": "paired", "set": {"dbar": 2, "sd": 5, "n": 25}, "task": "25店の前後差の平均2万円、差の標準偏差5万円。差の平均の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "2−2.064≒−0.064 で、わずかに0未満。区間は0を含む。店を36にすると SE は約0.83 になり、0を含まなくなる。"}, "Q-U23-003": {"mode": "prop2", "set": {"x1": 60, "n1": 200, "x2": 40, "n2": 200}, "task": "200人中60人と200人中40人。購入率の差の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "0.1−0.0843≒0.016。わずかに0より上。人数が各100人なら区間は0を含む。"}, "Q-U23-004": {"mode": "diff", "set": {"method": "pooled", "x1": 52, "s1": 8, "n1": 16, "x2": 48, "s2": 6, "n2": 16}, "task": "等分散を仮定。52（s＝8、16店）と48（s＝6、16店）の差の95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "t(30) の点約2.042×SE 2.5≒5.11。ウェルチに切り替えても SE は2.5、自由度が約27.8 になるだけ。"}, "Q-U23-005": {"mode": "ratio", "set": {"s1": 18, "n1": 11, "s2": 9, "n2": 13}, "task": "s_A²＝18（11日）、s_B²＝9（13日）。分散の比の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "2×3.621≒7.24。下の端は約0.59。1を含むので、ばらつきの違いは言えない。"}, "Q-U23-010": {"mode": "var", "set": {"level": 0.95, "n": 21, "s2": 150}, "task": "n＝21、s²＝150。母分散の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "3000÷34.170≒87.8。上の端は約312.8で、s²＝150 は下寄り。"}, "Q-U23-011": {"mode": "paired", "set": {"dbar": 2, "sd": 1.5, "n": 8}, "task": "8店の前後差の平均2万円、差の標準偏差1.5万円。差の平均の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "2−1.254≒0.746。差のばらつきが小さいので、8店でも0を含まない。"}, "Q-U23-012": {"mode": "prop2", "set": {"x1": 120, "n1": 300, "x2": 105, "n2": 300}, "task": "300人中120人と300人中105人。満足率の差の95%信頼区間は0を含むか。", "predict": {"type": "choice", "key": "contains0", "label": "差の区間は", "options": ["0を含む", "0を含まない"]}, "why": "区間は約 −0.027〜0.127。差0.05 は偶然のぶれの範囲。各1200人にすると区間は0を含まなくなる。"}, "Q-U23-020": {"mode": "diff", "set": {"method": "welch", "x1": 68, "s1": 3, "n1": 12, "x2": 62, "s2": 9, "n2": 8}, "task": "68（s＝3、12日）と62（s＝9、8日）。ウェルチの95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "SE≒3.30、自由度≒8.05、t の点≒2.30 で、区間は約 −1.60〜13.60。「等分散を仮定」に切り替えると約0.17〜11.83 で0を含まなくなる。"}, "Q-U23-021": {"mode": "corr", "set": {"r": 0.5, "n": 100}, "task": "r＝0.5、n＝100。ρ の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "z の区間を tanh で戻して約0.337。上の端は約0.634。n を400にすると約0.42〜0.57 に狭まる。"}, "Q-U23-022": {"mode": "paired", "set": {"dbar": 1.2, "sd": 2, "n": 10}, "task": "10人の前後差の平均1.2点、差の標準偏差2点。区間は0を含むか。", "predict": {"type": "choice", "key": "contains0", "label": "差の区間は", "options": ["0を含む", "0を含まない"]}, "why": "区間は約 −0.23〜2.63。n を20にすると約0.26〜2.14 で、0を含まなくなる。"}, "Q-U23-023": {"mode": "var", "set": {"level": 0.95, "n": 10, "s2": 4}, "task": "n＝10、s²＝4。母分散の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "36÷2.700≒13.33。下の端は約1.89 で、s²＝4 との距離が左右で大きく違う。"}, "Q-U23-030": {"mode": "prop2", "set": {"x1": 90, "n1": 500, "x2": 60, "n2": 500}, "task": "500人中90人と500人中60人。購入率の差の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "0.06−0.044≒0.016。差は小さいが0は含まない。"}, "Q-U23-031": {"mode": "ratio", "set": {"s1": 900, "n1": 13, "s2": 400, "n2": 11}, "task": "s_A²＝900（13日）、s_B²＝400（11日）。分散の比の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "2.25÷3.621≒0.62。上の端は約7.59 で、1を含む。"}, "Q-U23-032": {"mode": "paired", "set": {"dbar": 2.5, "sd": 6, "n": 12}, "task": "12店の前後差の平均2.5万円、差の標準偏差6万円。95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "2.201×1.732≒3.81。n を48にすると誤差幅は約1.74 で、0を含まなくなる。"}, "Q-U23-040": {"mode": "var", "set": {"level": 0.95, "n": 100, "s2": 4}, "task": "n＝100。母分散の区間の上限÷下限は（小数で）？", "predict": {"type": "number", "key": "ratio", "label": "上限÷下限"}, "why": "128.42÷73.36≒1.75。n を10にすると約7.05倍。平均の区間よりずっと多くのデータが要る。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -193,7 +202,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -210,6 +219,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -219,9 +229,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -231,10 +251,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;

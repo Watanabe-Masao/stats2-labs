@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -126,6 +133,8 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 window.__LABPRESETS__={"s1-se": {"mode": "se", "set": {"mu": 50, "sd": 12, "n": 36}, "task": "商品1個の重さは平均50g・標準偏差12g。36個の平均重量の標準誤差（SE）は何gか。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "g"}, "why": "12÷√36＝12÷6＝2g。1個ずつのばらつき12gはそのまま。n を9にすると4g、144にすると1g。n を4倍で SE は半分。"}, "s1-unb": {"mode": "unb", "set": {"vals": "1,3,5", "n": 2}, "task": "3つの値 1・3・5（母分散 σ²＝8/3≒2.667）から、戻しながら2個取る標本は9通り。n で割る分散 v を9通り平均するといくつか（小数で）。", "predict": {"type": "number", "key": "meanV", "label": "v の平均"}, "why": "(n−1)/n×σ²＝1/2×8/3≒1.333 で、σ² の半分しかない。n−1 で割る s² なら平均はちょうど 2.667。n を3・4と増やすと v の不足は小さくなる。"}, "s3-free": {"mode": "se", "modes": ["se", "prop", "unb"], "task": "解いてから、問題が聞いていること（平均のぶれか、比率のぶれか、分散の割り方か）に合うモードで確かめる。"}, "s4-free": {"mode": "se", "modes": ["se", "prop"], "task": "自分の売場の数字（1客の購入額の標準偏差と客数、購入率と調べる人数）を入れ、平均や比率がどれだけぶれるかを読む。"}, "s5-free": {"mode": "unb", "modes": ["unb", "se"], "task": "「不偏分散」で n を2→3→4と変え、v の平均が (n−1)/n×σ² になることを確かめる（発展1）。「平均のぶれ」で「200回取り直す」を押し、取り直した x̄ の標準偏差が SE に近いことを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（平均のぶれ、比率のぶれ、不偏分散）。"}, "Q-U18-001": {"mode": "se", "set": {"mu": 0, "sd": 10, "n": 25}, "task": "標準偏差10（母分散100）の母集団から25個。x̄ の分散はいくつか。", "predict": {"type": "number", "key": "var", "label": "x̄ の分散"}, "why": "σ²÷n＝100÷25＝4、SE は √4＝2。n を100にすると分散1・SE1。分散は n に反比例、SE は √n に反比例。"}, "Q-U18-002": {"mode": "prop", "set": {"p": 0.3, "n": 400, "e": 0.02}, "task": "比率 p＝0.3、400人で調べる。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.3×0.7÷400)≒0.023。n を1600にすると半分の約0.011。p を0.5に近づけると SE は大きくなる。"}, "Q-U18-003": {"mode": "se", "set": {"mu": 1000, "sd": 2000, "n": 16}, "task": "1人の購入額の標準偏差は2000円。16人の平均の標準誤差は何円か。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "円"}, "why": "2000÷√16＝500円。1人ずつのばらつき2000円は変わらない。人数を64人にすると250円。"}, "Q-U18-004": {"mode": "se", "set": {"mu": 0, "sd": 10, "n": 100}, "task": "標準偏差10の母集団から100個取る。平均の標準誤差はいくつか。", "predict": {"type": "number", "key": "se", "label": "SE"}, "why": "10÷√100＝1。25個の2から半分になるのに4倍の個数が要る。n を400にすると0.5。"}, "Q-U18-005": {"mode": "se", "set": {"mu": 50, "sd": 12, "n": 36}, "task": "1個の重さは平均50g・標準偏差12g。36個の合計の標準偏差は何gか。", "predict": {"type": "number", "key": "sdsum", "label": "合計の標準偏差", "unit": "g"}, "why": "分散が36倍の5184で、標準偏差は 12×6＝72g。平均にすると36で割って2g。合計のぶれは大きくなるが、平均のぶれは小さくなる。"}, "Q-U18-010": {"mode": "prop", "set": {"p": 0.5, "n": 100, "e": 0.02}, "task": "比率 p＝0.5、100人に聞く。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.25÷100)＝0.05。p を0.2にすると0.04、0.1にすると0.03。同じ人数でも、p が0.5に近いほどぶれは大きい。"}, "Q-U18-011": {"mode": "unb", "set": {"vals": "2,4,9", "n": 2}, "task": "3つの値 2・4・9 から戻しながら2個取る9通りで、不偏分散 s² の平均は（小数で）？", "predict": {"type": "number", "key": "meanS2", "label": "s² の平均"}, "why": "σ²＝26/3≒8.67 とちょうど一致する。n で割る v の平均は半分の4.33。n−1 で割るのは、x̄ から測った偏差が小さく出る分を補うため。"}, "Q-U18-020": {"mode": "se", "set": {"mu": 50, "sd": 10, "n": 30}, "task": "1日の売上は平均50万円・標準偏差10万円。30日間の1日平均売上の標準誤差は（万円・小数で）？", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "万円"}, "why": "10÷√30≒1.83万円。1日ずつの標準偏差10万円とは別もの。「先月の平均売上が2万円下がった」は、SE の1倍ほどで、偶然でも起こりうる大きさ。"}, "Q-U18-021": {"mode": "prop", "set": {"p": 0.5, "n": 100, "e": 0.02}, "task": "p＝0.5 のとき、SE(p̂) を0.02以下にする人数は何人か。", "predict": {"type": "number", "key": "nFor", "label": "必要な人数", "unit": "人"}, "why": "0.25÷0.02²＝625人。目標の SE を0.01にすると2500人（4倍）。p＝0.2 が分かっていれば 0.16÷0.0004＝400人で済む。"}, "Q-U18-022": {"mode": "se", "set": {"mu": 50, "sd": 24, "n": 144}, "task": "1個の標準偏差が24gの商品で、144個の平均の標準誤差は何gか。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "g"}, "why": "24÷12＝2g。ばらつきの大きい商品ほど、平均を安定させるのに多くの個数が要る（σ² に比例）。"}, "Q-U18-023": {"mode": "se", "set": {"mu": 50, "sd": 12, "n": 36}, "task": "σ＝12 の母集団から36個。標本平均の分散 σ²/n はいくつか。", "predict": {"type": "number", "key": "var", "label": "x̄ の分散"}, "why": "144÷36＝4（SE は2）。n を144にすると分散は1で1/4、SE は1で1/2。"}, "Q-U18-030": {"mode": "se", "set": {"mu": 1000, "sd": 1200, "n": 400}, "task": "1客の購入額の標準偏差は1200円。400客の平均（客単価）の標準誤差は何円か。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "円"}, "why": "1200÷20＝60円。客数が100の小さな店なら120円で、客単価はもっと大きく上下する。"}, "Q-U18-031": {"mode": "prop", "set": {"p": 0.6, "n": 150, "e": 0.02}, "task": "比率 p＝0.6、150人。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.24÷150)＝0.04。±2SE で ±8ポイント。600人に聞けば ±4ポイントになる。"}, "Q-U18-040": {"mode": "unb", "set": {"vals": "1,2,6", "n": 3}, "task": "3つの値 1・2・6 から戻しながら3個取る27通りで、n で割る分散 v の平均は（小数で）？", "predict": {"type": "number", "key": "meanV", "label": "v の平均"}, "why": "2/3×14/3≒3.11。n を2にすると1/2倍の2.33、4にすると3/4倍の3.5。いつも (n−1)/n 倍。"}, "Q-U21-012": {"mode": "prop", "set": {"p": 0.2, "n": 100}, "task": "p＝0.2、n＝100。p̂ の標準誤差は（小数で）？", "predict": {"type": "number", "key": "se", "label": "SE(p̂)"}, "why": "√(0.16÷100)＝0.04。n を400にすると0.02で半分。p̂ は不偏で、n とともに p に近づく。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -164,7 +173,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -181,6 +190,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -190,9 +200,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -202,10 +222,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;

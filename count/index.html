@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .chip{display:inline-block;padding:1px 7px;margin:2px;border-radius:6px;border:1px solid var(--line);background:var(--bg);font-family:ui-monospace,Menlo,monospace;font-size:13px}
 .grp{padding:4px 6px;border-radius:8px;margin:4px 0;border-left:5px solid var(--acc);background:var(--card)}
 .grp:nth-child(even){border-left-color:var(--mut)}
@@ -165,6 +172,8 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 window.__LABPRESETS__={"s1-list": {"mode": "list", "set": {"n": 5, "r": 2, "role": "なし"}, "unlock": ["role"], "task": "5人からレジと品出しを1人ずつ選ぶと20通り。役割のない当番2人を選ぶだけなら何通りか。", "predict": {"type": "number", "key": "comb", "label": "役割なしの選び方", "unit": "通り"}, "why": "「レジA・品出しB」と「レジB・品出しA」は同じ組 {A, B}。どの組も 2!＝2 回ずつ数えているので 20÷2＝10。役割を「区別する」に切り替えると、帯1本に2通りずつ並ぶ。"}, "s1-exp": {"mode": "list", "set": {"n": 4, "r": 3, "role": "あり"}, "unlock": ["role"], "task": "4人から3人を、役割（1番・2番・3番）を決めて選ぶ。何通りか。", "predict": {"type": "number", "key": "perm", "label": "役割ありの選び方", "unit": "通り"}, "why": "4×3×2＝24。色の帯1本（同じ3人の組）に 3!＝6 通りずつ並ぶので、役割なしなら 24÷6＝4。"}, "s2-pascal": {"mode": "pascal", "set": {"n": 7, "r": 3}, "task": "パスカルの三角形の7段目で ₇C₃ を選ぶ。上の段のどの2つの数の和か。₇C₃ はいくつか。", "predict": {"type": "number", "key": "c", "label": "₇C₃"}, "why": "₇C₃＝₆C₂＋₆C₃＝15＋20＝35。特定の1人を含む選び方（15）と含まない選び方（20）の和。"}, "s3-free": {"mode": "cond", "modes": ["cond", "list", "pascal"], "task": "解いてから、「条件付き」で条件を問題に合わせ、太枠（条件を満たすもの）の数と式を比べる。「パスカル」で数をタップすると、特定の1人を含む・含まないに分かれる。"}, "s4-path": {"mode": "path", "modes": ["path", "list"], "task": "→ を3個、↑ を2個並べる並べ方が、「5歩のうち → にする3歩を選ぶ」ことと同じだと確かめる。くわしくで書き出しを見る。"}, "s5-more": {"mode": "pascal", "modes": ["pascal", "multi", "der"], "task": "「パスカル」で段の合計と二項分布の確率の合計（発展1）、「重複を許す」で ● と ｜ の並べ方（発展2）、「完全順列」で 1/e への近づき方（発展3）を見る。"}, "s6-free": {"task": "自分の式を小さい例で確かめる。「並べて数える」の書き出しや「道順」の書き出しで、式と書き出しの数が一致するか見る。"}, "Q-U09-001": {"mode": "list", "set": {"n": 6, "r": 3, "role": "なし"}, "task": "6人から役割のない委員を3人選ぶ。何通りか。", "predict": {"type": "number", "key": "comb", "label": "選び方", "unit": "通り"}, "why": "会長・副会長・書記なら 6×5×4＝120。同じ3人の組を 3!＝6 回ずつ数えているので 120÷6＝20。"}, "Q-U09-002": {"mode": "list", "set": {"n": 7, "r": 2, "role": "あり"}, "task": "7人から店長代理と副代理を選ぶ。何通りか。", "predict": {"type": "number", "key": "perm", "label": "選び方", "unit": "通り"}, "why": "7×6＝42。役割を「区別しない」に切り替えると研修参加者2人の選び方 42÷2＝21。"}, "Q-U09-003": {"mode": "list", "set": {"n": 4, "r": 2, "role": "あり"}, "task": "4人からリーダーとサブリーダーを選ぶ（兼任なし）。何通りか。", "predict": {"type": "number", "key": "perm", "label": "選び方", "unit": "通り"}, "why": "4×3＝12。帯1本（同じ2人の組）に「B→C」「C→B」の2通りが並ぶ。"}, "Q-U09-004": {"mode": "list", "set": {"n": 4, "r": 2, "role": "なし"}, "task": "4人から役割のない委員を2人選ぶ。何通りか。", "predict": {"type": "number", "key": "comb", "label": "選び方", "unit": "通り"}, "why": "役割ありの12通りを、同じ組の並べ方 2!＝2 で割って6。"}, "Q-U09-005": {"mode": "multi", "set": {"n": 3, "r": 2}, "task": "3種類のパンから、1個目と2個目を順に選ぶ（同じパンを2回選んでもよい）。何通りか。", "predict": {"type": "number", "key": "pow", "label": "選び方", "unit": "通り"}, "why": "1個目3通り×2個目3通り＝3²＝9。順番を区別しないなら ₄C₂＝6（くわしくの書き出し）。"}, "Q-U09-010": {"mode": "list", "set": {"n": 5, "r": 3, "role": "あり"}, "task": "5種類のパンから3種類を選び、上段・中段・下段に1種類ずつ並べる。何通りか。", "predict": {"type": "number", "key": "perm", "label": "並べ方", "unit": "通り"}, "why": "5×4×3＝60。段（役割）を区別しない詰め合わせなら 60÷3!＝10。"}, "Q-U09-011": {"mode": "pascal", "set": {"n": 10, "r": 8}, "task": "₁₀C₈ はいくつか。パスカルの三角形で、対称な ₁₀C₂ と比べる。", "predict": {"type": "number", "key": "c", "label": "₁₀C₈"}, "why": "選ぶ8人を決めることは、選ばない2人を決めることと同じ。₁₀C₈＝₁₀C₂＝10×9÷2＝45。続けて n・r を 7・3、12・10 に動かし、2・3 の答え（35、66）も確かめる。"}, "Q-U09-012": {"mode": "list", "set": {"n": 8, "r": 3, "role": "あり"}, "task": "8人の中の1位・2位・3位の決め方は何通りか。", "predict": {"type": "number", "key": "perm", "label": "決め方", "unit": "通り"}, "why": "8×7×6＝336。順位は役割なので順列。区別しない委員なら 336÷6＝56。"}, "Q-U09-020": {"mode": "cond", "set": {"kind": "include", "n": 6, "r": 3}, "task": "6人（A〜F）から3人の当番を選ぶ。A を必ず含む選び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "A を含む選び方", "unit": "通り"}, "why": "A を先に入れて、残り5人から2人：₅C₂＝10。くわしくの書き出しで、太枠（A を含む組）が10個あることを確かめる。含まないのも ₅C₃＝10 で、合わせて ₆C₃＝20。"}, "Q-U09-021": {"mode": "cond", "set": {"kind": "atleast", "n": 7, "r": 3, "m": 4}, "task": "7人（印の付いた女性4人と男性3人）から3人を選ぶ。女性を少なくとも1人含む選び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "女性を含む選び方", "unit": "通り"}, "why": "全部 ₇C₃＝35 から、男性3人だけの ₃C₃＝1 を引いて34。くわしくの書き出しで、太枠でない組が1つだけあることを確かめる。"}, "Q-U09-022": {"mode": "cond", "set": {"kind": "adjacent", "n": 5}, "task": "A〜E の5人を一列に並べる。A と B が隣り合う並び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "隣り合う並び方", "unit": "通り"}, "why": "A と B をかたまりとみて4つを並べる 4!＝24、かたまりの中の AB・BA の2通りで48。全部の120通りのうち、くわしくの太枠が48個。"}, "Q-U09-023": {"mode": "list", "set": {"n": 9, "r": 2, "role": "なし"}, "task": "委員長を決めたあと、残り9人から役割のない委員2人を選ぶ。何通りか。", "predict": {"type": "number", "key": "comb", "label": "委員の選び方", "unit": "通り"}, "why": "₉C₂＝36。委員長の10通りを掛けて 360。"}, "Q-U09-024": {"mode": "list", "set": {"n": 5, "r": 2, "role": "なし"}, "task": "5人から無作為に2人を選ぶ。選び方は全部で何通りか（確率の分母）。", "predict": {"type": "number", "key": "comb", "label": "全部の選び方", "unit": "通り"}, "why": "₅C₂＝10。そのうち {A, B} は1通りなので確率 1/10。役割ありで数えると分母20、分子2（A→B・B→A）で同じ 1/10。"}, "Q-U09-025": {"mode": "cond", "set": {"kind": "hyper", "n": 10, "r": 3, "m": 2, "k": 1}, "task": "10個のうち2個が不良（印）。3個を戻さずに取り出すとき、不良がちょうど1個の確率は（小数で）？", "predict": {"type": "number", "key": "prob", "label": "確率（小数）"}, "why": "不良1個の選び方 ₂C₁＝2、良品2個 ₈C₂＝28 で 2×28＝56 通り。全部 ₁₀C₃＝120 通りなので 56÷120＝7/15≒0.4667。"}, "Q-U09-030": {"mode": "list", "set": {"n": 10, "r": 2, "role": "なし"}, "task": "10人が全員と1回ずつ握手する。握手は全部で何回か。", "predict": {"type": "number", "key": "comb", "label": "握手の回数", "unit": "回"}, "why": "握手1回＝2人の組（区別なし）。₁₀C₂＝10×9÷2＝45。"}, "Q-U09-031": {"mode": "path", "set": {"a": 4, "b": 3}, "task": "右へ4歩・上へ3歩の最短経路は何通りか。", "predict": {"type": "number", "key": "paths", "label": "道順", "unit": "通り"}, "why": "7歩のうち右の4歩を選ぶ：₇C₄＝35。上の3歩を選ぶ ₇C₃ と同じ。"}, "Q-U09-032": {"mode": "pascal", "set": {"n": 10, "r": 5}, "task": "10店舗から試験を行う5店舗を選ぶ選び方は何通りか。", "predict": {"type": "number", "key": "c", "label": "₁₀C₅"}, "why": "₁₀C₅＝252。パスカルの10段目のまん中（一番大きい数）。どの選び方も同じ確率で選ぶのが無作為化。"}, "Q-U09-040": {"mode": "pascal", "set": {"n": 4, "r": 1, "p": 0.25}, "task": "B(4, 0.25) の確率を k＝0〜4 で全部足すといくつか。", "predict": {"type": "number", "key": "psum", "label": "確率の合計"}, "why": "₄Cₖ×0.25ᵏ×0.75⁴⁻ᵏ を足すと (0.25＋0.75)⁴＝1。くわしくの表で 0.3164, 0.4219, 0.2109, 0.0469, 0.0039 を確かめる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -203,7 +212,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -220,6 +229,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -229,9 +239,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -241,10 +261,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const SUBD="₀₁₂₃₄₅₆₇₈₉",sub=n=>String(n).split("").map(d=>SUBD[+d]).join("");

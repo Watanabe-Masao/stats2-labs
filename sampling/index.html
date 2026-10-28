@@ -84,6 +84,13 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
 .card{overflow-wrap:anywhere}
@@ -127,6 +134,8 @@ td.on{color:var(--acc2);font-weight:700}
 window.__LABPRESETS__={"s1-incl": {"mode": "incl", "set": {"N": 100, "n": 10, "m": 5}, "task": "名簿に載っている100店から10店を単純無作為抽出する。名簿に載っていない新店5店のうち、ある1店が選ばれる確率は？", "predict": {"type": "number", "key": "piMiss", "label": "新店が選ばれる確率"}, "why": "名簿の外の店は選ばれようがない。名簿の各店は 10÷100＝0.1 で同じ。n を増やしても新店は0のまま。結論を言えるのは名簿の100店まで。"}, "s1-enum": {"mode": "enum", "set": {"vals": "3,5,7,9,11", "n": 2, "c": 11, "tol": 1}, "task": "5店の値 3・5・7・9・11（平均7）から2店を選ぶ。10通りの標本のうち、x̄ が 6〜8（μ±1）に入る割合は（小数で）？", "predict": {"type": "number", "key": "within", "label": "μ±1 に入る割合"}, "why": "10通りのうち x̄ が6〜8なのは6通り。n を3・4と増やすと、x̄ は μ＝7 の近くに集まり、n＝5（全数）では x̄＝7 の1通りだけになる。"}, "s3-free": {"mode": "incl", "modes": ["incl", "enum", "repl"], "task": "解いてから、問題が聞いていること（選ばれる確率か、標本ごとの x̄ の散らばりか、戻すかどうか）に合うモードで確かめる。"}, "s4-free": {"mode": "incl", "modes": ["incl", "enum", "repl"], "task": "自分の名簿の件数と選ぶ件数、少数の店の実際の値を入れ、選ばれる確率と、選び方で x̄ がどれだけ変わるかを見る。"}, "s5-free": {"mode": "enum", "modes": ["enum", "repl"], "task": "「標本を並べる」で n を変え、くわしくの x̄ の標準偏差と σ÷√n×√((N−n)/(N−1)) が一致するのを見る（発展1）。「戻す・戻さない」で N を大きくし、差が消えるのを見る（発展2）。"}, "s6-free": {"task": "自分の抽出の設計を、3つのモードで確かめる（選ばれる確率、標本ごとの x̄ の散らばり、戻すかどうか）。"}, "Q-U17-001": {"mode": "incl", "set": {"N": 200, "n": 20, "m": 0}, "task": "200店から20店を単純無作為抽出する。特定の2店がどちらも選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "pair", "label": "2店とも入る確率"}, "why": "20/200×19/199≒0.0095。1店が入ると残りの枠が19に減るので、0.1×0.1＝0.01 より少し小さい。"}, "Q-U17-002": {"mode": "enum", "set": {"vals": "3,5,7,9,11", "n": 2, "c": 11, "tol": 1}, "task": "5店の値 3・5・7・9・11 から2店を選ぶ。選び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "選び方", "unit": "通り"}, "why": "₅C₂＝10通りで、どれも確率0.1。x̄ は4〜10に散らばるが、10通りの x̄ の平均は μ＝7 に一致する。"}, "Q-U17-003": {"mode": "incl", "set": {"N": 1200, "n": 60, "m": 0}, "task": "名簿1200人から60人を単純無作為抽出する。各会員が選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "pi", "label": "選ばれる確率"}, "why": "n÷N＝60÷1200＝0.05。名簿の人数や選ぶ人数を変えても、名簿の中では全員が同じ確率になる。"}, "Q-U17-004": {"mode": "enum", "set": {"vals": "2,4,6,8", "n": 2, "c": 6, "tol": 1}, "task": "4人の点数 2・4・6・8 から2人を選ぶ。x̄ が6以上になる確率は（小数で）？", "predict": {"type": "number", "key": "pge", "label": "P(x̄≧6)"}, "why": "6通りのうち (4,8) と (6,8) の2通り。どの標本も同じ確率 1/6 なので 2÷6。n を3にすると x̄ は μ＝5 の近くに集まる。"}, "Q-U17-005": {"mode": "repl", "set": {"N": 30, "n": 5}, "task": "30店の名簿から5店を、戻して選ぶ。同じ店が2回以上選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "pDup", "label": "重複の確率"}, "why": "1−(30×29×28×27×26)÷30⁵≒0.296。N を300にすると約0.03に下がる。名簿が大きければ、戻す・戻さないの差は小さい。"}, "Q-U17-010": {"mode": "incl", "set": {"N": 500, "n": 25, "m": 20}, "task": "台帳500社から25社を単純無作為抽出する。台帳に載る各社が選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "pi", "label": "選ばれる確率"}, "why": "25÷500＝0.05。名簿の外の20社は0のまま。n を増やしても、台帳の漏れは埋まらない。"}, "Q-U17-011": {"mode": "enum", "set": {"vals": "4,6,11", "n": 2, "c": 8, "tol": 1}, "task": "3人の点数 4・6・11 から2人を選ぶ。3通りの x̄ を平均するといくつか。", "predict": {"type": "number", "key": "meanmean", "label": "x̄ の平均"}, "why": "x̄ は 5・7.5・8.5 で、平均は7。母集団の平均 μ＝7 と一致する（標本平均は μ の不偏推定量）。どの1つの x̄ も μ とは限らない。"}, "Q-U17-020": {"mode": "incl", "set": {"N": 400, "n": 20, "m": 0}, "task": "400人の名簿から乱数で20人を選ぶ。各会員が選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "pi", "label": "選ばれる確率"}, "why": "20÷400＝0.05 で全員同じ。担当者が「偏らないよう気をつけて」選んでも、全員の確率が決まっていなければ無作為とは言えない。"}, "Q-U17-021": {"mode": "incl", "set": {"N": 100, "n": 10, "m": 20}, "task": "全120店のうち名簿に載るのは100店。名簿が全体を覆う割合は（小数で）？", "predict": {"type": "number", "key": "cover", "label": "覆う割合"}, "why": "100÷120≒0.83。n を増やしても覆う割合は変わらない。名簿の漏れは、選び方ではなく名簿を直すことで減らす。"}, "Q-U17-022": {"mode": "incl", "set": {"N": 50, "n": 5, "m": 0}, "task": "50店から5店を単純無作為抽出する。特定の2店のうち少なくとも一方が選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "either", "label": "少なくとも一方"}, "why": "1−(45×44)÷(50×49)≒0.192。0.1＋0.1 から「両方入る」約0.008を引いた値と同じ（加法定理）。"}, "Q-U17-023": {"mode": "enum", "set": {"vals": "3,5,7,9,11", "n": 2, "c": 11, "tol": 1}, "task": "5店から2店を単純無作為抽出する。10通りの組み合わせのうち、ある1つの組み合わせが選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "pEach", "label": "1つの組み合わせの確率"}, "why": "10通りがどれも同じ確率 1/10。だから各店の選ばれる確率も、その店を含む4通り分の 4/10＝2/5＝n/N になる。"}, "Q-U17-030": {"mode": "incl", "set": {"N": 40, "n": 4, "m": 0}, "task": "40店から4店を単純無作為抽出する。特定の2店のうち少なくとも1店が選ばれる確率は（小数で）？", "predict": {"type": "number", "key": "either", "label": "少なくとも1店"}, "why": "1−(36×35)÷(40×39)≒0.192。担当が3店・4店と増えると確率も上がるが、どの店も1店あたりは0.1のまま。"}, "Q-U17-031": {"mode": "repl", "set": {"N": 500, "n": 20}, "task": "500枚から20枚を戻して選ぶ。同じレシートが2回以上出る確率は（小数で）？", "predict": {"type": "number", "key": "pDup", "label": "重複の確率"}, "why": "1−(500×499×…×481)÷500²⁰≒0.32。「500枚もあれば重複しない」と思いがちだが、組（ペア）の数が多いので重複は起きやすい（誕生日の問題と同じ形）。"}, "Q-U17-032": {"mode": "enum", "set": {"vals": "1,2,2,3,4,6", "n": 3, "c": 4, "tol": 1}, "task": "6店の値 1・2・2・3・4・6 から3店を選ぶ。x̄ が4以上になる確率は（小数で）？", "predict": {"type": "number", "key": "pge", "label": "P(x̄≧4)"}, "why": "20通りのうち3通り。同じ値（2が2店）も別の店として数える。標本から言えることには、選び方による偶然のぶれが必ず入る。"}, "Q-U17-040": {"mode": "enum", "set": {"vals": "3,5,7,9,11", "n": 2, "c": 11, "tol": 1}, "task": "5店の値 3・5・7・9・11 から2店を選ぶ。10通りの x̄ の標準偏差は（小数で）？", "predict": {"type": "number", "key": "sdmean", "label": "x̄ の標準偏差"}, "why": "√3≒1.73。σ÷√n だけなら2になるが、戻さずに選ぶので √((N−n)/(N−1))＝0.866 倍に小さくなる。n＝N（全数）では0。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
 const $=id=>document.getElementById(id);
 const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -165,7 +174,7 @@ if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_b
 b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
-const p=cfg.predict;let h=`<div class="lk-task"><div class="lk-tt">🎯 課題</div><div class="lk-q">${esc(cfg.task)}</div>`;
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
 if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
 if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
 else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
@@ -182,6 +191,7 @@ function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden
 el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
 const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
@@ -191,9 +201,19 @@ else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</
 `<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
 function start(def){const tabs=$("tabs");
 const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
 const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
@@ -203,10 +223,11 @@ document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle(
 if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
 order.forEach(k=>modes[k].init&&modes[k].init());
 if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
 })();
 const $=LK.$,esc=LK.esc;
 const W=340;
