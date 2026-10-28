@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>回帰ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
+:root{--pos:#c2410c;--neg:#0b63c9;--ln:#7c3aed}
+@media (prefers-color-scheme:dark){:root{--pos:#ff9a5c;--neg:#4c9bff;--ln:#b794f6}}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.card{overflow-wrap:anywhere}
+.mode .lk-step .lk-name{max-width:6.4em}
+.pic svg{touch-action:none;user-select:none;-webkit-user-select:none}
+.pt{cursor:grab}
+.hint{font-size:12px;color:var(--mut);margin:2px 0 0}
+</style></head><body>
+<h1>🧪 回帰ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-fit" class="mode">
+<p class="mut" style="margin:0">点を指で動かすと、回帰直線・残差（点から直線までの縦の線）・傾き b・切片 a・決定係数 R² が同時に動く。最小二乗法は、残差の2乗の合計（正方形の面積の合計）がいちばん小さくなる直線を選ぶ。</p>
+<div class="ctl pic" id="fbox"></div>
+<p class="hint ctl">点はドラッグで動く（0.5 刻み）。◇は「予測する x」での予測値。</p>
+<div class="row ctl"><label><input type="checkbox" id="fsq" checked> 残差の2乗を正方形で</label><button type="button" class="sub" id="fadd">点を足す</button><button type="button" class="sub" id="fdel">点を消す</button><button type="button" class="sub" id="freset">元に戻す</button></div>
+<input type="range" id="fpx" min="0" max="80" step="0.5" value="5" data-name="予測する x">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res key" id="fsum"></div>
+<div class="res det" id="ftab"></div>
+</div>
+<div id="m-line" class="mode">
+<p class="mut" style="margin:0">自分で直線を引く。傾きと切片を動かして、残差の2乗の合計（正方形の面積の合計）を小さくしていく。いちばん小さくできるのが最小二乗の直線（点線）。</p>
+<div class="ctl pic" id="lbox"></div>
+<input type="range" id="lm" min="-5" max="5" step="0.1" value="0.5" data-name="傾き">
+<input type="range" id="lc" min="-20" max="20" step="0.1" value="4" data-name="切片">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res key" id="lsum"></div>
+</div>
+<div id="m-resid" class="mode">
+<p class="mut" style="margin:0">残差プロット：横に x、縦に残差 e＝y−ŷ をとる。直線で表せる関係なら、残差は0の上下にばらばらに散る。山形・谷形などの形が見えたら、直線では表しきれない曲がりがある。点はドラッグで動く。</p>
+<div class="ctl pic" id="rbox"></div>
+<div class="ctl pic" id="rres"></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res key" id="rsum"></div>
+</div>
+<div id="m-dir" class="mode">
+<p class="mut" style="margin:0">回帰の向き。y を x で予測する直線（縦のずれを最小）と、x を y で予測する直線（横のずれを最小）は、点が一直線に並ばない限り一致しない。2本の傾きの積は r²。点はドラッグで動く。</p>
+<div class="ctl pic" id="dbox"></div>
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="card res key" id="dsum"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-fit": {"mode": "fit", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "px": 5}, "task": "5週の広告回数 x と来店者数 y（百人）は (1,3)(2,5)(3,4)(4,6)(5,7)。最小二乗の回帰直線の傾き b を（小数で）予想する。", "predict": {"type": "number", "key": "b", "label": "傾き b"}, "why": "偏差の積の和9 を x の偏差平方和10 で割って0.9。直線は (3, 5) を通るので a＝2.3。点を動かすと、正方形の合計（SSE）が最小になるよう直線がついてくる。"}, "s1-line": {"mode": "line", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "m": 0.5, "c": 4}, "task": "例題Aの5点に、目分量の直線 ŷ＝4＋0.5x を引いた。この直線の残差平方和（正方形の面積の合計）は（小数で）？", "predict": {"type": "number", "key": "sseUser", "label": "残差平方和"}, "why": "残差は −1.5, 0, −1.5, 0, 0.5。傾きと切片を動かして小さくしていくと、最小二乗の1.9 より小さくはならない。"}, "s3-free": {"mode": "fit", "modes": ["fit", "line", "resid", "dir"], "task": "解いてから、問題が聞いていること（直線と予測、自分の直線との比較、残差の形、回帰の向き）に合うモードで確かめる。"}, "s4-free": {"mode": "fit", "modes": ["fit", "resid"], "task": "自分の売場の2つの数字（たとえば気温と売上）を点で入れ、回帰直線・R²・残差を読む。予測する x を範囲の外に動かして外挿を確かめる。"}, "s5-free": {"mode": "fit", "modes": ["fit", "resid", "dir"], "task": "「回帰直線」の「くわしく」で平方和の表と F を見る（発展1）。「残差プロット」で残差の形を見る（発展2）。「回帰の向き」で2つの係数の積が r² になることを確かめる（発展3）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（回帰直線、自分で引く、残差プロット、回帰の向き）。"}, "Q-U29-001": {"mode": "fit", "set": {"data": "1,2 2,3 3,6 4,7", "px": 3}, "task": "4点 (1,2)(2,3)(3,6)(4,7) に最小二乗で直線を引く。傾き b は（小数で）？", "predict": {"type": "number", "key": "b", "label": "傾き b"}, "why": "b＝9÷5＝1.8、a＝0。点を1つ動かすと、直線は (x̄, ȳ) を通ったまま傾きが変わる。"}, "Q-U29-002": {"mode": "fit", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "px": 4}, "task": "例題Aの5点で、広告4回のときの予測値 ŷ は（小数で）？", "predict": {"type": "number", "key": "yhat", "label": "ŷ（百人）"}, "why": "2.3＋0.9×4＝5.9。実際は6 なので残差は0.1。表で残差の合計が0 になることも見る。"}, "Q-U29-003": {"mode": "fit", "set": {"data": "6,39 8,42 10,52 12,54 14,63", "px": 12}, "task": "x̄＝10、ȳ＝50、Σ(x−x̄)²＝40、偏差の積の和120 の5店。広告費12万円の予測 ŷ は？", "predict": {"type": "number", "key": "yhat", "label": "ŷ（万円）"}, "why": "b＝3、a＝20 で ŷ＝20＋3×12。ラボの5点はこの集計に合わせた例。"}, "Q-U29-004": {"mode": "fit", "set": {"data": "1,2 2,1 3,4 4,3 5,5", "px": 3}, "task": "5点 (1,2)(2,1)(3,4)(4,3)(5,5) の回帰直線。決定係数 R² は（小数で）？", "predict": {"type": "number", "key": "r2", "label": "R²"}, "why": "SSE＝3.6、SST＝10 で R²＝1−0.36。相関係数の2乗と一致する。"}, "Q-U29-005": {"mode": "fit", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "px": 20}, "task": "例題Aの5点（広告1〜5回）の直線で、広告20回の予測値 ŷ は（小数で）？", "predict": {"type": "number", "key": "yhat", "label": "ŷ（百人）"}, "why": "計算はできるが、◇は観測した範囲（薄い帯）のはるか外。点を1つ動かすだけで20回の予測は大きく変わる。"}, "Q-U29-010": {"mode": "dir", "set": {"data": "1,2 2,3 3,6 4,7"}, "task": "4点 (1,2)(2,3)(3,6)(4,7)。x を y で回帰したときの係数 b_xy は（小数で）？", "predict": {"type": "number", "key": "byx", "label": "b_xy"}, "why": "9÷17≒0.529。y を x で回帰した傾き1.8 の逆数（約0.556）ではない。点を動かして一直線にそろえると、2本の直線が重なる。"}, "Q-U29-011": {"mode": "fit", "set": {"data": "1,3.5 2,2.5 3,6.5 4,5.5 5,9.5", "px": 3}, "task": "SST＝30、SSE＝7.5 になる5点。決定係数 R² は（小数で）？", "predict": {"type": "number", "key": "r2", "label": "R²"}, "why": "1−7.5÷30。正方形（残差の2乗）の合計が y のばらつき全体の4分の1 残っている。"}, "Q-U29-012": {"mode": "fit", "set": {"data": "40,31 40,23 50,30 60,37 60,29", "px": 60}, "task": "x̄＝50、ȳ＝30、s_x＝10、s_y＝5、r＝0.6 になる5店。面積60m² の予測 ŷ は？", "predict": {"type": "number", "key": "yhat", "label": "ŷ（百円）"}, "why": "b＝0.6×5÷10、a＝30−b×50。同じ x＝60 の2店（37 と 29）の真ん中を直線が通る。"}, "Q-U29-020": {"mode": "line", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "m": 1.2, "c": 1}, "task": "例題Aの5点に直線 ŷ＝1＋1.2x。この直線の残差平方和は（小数で）？", "predict": {"type": "number", "key": "sseUser", "label": "残差平方和"}, "why": "3.6 で最小二乗の1.9 より大きい。切片を上げ、傾きを下げると近づく。"}, "Q-U29-021": {"mode": "resid", "set": {"data": "1,2 2,5 3,7 4,8 5,8.5"}, "task": "値引き率と販売数の5点に直線を引く。残差プロットの形はどれか。", "predict": {"type": "choice", "key": "shape", "label": "残差の形", "options": ["山形", "谷形", "ばらばら"]}, "why": "両端が−、真ん中が＋の山形。R² が高くても曲がりがある。点を直線に乗るよう動かすと「ばらばら」に変わる。"}, "Q-U29-022": {"mode": "fit", "set": {"data": "6,39 8,42 10,52 12,54 14,63", "px": 10}, "task": "Q-U29-003 の5店（x̄＝10、ȳ＝50）。広告費10万円の予測値 ŷ は？", "predict": {"type": "number", "key": "yhat", "label": "ŷ（万円）"}, "why": "x＝x̄ なら ŷ＝ȳ。点をどう動かしても、直線は○（平均の点）を通る。"}, "Q-U29-023": {"mode": "fit", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "px": 3}, "task": "例題Aの5点（r＝0.9）の回帰直線。決定係数 R² は（小数で）？", "predict": {"type": "number", "key": "r2", "label": "R²"}, "why": "1−1.9÷10＝0.81＝0.9²。点を動かしても R² と r² はいつも一致する。"}, "Q-U29-030": {"mode": "fit", "set": {"data": "20,30 22,34 24,33 26,38 28,40", "px": 25}, "task": "気温20〜28℃の5日。25℃の日の売上の予測 ŷ は（小数で）？", "predict": {"type": "number", "key": "yhat", "label": "ŷ（万円）"}, "why": "6.2＋1.2×25。予測する x を40 に動かすと◇が範囲の外に出て「外挿」と表示される。"}, "Q-U29-031": {"mode": "fit", "set": {"data": "2,10 3,15 4,13 5,18 6,19", "px": 4}, "task": "面積2〜6（百m²）と売上の5店。いちばん小さい残差は（小数で）？", "predict": {"type": "number", "key": "emin", "label": "最小の残差"}, "why": "x＝4 の店が −2。「くわしく」の表で残差の並びを見る。その店を上に動かすと、直線も少し持ち上がる。"}, "Q-U29-032": {"mode": "fit", "set": {"data": "20,30 22,34 24,33 26,38 28,40", "px": 25}, "task": "気温と売上の5日の回帰。残差の標準偏差 s_e は（小数で）？", "predict": {"type": "number", "key": "se", "label": "s_e（万円）"}, "why": "√(6.4÷3)≒1.46。自由度は5−2＝3。点を1つ大きく外すと s_e が大きくなり、予測のずれの目安が広がる。"}, "Q-U29-040": {"mode": "fit", "set": {"data": "1,3 2,5 3,4 4,6 5,7", "px": 3}, "task": "例題Aの回帰。F＝SSR÷(SSE÷(n−2)) は（小数で）？（「くわしく」の表に出る）", "predict": {"type": "number", "key": "f", "label": "F"}, "why": "8.1÷(1.9÷3)≒12.79。点を直線から離すと SSE が増え、F は小さくなる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc,SPEC={},reg_=(k,s)=>{SPEC[k]=s;LK.register(k,s);};
+const W=340;
+const f=(v,d=4)=>{if(!isFinite(v))return "—";const r=+v.toFixed(d);return String(Object.is(r,-0)?0:r);};
+const sg=v=>v<0?`−${f(-v)}`:f(v);   // 式の中の負の数
+function reg(P){const n=P.length;if(n<2)return {n};
+const xb=P.reduce((s,p)=>s+p[0],0)/n,yb=P.reduce((s,p)=>s+p[1],0)/n;let sxy=0,sxx=0,syy=0;P.forEach(([x,y])=>{sxy+=(x-xb)*(y-yb);sxx+=(x-xb)**2;syy+=(y-yb)**2;});
+const b=sxx>0?sxy/sxx:NaN,a=yb-b*xb,e=P.map(([x,y])=>y-(a+b*x)),sse=e.reduce((s,v)=>s+v*v,0),ssr=syy-sse,r2=syy>0?1-sse/syy:NaN,r=sxx>0&&syy>0?sxy/Math.sqrt(sxx*syy):NaN;
+const se=n>2?Math.sqrt(sse/(n-2)):NaN,F=n>2&&sse>1e-12?ssr/(sse/(n-2)):NaN;
+return {n,xbar:xb,ybar:yb,sxx,sxy,syy,b,a,e,sse,sst:syy,ssr,r2,r,se,f:F,emax:Math.max(...e),emin:Math.min(...e),esum:e.reduce((s,v)=>s+v,0)};}
+const parse=s=>String(s).trim().split(/\s+/).map(t=>t.split(",").map(Number)).filter(p=>p.length===2&&p.every(isFinite));
+function niceStep(span){const raw=span/5,p=Math.pow(10,Math.floor(Math.log10(raw))),m=raw/p;return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p;}
+function domain(P,extra){const Q=P.concat(extra||[]),xs=Q.map(p=>p[0]),ys=Q.map(p=>p[1]);let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+const px=Math.max((x1-x0)*0.15,1),py=Math.max((y1-y0)*0.15,1);x0-=px;x1+=px;y0-=py;y1+=py;const mx=Math.min(...xs),my=Math.min(...ys);if(mx>=0&&x0<(x1-x0)*0.6)x0=0;if(my>=0&&y0<(y1-y0)*0.6)y0=0;const sx=niceStep(x1-x0),sy=niceStep(y1-y0);
+return {x0:Math.floor(x0/sx)*sx,x1:Math.ceil(x1/sx)*sx,y0:Math.floor(y0/sy)*sy,y1:Math.ceil(y1/sy)*sy,sx,sy};}
+function plot(box,P,D,opts){opts=opts||{};const H=opts.h||250,L=34,R=W-10,T=10,B=H-24,X=x=>L+(x-D.x0)/(D.x1-D.x0)*(R-L),Y=y=>B-(y-D.y0)/(D.y1-D.y0)*(B-T),ky=(B-T)/(D.y1-D.y0);
+let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="${esc(opts.label||"散布図と直線")}"><defs><clipPath id="${box.id}c"><rect x="${L}" y="${T}" width="${R-L}" height="${B-T}"/></clipPath></defs>`;
+for(let x=D.x0;x<=D.x1+1e-9;x+=D.sx)s+=`<line x1="${X(x)}" y1="${T}" x2="${X(x)}" y2="${B}" stroke="var(--line)" stroke-width=".6"/><text x="${X(x)}" y="${B+14}" font-size="10" text-anchor="middle" fill="var(--mut)">${+x.toFixed(6)}</text>`;
+for(let y=D.y0;y<=D.y1+1e-9;y+=D.sy)s+=`<line x1="${L}" y1="${Y(y)}" x2="${R}" y2="${Y(y)}" stroke="var(--line)" stroke-width=".6"/><text x="${L-4}" y="${Y(y)+3}" font-size="10" text-anchor="end" fill="var(--mut)">${+y.toFixed(6)}</text>`;
+if(opts.xlab)s+=`<text x="${R}" y="${B-4}" font-size="10" text-anchor="end" fill="var(--mut)">${esc(opts.xlab)}</text>`;
+if(opts.ylab)s+=`<text x="${L+4}" y="${T+10}" font-size="10" fill="var(--mut)">${esc(opts.ylab)}</text>`;
+s+=`<g clip-path="url(#${box.id}c)">`;
+const ln=opts.line;
+if(ln&&isFinite(ln.b)){P.forEach(([x,y])=>{const yh=ln.a+ln.b*x,e=y-yh,c=e>0?"var(--pos)":e<0?"var(--neg)":"var(--mut)";
+if(opts.squares&&Math.abs(e)>1e-9){const side=Math.abs(e)*ky,x1=X(x),sx=x1+side<=R?x1:x1-side;s+=`<rect x="${sx}" y="${Math.min(Y(y),Y(yh))}" width="${side}" height="${side}" fill="${c}" fill-opacity=".13" stroke="${c}" stroke-opacity=".45" stroke-width=".8"/>`;}
+s+=`<line x1="${X(x)}" y1="${Y(y)}" x2="${X(x)}" y2="${Y(yh)}" stroke="${c}" stroke-width="2"/>`;});}
+(opts.lines||[]).forEach(l=>{if(!isFinite(l.b))return;if(l.vertical){s+=`<line x1="${X(l.x)}" y1="${T}" x2="${X(l.x)}" y2="${B}" stroke="${l.col}" stroke-width="${l.w||2}" ${l.dash?`stroke-dasharray="${l.dash}"`:""}/>`;return;}
+s+=`<line x1="${X(D.x0)}" y1="${Y(l.a+l.b*D.x0)}" x2="${X(D.x1)}" y2="${Y(l.a+l.b*D.x1)}" stroke="${l.col}" stroke-width="${l.w||2}" ${l.dash?`stroke-dasharray="${l.dash}"`:""}/>`;});
+if(opts.range)s+=`<rect x="${X(opts.range[0])}" y="${T}" width="${X(opts.range[1])-X(opts.range[0])}" height="${B-T}" fill="var(--acc)" fill-opacity=".05"/>`;
+if(opts.mean)s+=`<circle cx="${X(opts.mean[0])}" cy="${Y(opts.mean[1])}" r="4" fill="none" stroke="var(--fg)" stroke-width="1.5"/>`;
+if(opts.pred){const [px,py]=opts.pred,cx=X(Math.min(D.x1,Math.max(D.x0,px))),cy=Y(Math.min(D.y1,Math.max(D.y0,py)));s+=`<path d="M${cx} ${cy-7}L${cx+7} ${cy}L${cx} ${cy+7}L${cx-7} ${cy}Z" fill="var(--card)" stroke="var(--ln)" stroke-width="2"/>`;}
+s+=`</g>`;
+P.forEach((p,i)=>{const cx=X(p[0]),cy=Y(p[1]);s+=`<circle class="pt" data-i="${i}" cx="${cx}" cy="${cy}" r="7" fill="var(--acc)" fill-opacity=".9" stroke="var(--bg)" stroke-width="2"/>`;});
+box.innerHTML=s+`</svg>`+(opts.legend||"");
+box._st={P,D,L,R,T,B,snap:opts.snap||0.5,drag:opts.drag};
+if(opts.drag&&!box._on){box._on=true;let di=-1;
+const at=e=>{const st=box._st,svg=box.querySelector("svg"),m=svg.getScreenCTM().inverse(),pt=new DOMPoint(e.clientX,e.clientY).matrixTransform(m),q=st.snap,D=st.D;
+return [Math.min(D.x1,Math.max(D.x0,Math.round(((pt.x-st.L)/(st.R-st.L)*(D.x1-D.x0)+D.x0)/q)*q)),Math.min(D.y1,Math.max(D.y0,Math.round(((st.B-pt.y)/(st.B-st.T)*(D.y1-D.y0)+D.y0)/q)*q))];};
+box.addEventListener("pointerdown",e=>{const t=e.target.closest&&e.target.closest(".pt");if(!t)return;di=+t.dataset.i;box.setPointerCapture(e.pointerId);e.preventDefault();});
+box.addEventListener("pointermove",e=>{if(di<0)return;const st=box._st,v=at(e),o=st.P[di];if(o[0]===v[0]&&o[1]===v[1])return;st.P[di]=v;st.drag();});
+const up=()=>{if(di<0)return;di=-1;box.dispatchEvent(new Event("change",{bubbles:true}));};
+box.addEventListener("pointerup",up);box.addEventListener("pointercancel",up);}}
+const lineTxt=(a,b)=>`ŷ＝${f(a,3)}${b<0?"−":"＋"}${f(Math.abs(b),3)}x`;
+const LEG=`<div class="legend mut"><span><i class="sw" style="background:var(--ln)"></i>回帰直線</span><span><i class="sw" style="background:var(--pos);opacity:.6"></i>残差＋</span><span><i class="sw" style="background:var(--neg);opacity:.6"></i>残差−</span><span>○＝(x̄, ȳ)</span></div>`;
+const DEF="1,3 2,5 3,4 4,6 5,7";
+let fOrig=parse(DEF),fP=fOrig.map(p=>p.slice()),fD=null;
+function fDomain(){const R0=reg(fOrig),px=+$("fpx").value;fD=domain(fOrig,[[px,R0.a+R0.b*px]]);}
+function fVals(){const R=reg(fP),px=+$("fpx").value,xs=fP.map(p=>p[0]),lo=Math.min(...xs),hi=Math.max(...xs),yh=R.a+R.b*px;
+return {...R,px,yhat:yh,inrange:px>=lo&&px<=hi?"範囲内":"外挿",xmin:lo,xmax:hi,data:fP.map(p=>p.join(",")).join(" ")};}
+function fRender(){if(!fD)fDomain();const F=fVals();
+plot($("fbox"),fP,fD,{drag:fRender,label:"散布図と回帰直線",line:{a:F.a,b:F.b},squares:$("fsq").checked,lines:[{a:F.a,b:F.b,col:"var(--ln)",w:2.5}],mean:[F.xbar,F.ybar],pred:[F.px,F.yhat],range:[F.xmin,F.xmax],legend:LEG});
+$("fsum").innerHTML=`<div>b＝Σ(x−x̄)(y−ȳ)÷Σ(x−x̄)²＝${f(F.sxy,3)}÷${f(F.sxx,3)}＝<b>${f(F.b,4)}</b>　a＝ȳ−b x̄＝${f(F.ybar,3)}−${f(F.b,4)}×${f(F.xbar,3)}＝<b>${f(F.a,4)}</b></div><div>回帰直線 <b>${lineTxt(F.a,F.b)}</b></div><div>残差平方和 SSE＝<b>${f(F.sse,4)}</b>　y の偏差平方和 SST＝${f(F.sst,4)}　R²＝1−SSE÷SST＝<b>${f(F.r2,4)}</b>（r²＝${f(F.r*F.r,4)}）</div><div>x＝${f(F.px,2)} の予測 ŷ＝<b>${f(F.yhat,4)}</b>（${F.inrange==="外挿"?`<b>外挿</b>：x の範囲 ${f(F.xmin,2)}〜${f(F.xmax,2)} の外。直線がそこまで続く保証はない`:"観測した x の範囲内"}）</div><div class="mut">直線は必ず (x̄, ȳ) を通り、残差の合計は0。R² は y のばらつきのうち直線で説明できる割合で、「予測が当たる割合」ではない。</div>`;
+$("ftab").innerHTML=`<table><tr><th>x</th><th>y</th><th>ŷ</th><th>残差 e</th><th>e²</th></tr>${fP.map(([x,y],i)=>`<tr><td>${f(x,2)}</td><td>${f(y,2)}</td><td>${f(F.a+F.b*x,3)}</td><td>${f(F.e[i],3)}</td><td>${f(F.e[i]**2,4)}</td></tr>`).join("")}<tr><th>計</th><td></td><td></td><th>${f(F.esum,3)}</th><th>${f(F.sse,4)}</th></tr></table>
+<table><tr><th>変動</th><th>平方和</th><th>自由度</th></tr><tr><td>回帰 SSR</td><td>${f(F.ssr,4)}</td><td>1</td></tr><tr><td>残差 SSE</td><td>${f(F.sse,4)}</td><td>${F.n-2}</td></tr><tr><td>全体 SST</td><td>${f(F.sst,4)}</td><td>${F.n-1}</td></tr></table><div class="mut">残差の標準偏差 s_e＝√(SSE÷(n−2))＝${f(F.se,4)}。F＝SSR÷(SSE÷(n−2))＝${f(F.f,4)}。</div>`;}
+reg_("fit",{name:"回帰直線",
+init(){$("fsq").onchange=fRender;LK.stepper($("fpx"),()=>{fDomain();fRender();});
+$("fadd").onclick=()=>{fP.push([Math.round(((fD.x0+fD.x1)/2)*2)/2,Math.round(((fD.y0+fD.y1)/2)*2)/2]);fRender();};
+$("fdel").onclick=()=>{if(fP.length>3){fP.pop();fRender();}};$("freset").onclick=()=>{fP=fOrig.map(p=>p.slice());fDomain();fRender();};fRender();},
+apply(s){if(s.data){fOrig=parse(s.data);fP=fOrig.map(p=>p.slice());}if(s.px!==undefined)LK.setRange("fpx",s.px);fDomain();fRender();},
+render:fRender,
+value(key){const F=fVals(),v=F[key];return {v,text:typeof v==="string"?v:f(v)};}});
+let lP=parse(DEF),lD=domain(lP);
+function lVals(){const m=+$("lm").value,c=+$("lc").value,R=reg(lP),eu=lP.map(([x,y])=>y-(c+m*x)),su=eu.reduce((s,v)=>s+v*v,0);
+return {m,c,sseUser:su,sumUser:eu.reduce((s,v)=>s+v,0),sseLS:R.sse,b:R.b,a:R.a,diff:su-R.sse};}
+function lRender(){const Lv=lVals();
+plot($("lbox"),lP,lD,{label:"自分で引いた直線",line:{a:Lv.c,b:Lv.m},squares:true,lines:[{a:Lv.a,b:Lv.b,col:"var(--mut)",dash:"5 4",w:1.5},{a:Lv.c,b:Lv.m,col:"var(--ln)",w:2.5}],legend:`<div class="legend mut"><span><i class="sw" style="background:var(--ln)"></i>自分の直線</span><span>点線＝最小二乗の直線</span><span>正方形の面積＝残差²</span></div>`});
+$("lsum").innerHTML=`<div>自分の直線 ŷ＝${f(Lv.c,2)}${Lv.m<0?"−":"＋"}${f(Math.abs(Lv.m),2)}x：残差平方和＝<b>${f(Lv.sseUser,4)}</b>（残差の合計 ${f(Lv.sumUser,3)}）</div><div>最小二乗の直線 ${lineTxt(Lv.a,Lv.b)}：残差平方和＝<b>${f(Lv.sseLS,4)}</b></div><div>差＝${f(Lv.diff,4)}${Lv.diff<1e-9?"（最小二乗と同じ）":""}</div><div class="mut">傾きや切片をどう動かしても、最小二乗の残差平方和より小さくはならない。</div>`;}
+reg_("line",{name:"自分で引く",
+init(){["lm","lc"].forEach(id=>LK.stepper($(id),lRender));lRender();},
+apply(s){if(s.data){lP=parse(s.data);lD=domain(lP);}if(s.m!==undefined)LK.setRange("lm",s.m);if(s.c!==undefined)LK.setRange("lc",s.c);lRender();},
+render:lRender,
+value(key){const Lv=lVals(),v=Lv[key];return {v,text:f(v)};}});
+let rOrig=parse("1,2 2,5 3,7 4,8 5,8.5"),rP=rOrig.map(p=>p.slice()),rD=domain(rP);
+function rVals(){const R=reg(rP),xb=R.xbar,q=rP.map(p=>(p[0]-xb)**2),qb=q.reduce((s,v)=>s+v,0)/q.length;let sq=0,se2=0,sqe=0;
+q.forEach((v,i)=>{sq+=(v-qb)**2;se2+=R.e[i]**2;sqe+=(v-qb)*R.e[i];});const c=sq>0&&se2>1e-12?sqe/Math.sqrt(sq*se2):0;
+return {...R,curve:c,shape:Math.abs(c)>=0.7?(c<0?"山形":"谷形"):"ばらばら"};}
+function rRender(){const Rv=rVals();
+plot($("rbox"),rP,rD,{drag:rRender,h:210,label:"散布図と回帰直線",line:{a:Rv.a,b:Rv.b},lines:[{a:Rv.a,b:Rv.b,col:"var(--ln)",w:2.5}],legend:""});
+const em=Math.max(1,...Rv.e.map(Math.abs))*1.3,step=niceStep(2*em),E={x0:rD.x0,x1:rD.x1,sx:rD.sx,y0:-Math.ceil(em/step)*step,y1:Math.ceil(em/step)*step,sy:step};
+plot($("rres"),rP.map((p,i)=>[p[0],Rv.e[i]]),E,{h:150,label:"残差プロット",line:{a:0,b:0},lines:[{a:0,b:0,col:"var(--fg)",w:1.2}],ylab:"残差 e",legend:`<div class="legend mut"><span>下の図：横に x、縦に残差</span><span><i class="sw" style="background:var(--pos);opacity:.6"></i>＋</span><span><i class="sw" style="background:var(--neg);opacity:.6"></i>−</span></div>`});
+$("rsum").innerHTML=`<div>${lineTxt(Rv.a,Rv.b)}　R²＝<b>${f(Rv.r2,4)}</b></div><div>残差の並び：${Rv.e.map(v=>v>1e-9?"＋":v<-1e-9?"−":"0").join(" ")} → 形は <b>${Rv.shape}</b></div><div class="mut">R² が高くても、残差に山形や谷形が見えたら直線は合っていない（曲がりがある）。外挿はとくに危ない。</div>`;}
+reg_("resid",{name:"残差プロット",
+init(){rRender();},
+apply(s){if(s.data){rOrig=parse(s.data);rP=rOrig.map(p=>p.slice());rD=domain(rP);}rRender();},
+render:rRender,
+value(key){const Rv=rVals(),v=Rv[key];return {v,text:typeof v==="string"?v:f(v)};}});
+let dP=parse("1,2 2,1 3,4 4,3 5,5"),dD=domain(dP);
+function dVals(){const R=reg(dP),byx=R.syy>0?R.sxy/R.syy:NaN,ayx=R.xbar-byx*R.ybar;return {bxy:R.b,axy:R.a,byx,ayx,slope2:1/byx,r:R.r,r2:R.r*R.r,prod:R.b*byx,xbar:R.xbar,ybar:R.ybar};}
+function dRender(){const Dv=dVals(),l2={a:-Dv.ayx/Dv.byx,b:1/Dv.byx};
+plot($("dbox"),dP,dD,{drag:dRender,label:"2本の回帰直線",lines:[{a:Dv.axy,b:Dv.bxy,col:"var(--ln)",w:2.5},isFinite(l2.b)&&Math.abs(l2.b)<1e6?{a:l2.a,b:l2.b,col:"var(--pos)",w:2,dash:"6 4"}:{vertical:true,x:Dv.xbar,b:0,col:"var(--pos)",dash:"6 4"}],mean:[Dv.xbar,Dv.ybar],legend:`<div class="legend mut"><span><i class="sw" style="background:var(--ln)"></i>y を x で予測</span><span><i class="sw" style="background:var(--pos)"></i>x を y で予測（点線）</span><span>○＝(x̄, ȳ)</span></div>`});
+$("dsum").innerHTML=`<div>y を x で予測：ŷ＝${f(Dv.axy,3)}${Dv.bxy<0?"−":"＋"}${f(Math.abs(Dv.bxy),4)}x（傾き b_yx＝Sxy÷Sxx＝<b>${f(Dv.bxy,4)}</b>）</div><div>x を y で予測：x̂＝${f(Dv.ayx,3)}${Dv.byx<0?"−":"＋"}${f(Math.abs(Dv.byx),4)}y（係数 b_xy＝Sxy÷Syy＝<b>${f(Dv.byx,4)}</b>）</div><div>2つの係数の積＝${f(Dv.prod,4)}＝r²（r＝${f(Dv.r,4)}）</div><div class="mut">2本とも (x̄, ȳ) を通る。点が一直線に並ぶ（r＝±1）ときだけ重なる。y から x を予測したいときに、ŷ の式を x について解いて使わない。</div>`;}
+reg_("dir",{name:"回帰の向き",
+init(){dRender();},
+apply(s){if(s.data){dP=parse(s.data);dD=domain(dP);}dRender();},
+render:dRender,
+value(key){const Dv=dVals(),v=Dv[key];return {v,text:f(v)};}});
+LK.start("fit");
+window.__LAB__={LK,fVals,lVals,rVals,dVals,reg,apply:(k,s)=>{LK.show(k);SPEC[k].apply(s);}};
+</script>
+</body></html>
