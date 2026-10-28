@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>実験計画ラボ</title>
+<style>
+:root{--bg:#ffffff;--fg:#1f2328;--mut:#5d6670;--line:#d0d7de;--card:#f6f8fa;--acc:#0b63c9;--acc2:#b0306f;--ok:#1a7f37;--ng:#cf222e;--task:#fff8e6;--taskline:#e3c26b}
+@media (prefers-color-scheme:dark){:root{--bg:#191919;--fg:#e6edf3;--mut:#a3adb8;--line:#3d444d;--card:#252525;--acc:#4c9bff;--acc2:#e06aa8;--ok:#3fb950;--ng:#f85149;--task:#2b2617;--taskline:#7a6526}}
+*{box-sizing:border-box}
+body{margin:0;padding:12px 14px 20px;font:15px/1.6 -apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--fg);-webkit-text-size-adjust:100%}
+h1{font-size:16px;margin:0 0 8px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0 10px}
+.tabs button{flex:1 1 30%;min-height:40px;padding:6px 4px;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;font-size:13px;cursor:pointer}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.tabs button:disabled{opacity:.4}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+label{font-size:14px;display:flex;align-items:center;gap:6px}
+select{font-size:15px;min-height:40px;padding:4px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+.mut{color:var(--mut);font-size:13px}
+.big{font-size:18px;font-weight:700}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+button.act,button.sub{min-height:44px;padding:8px 14px;border-radius:10px;font-size:15px;cursor:pointer}
+button.act{border:1px solid var(--acc);background:var(--acc);color:#fff}
+button.sub{border:1px solid var(--line);background:var(--card);color:var(--fg)}
+button:disabled{opacity:.45}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{border-bottom:1px solid var(--line);padding:5px 6px;text-align:right;vertical-align:top}
+td:first-child,th:first-child{text-align:left}
+svg{max-width:100%;height:auto;display:block}
+/* −／＋ 付きスライダー */
+.lk-step{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap}
+.lk-step .lk-name{font-size:14px;min-width:4.5em}
+.lk-step button{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:20px;line-height:1;cursor:pointer;flex:none}
+.lk-step input[type=range]{flex:1 1 90px;min-width:90px;height:32px}
+.lk-step .lk-val{font-weight:700;min-width:4.2em;text-align:right}
+/* 課題カード */
+.lk-task{background:var(--task);border:1px solid var(--taskline);border-radius:12px;padding:10px 12px;margin:6px 0 4px}
+.lk-task .lk-tt{font-weight:700;margin-bottom:2px}
+.lk-task input[type=number]{font-size:17px;width:7.5em;min-height:44px;padding:4px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.lk-choices{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.lk-choices button{min-height:44px;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:15px;cursor:pointer}
+.lk-choices button.on{border-color:var(--acc);box-shadow:inset 0 0 0 2px var(--acc)}
+.lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
+.lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
+/* 予想する前は結果を隠す */
+.lk-locked .res{display:none}
+.lk-locked .ctl{pointer-events:none;opacity:.5}
+.lk-wait{display:none}
+.lk-locked .lk-wait{display:block}
+/* 式で計算 */
+.lk-formula{border-left:3px solid var(--acc);padding:4px 10px;margin:8px 0;font-size:14px}
+.lk-formula .lk-ft{font-size:12px;color:var(--mut)}
+.lk-formula div.l{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+/* スマホの操作感：タップで拡大しない・ダブルタップの遅れをなくす・スライダーのつまみを大きく */
+button,a,input,select,label{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+select{font-size:16px}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:40px;margin:0;padding:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+.lk-step{display:grid;grid-template-columns:auto 40px minmax(60px,1fr) 40px auto;gap:6px;align-items:center;flex-wrap:nowrap}
+.lk-step .lk-name{min-width:0;font-size:13px;line-height:1.25;max-width:4.5em}
+.lk-step button{width:40px;height:40px}
+.lk-step input[type=range]{min-width:0;width:100%;height:40px}
+.lk-step .lk-val{min-width:3.4em;font-size:14px}
+.lk-fixed{font-size:14px}
+.lk-why{margin-top:4px;font-size:14px}
+.lk-live{margin-top:6px;padding:4px 8px;border-radius:8px;background:var(--bg);font-size:14px}
+.lk-bar{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.lk-link{display:inline-flex;align-items:center;min-height:40px;padding:6px 12px;border-radius:20px;border:1px solid var(--line);background:var(--card);color:var(--acc);font-size:14px;text-decoration:none;cursor:pointer}
+/* Notion の埋め込み（高さ約320px）：要点と操作だけ */
+body.lk-embed{padding:8px 12px 10px}
+.lk-embed h1{display:none}
+.lk-embed .lk-task{margin-top:0}
+.lk-embed .lk-tt,.lk-embed .lk-note{display:none}
+.lk-embed .lk-q::before{content:"🎯 "}
+.lk-embed.lk-locked .ctl{display:none}
+.lk-embed.lk-locked .lk-wait{display:none}
+.lk-embed.lk-focus .mode>p.mut{display:none}
+.lk-embed.lk-pred:not(.lk-more) .mode .res,.lk-embed.lk-pred:not(.lk-more) .mode .det{display:none}
+[hidden]{display:none!important}
+.lk-step .lk-name{max-width:5.2em;white-space:nowrap}
+.lk-embed .lk-done .lk-q{display:none}
+.lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
+.lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
+body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
+/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+.lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
+.lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
+.lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--acc);background:var(--card,transparent)}
+.lk-law .l{font-size:14px;line-height:1.6;padding-left:.6em;text-indent:-.6em}
+.lk-law .l::before{content:"・"}
+.lk-limit{margin-top:6px;padding:6px 8px;border-radius:6px;background:var(--task);font-size:13px}
+.legend span{margin-right:10px;font-size:12px;white-space:nowrap}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+.card{overflow-wrap:anywhere}
+.mode .lk-step .lk-name{max-width:6.8em}
+</style></head><body>
+<h1>🧪 実験計画ラボ</h1>
+<div id="lk-task"></div>
+<div class="tabs" id="tabs"></div>
+<div id="m-anova" class="mode">
+<p class="mut" style="margin:0">全体の変動を「群の平均のずれ（群間）」と「群の中のばらつき（群内）」に分ける。F＝群間の平均平方÷群内の平均平方。群の平均を離すと F は大きく、群の中を散らすと F は小さくなる。</p>
+<div class="row ctl"><label>データ <select id="adata" data-key="data"></select></label></div>
+<input type="range" id="akb" min="0" max="3" step="0.25" value="1" data-name="平均のずれ" data-unit="倍">
+<input type="range" id="akw" min="0.25" max="3" step="0.25" value="1" data-name="群内のばらつき" data-unit="倍">
+<input type="range" id="arep" min="1" max="5" step="1" value="1" data-name="くり返し" data-unit="回">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="aplot"></div>
+<div class="card res key" id="asum"></div>
+<div class="res det" id="atab"></div>
+</div>
+<div id="m-assign" class="mode">
+<p class="mut" style="margin:0">規模の違う20店で、施策の効果（本当は＋τ）を調べる実験を500回くり返す。割り当て方で、推定した効果の「偏り」と「ばらつき」がどう変わるかを見る。</p>
+<div class="row ctl"><label>割り当て方 <select id="smethod" data-key="method"><option value="random">くじで半分</option><option value="choose">大きい店を選ぶ</option><option value="block">近い2店の組でくじ</option></select></label></div>
+<input type="range" id="stau" min="0" max="6" step="0.5" value="3" data-name="本当の効果 τ">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="splot"></div>
+<div class="card res key" id="ssum"></div>
+</div>
+<div id="m-multi" class="mode">
+<p class="mut" style="margin:0">本当はどの群の平均も同じとき、群の組ごとに t 検定（5%）をくり返すと、どれかが偶然「有意」になる確率が増える。分散分析の F 検定（5%）と比べる。2000回の実験で数える（固定の乱数）。</p>
+<input type="range" id="mk" min="2" max="6" step="1" value="3" data-name="群の数">
+<input type="range" id="mn" min="3" max="20" step="1" value="5" data-name="各群の店舗数">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="mplot"></div>
+<div class="card res key" id="msum"></div>
+</div>
+<div id="m-inter" class="mode">
+<p class="mut" style="margin:0">施策の効果が店の型で違うとき（交互作用）、平均の効果1つでは語れない。小型店と大型店で効果を変え、平均の効果に何が消えるかを見る。</p>
+<input type="range" id="ies" min="-4" max="8" step="0.5" value="4" data-name="小型店での効果">
+<input type="range" id="iel" min="-4" max="8" step="0.5" value="0" data-name="大型店での効果">
+<input type="range" id="ip" min="0" max="1" step="0.1" value="0.5" data-name="小型店の割合">
+<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="res key" id="iplot"></div>
+<div class="card res key" id="isum"></div>
+</div>
+<script>
+window.__LABPRESETS__={"s1-anova": {"mode": "anova", "set": {"data": "ex", "kb": 1, "kw": 1, "rep": 1}, "task": "3つの施策（各2店）。A 1,3・B 3,5・C 5,7。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平方和16÷2＝8、群内の平方和6÷3＝2、F＝4。境目9.552 に届かないので棄却しない。くり返しを2回にすると F＝12 で棄却する。"}, "s1-assign": {"mode": "assign", "set": {"method": "choose", "tau": 3}, "task": "本当の効果は3。施策を「大きい店から10店」に割り当てて500回実験すると、推定した効果は？", "predict": {"type": "choice", "key": "biased", "label": "推定は", "options": ["偏りあり", "偏りなし"]}, "why": "大きい店の売上の高さが効果に混ざり、推定の平均は約23。くじに切り替えると平均は本当の3 に近づく（ばらつきは大きい）。"}, "s1-exp": {"mode": "assign", "modes": ["assign"], "set": {"method": "block", "tau": 3}, "unlock": ["method"], "task": "規模の近い2店ずつを組にして、組の中でくじを引く。推定した効果のばらつきは、20店からくじで半分を選ぶときと比べて？", "predict": {"type": "choice", "key": "spread", "label": "ばらつきは", "options": ["くじより小さい", "くじと同じくらい", "くじより大きい"]}, "why": "組の2店は規模がほぼ同じなので、規模の差がばらつきに入らない。くじで半分だと、規模の差（20〜58）がそのまま推定のばらつきになる。"}, "s3-rule": {"mode": "anova", "set": {"data": "ex", "kb": 1, "kw": 1, "rep": 1}, "steps": [{"label": "そのまま", "task": "例題A（各2店）。F の値は？", "set": {"kb": 1, "kw": 1, "rep": 1}, "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平均平方8 ÷ 群内の平均平方2。"}, {"label": "平均のずれ2倍", "task": "群の平均のずれだけを2倍にする。F は？", "set": {"kb": 2}, "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平方和は 2²＝4倍の64。群内は変わらない。"}, {"label": "群内のばらつき2倍", "task": "平均のずれを元に戻し、群の中のばらつきだけを2倍にする。F は？", "set": {"kb": 1, "kw": 2}, "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群内の平方和が4倍の24。F は4分の1。"}, {"label": "店舗を2倍", "task": "ばらつきを元に戻し、同じ値の店をもう1組ずつ足す（各4店）。F は？", "set": {"kw": 1, "rep": 2}, "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平方和は2倍の32、群内は2倍の12 だが、群内の自由度が3から9 に増える。"}], "law": {"title": "式で説明する", "lines": ["F ＝ (群間の平方和 ÷ (a−1)) ÷ (群内の平方和 ÷ (N−a))", "群の平均のずれを k 倍 → 群間の平方和は k² 倍", "群の中のばらつきを k 倍 → 群内の平方和は k² 倍", "店舗を増やす → 群内の自由度が増え、同じずれでも F が大きく、境目は下がる"], "text": "F は「群の平均がどれだけ離れているか」を「群の中のばらつき」と比べた量。平均の差だけでも、ばらつきだけでも決まらない。", "limit": "群の中のばらつきが群ごとに大きく違う、店どうしが独立でない（同じ店を何日も数えた）、割り当てが偏っている、といった場合は、この F の読み方の外にある。"}}, "s3-free": {"mode": "anova", "modes": ["anova", "assign", "multi"], "task": "解いてから、何を確かめたいか（F の計算・割り当て方・検定のくり返し）に合うモードで確かめる。"}, "s4-free": {"mode": "anova", "modes": ["anova", "assign", "multi"], "task": "自分の売場の施策の数字を思い浮かべ、群の平均のずれ・群内のばらつき・店舗数を動かして F と判断を読む。"}, "s5-free": {"mode": "inter", "modes": ["inter", "assign"], "task": "「効果が店で違う」で、平均の効果1つで何が消えるかを見る。「割り当て方」で、なぜ無作為化するのかを確かめる。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（分散分析、割り当て方、t 検定のくり返し、効果が店で違う）。"}, "Q-U32-001": {"mode": "anova", "set": {"data": "b", "kb": 1, "kw": 1, "rep": 1}, "task": "陳列3案（各3店）。A 2,4,6・B 5,7,9・C 8,10,12。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平均平方27 ÷ 群内の平均平方4。境目5.143 を超える。各2店の例題A（F＝4）より、群の平均のずれが大きく店も多い。"}, "Q-U32-002": {"mode": "assign", "set": {"method": "random", "tau": 3}, "task": "本当の効果は3。20店からくじで半分を選んで施策をする実験を500回くり返すと、推定した効果は？", "predict": {"type": "choice", "key": "biased", "label": "推定は", "options": ["偏りあり", "偏りなし"]}, "why": "くじなら規模の差が施策と無関係になり、推定の平均は本当の3 に近い。ただしヒストグラムの幅は広い。「大きい店を選ぶ」に切り替えると平均は約23 になる。"}, "Q-U32-003": {"mode": "anova", "set": {"data": "four", "kb": 1, "kw": 1, "rep": 1}, "task": "4つの売場（各6店）。群間の平方和30、群内の平方和60 になるデータ。F の値は（小数で）？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "(30÷3)÷(60÷20)＝10÷3。群の数が増えると、群間の自由度も増える。"}, "Q-U32-004": {"mode": "anova", "set": {"data": "ex", "kb": 1, "kw": 1, "rep": 5}, "task": "例題Aの6店を、同じ値で5回ずつくり返して30個として数える。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "平方和はどちらも5倍だが、群内の自由度が3 から27 に増える。データは増えていない（同じ店をくり返しただけ）のに F だけが大きくなる。"}, "Q-U32-005": {"mode": "multi", "set": {"k": 3, "n": 5}, "task": "本当は平均が同じ3群（各5店）。組ごとの t 検定（5%）で、どれかが偶然有意になる割合は（小数で）？", "predict": {"type": "number", "key": "fwerT", "label": "割合", "tol": 0.02}, "why": "約0.12。F 検定の割合は約0.05。群を6 にすると組は15、割合は約0.38 に増える。"}, "Q-U32-010": {"mode": "anova", "set": {"data": "five", "kb": 1, "kw": 1, "rep": 1}, "task": "3案（各5店）。全体の平方和60・群間の平方和30 になるデータ。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "全体＝群間＋群内 なので群内は30。自由度で割ってから比べる。"}, "Q-U32-011": {"mode": "anova", "set": {"data": "rep", "kb": 1, "kw": 1, "rep": 1}, "task": "例題Aの値で各4店。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平均平方16、群内の平均平方 12÷9≒1.33。Q-U32-004 と違い、ここは別々の店を4店ずつ用意した場合。"}, "Q-U32-012": {"mode": "anova", "set": {"data": "two", "kb": 1, "kw": 1, "rep": 1}, "task": "A（1, 3）と C（5, 7）の2群。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "t＝2.83 の2乗。境目 F(1, 2)≒18.51 も t の点4.303 の2乗。"}, "Q-U32-020": {"mode": "multi", "set": {"k": 4, "n": 5}, "task": "本当は平均が同じ4群（各5店）。比べる組の数は？", "predict": {"type": "number", "key": "pairs", "label": "組の数"}, "why": "6組。どれかが偶然有意になる割合は約0.2、F 検定なら約0.05。"}, "Q-U32-021": {"mode": "anova", "set": {"data": "uneq", "kb": 1, "kw": 1, "rep": 1}, "task": "A（2, 4）・B（4, 6, 8）・C（7, 9）。F の値は（小数で）？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "全体の平均は店の数で重みを付けた40÷7。群間の平方和も、群ごとの店の数を掛けて足す。"}, "Q-U32-022": {"mode": "assign", "set": {"method": "block", "tau": 3}, "task": "規模の近い2店ずつの組の中でくじを引く。推定した効果のばらつきは、くじで半分を選ぶときと比べて？", "predict": {"type": "choice", "key": "spread", "label": "ばらつきは", "options": ["くじより小さい", "くじと同じくらい", "くじより大きい"]}, "why": "くじで半分だとばらつき（標準偏差）は約5.4、組にすると約1.1。偏りはどちらもない。"}, "Q-U32-023": {"mode": "anova", "set": {"data": "ex", "kb": 2, "kw": 1, "rep": 1}, "task": "例題Aで、群の平均のずれだけを2倍にした。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平方和は 2²＝4倍の64、群内は6 のまま。F＝(64÷2)÷(6÷3)＝16。"}, "Q-U32-030": {"mode": "anova", "set": {"data": "flyer", "kb": 1, "kw": 1, "rep": 1}, "task": "チラシ3案（各4店）。F の値は（小数で）？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平均平方≒10.33、群内の平均平方≒1.33。境目4.256 を超える。"}, "Q-U32-031": {"mode": "assign", "set": {"method": "choose", "tau": 0}, "task": "本当の効果は0（効果なし）。大きい店から10店に施策をして500回実験すると、推定した効果は？", "predict": {"type": "choice", "key": "biased", "label": "推定は", "options": ["偏りあり", "偏りなし"]}, "why": "効果がないのに、推定の平均は約20。規模の差がそのまま「効果」に見える。"}, "Q-U32-032": {"mode": "anova", "set": {"data": "promo", "kb": 1, "kw": 1, "rep": 1}, "task": "陳列3案（各3店）。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "群間の平均平方28、群内の平均平方4。採用するかは差の大きさと手間で決める。"}, "Q-U32-040": {"mode": "inter", "set": {"es": 4, "el": 0, "p": 0.8}, "task": "小型店の効果4、大型店の効果0、小型店の割合0.8。平均の効果は（小数で）？", "predict": {"type": "number", "key": "avg", "label": "平均の効果"}, "why": "0.8×4＋0.2×0。割合を0.5 にすると2。どちらの数も「どの店で効くか」を表さない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+const LK=(()=>{
+const cfg=window.__LABCFG__||{};
+const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
+if(STEPS){const s0=STEPS[0];cfg.task=s0.task;cfg.predict=s0.predict;cfg.why=s0.why;}
+const $=id=>document.getElementById(id);
+const modes={},order=[];let cur=null,locked=false,last=null,revealed=false,moved=false;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const EMBED=(()=>{try{return window.self!==window.top;}catch(e){return true;}})()||/[?&]embed=1/.test(location.search);
+const FOCUS=!!(cfg.task&&cfg.mode);
+function register(key,spec){modes[key]=spec;order.push(key);}
+function show(k){cur=k;order.forEach(m=>{$("m-"+m).style.display=m===k?"block":"none";});
+document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===k));
+if(modes[k].render)modes[k].render();live();}
+function fmtNum(v){if(typeof v!=="number")return String(v);return String(+v.toFixed(3));}
+function stepper(input,onchange){
+const wrap=document.createElement("div");wrap.className="lk-step ctl";
+const name=document.createElement("span");name.className="lk-name";name.textContent=input.dataset.name||"";
+const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label",(input.dataset.name||"")+"を下げる");
+const plus=document.createElement("button");plus.type="button";plus.textContent="＋";plus.setAttribute("aria-label",(input.dataset.name||"")+"を上げる");
+const val=document.createElement("span");val.className="lk-val";
+input.parentNode.insertBefore(wrap,input);wrap.append(name,minus,input,plus,val);
+const step=()=>+input.step||1,dec=()=>Math.max(0,(String(input.step).split(".")[1]||"").length);
+const upd=()=>{val.textContent=(+input.value).toFixed(dec())+(input.dataset.unit||"");};
+const bump=d=>{const v=Math.min(+input.max,Math.max(+input.min,+input.value+d*step()));input.value=v.toFixed(dec());upd();onchange&&onchange();};
+minus.onclick=()=>bump(-1);plus.onclick=()=>bump(1);
+input.addEventListener("input",()=>{upd();onchange&&onchange();});
+input._lkUpd=upd;upd();return wrap;}
+function setRange(id,v){const e=$(id);e.value=v;e._lkUpd&&e._lkUpd();}
+function formula(lines,title){return `<div class="lk-formula res"><div class="lk-ft">${esc(title||"式で計算")}</div>${lines.map(l=>`<div class="l">${esc(l)}</div>`).join("")}</div>`;}
+function fixPicks(){if(!cfg.predict||!cfg.set)return;
+Object.keys(cfg.set).filter(k=>!(cfg.unlock||[]).includes(k)).forEach(k=>{const el=document.querySelector(`#m-${cur} select[data-key="${k}"]`);if(!el)return;
+const lab=el.closest("label"),name=lab?lab.firstChild.textContent.trim():"";
+const t=document.createElement("span");t.className="lk-fixed";t.innerHTML=`${esc(name)}：<b>${esc(el.options[el.selectedIndex].text)}</b>`;
+el.style.display="none";(lab||el).after(t);if(lab)lab.style.display="none";});}
+const web=/^https?:$/.test(location.protocol);
+function bar(){const b=$("lk-bar");if(!b)return;let h="";
+if(EMBED&&FOCUS&&cfg.predict)h+=`<button type="button" class="lk-link" id="lk-more" aria-expanded="false">くわしく（表・式）▾</button>`;
+if(EMBED&&web)h+=`<a class="lk-link" href="${esc(location.href.replace(/[?&]embed=1\b/,""))}" target="_blank" rel="noopener">大きく開く ↗</a>`;
+if(FOCUS&&web&&window.__LABPRESETS__)h+=`<a class="lk-link" href="./" target="_blank" rel="noopener">ほかのモードも試す ↗</a>`;
+b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
+if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
+function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
+const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
+if(!p)return;
+let guess=null;const go=$("lk-go");
+if(p.type==="number")$("lk-in").addEventListener("input",e=>{guess=e.target.value===""?null:+e.target.value;go.disabled=guess===null||isNaN(guess);});
+else $("lk-ch").querySelectorAll("button").forEach(b=>b.onclick=()=>{guess=b.dataset.v;$("lk-ch").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));go.disabled=false;});
+go.onclick=()=>reveal(guess);$("lk-skip").onclick=()=>reveal(null);}
+function lock(on){locked=on;document.body.classList.toggle("lk-locked",on);
+document.querySelectorAll("#tabs button").forEach(b=>b.disabled=on&&b.dataset.m!==cur);}
+function live(){const el=$("lk-live");if(!el||!revealed||!moved)return;el.hidden=false;const p=cfg.predict,r=modes[cur].value(p.key);
+el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.text)}</b>`;}
+function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
+const r=modes[cur].value(p.key);last=r;let h="";
+if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
+const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
+else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
+h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
+h+=`<div class="lk-live" id="lk-live" hidden></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
+$("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;
+const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
+const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
+live();bar();if(EMBED)window.scrollTo(0,0);}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
+if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
+taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
+function showLaw(){const L=cfg.law,box=$("lk-lawbox");if(!L||!box)return;
+box.innerHTML=`<div class="lk-law">${histTable()}<div class="lk-tt">📐 ${esc(L.title||"式で説明する")}</div>${(L.lines||[]).map(l=>`<div class="l">${esc(l)}</div>`).join("")}${L.text?`<div class="lk-why">${esc(L.text)}</div>`:""}${L.limit?`<div class="lk-limit"><b>この式で言えないこと</b>　${esc(L.limit)}</div>`:""}</div>`;
+const b=$("lk-law");if(b)b.closest(".lk-lawask").remove();const top=document.querySelector(".lk-task > .lk-hist");if(top)top.remove();}
+function start(def){const tabs=$("tabs");
+const m=cfg.mode&&modes[cfg.mode]?cfg.mode:def;
+const shown=(cfg.modes||(cfg.mode?[cfg.mode]:order)).filter(k=>modes[k]);
+shown.forEach(k=>{const b=document.createElement("button");b.type="button";b.textContent=modes[k].name;b.dataset.m=k;b.onclick=()=>{if(!b.disabled)show(k);};tabs.appendChild(b);});
+if(shown.length<2)tabs.hidden=true;
+document.body.classList.toggle("lk-embed",EMBED);document.body.classList.toggle("lk-focus",FOCUS);document.body.classList.toggle("lk-pred",!!(FOCUS&&cfg.predict));
+if(!$("lk-bar")){const b=document.createElement("div");b.id="lk-bar";b.className="lk-bar";document.body.appendChild(b);}
+order.forEach(k=>modes[k].init&&modes[k].init());
+if(cfg.set&&modes[m].apply)modes[m].apply(cfg.set);
+if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
+show(m);fixPicks();taskCard();if(cfg.predict)lock(true);
+if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
+["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
+return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;}};
+})();
+const $=LK.$,esc=LK.esc;
+const W=340;
+const f=(v,d=4)=>{if(typeof v!=="number"||!isFinite(v))return String(v);const r=+v.toFixed(d);return String(Object.is(r,-0)?0:r);};
+function lgam(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+0.5)*Math.log(t);let s=1.000000000190015;for(const ci of c)s+=ci/++y;return -t+Math.log(2.5066282746310005*s/x);}
+function betacf(a,b,x){const FP=1e-300;let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<FP)d=FP;d=1/d;let h=d;
+for(let m=1;m<=300;m++){const m2=2*m;let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<FP)d=FP;c=1+aa/c;if(Math.abs(c)<FP)c=FP;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-15)break;}return h;}
+function ibeta(a,b,x){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(lgam(a+b)-lgam(a)-lgam(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+function gammp(a,x){if(x<=0)return 0;if(x<a+1){let ap=a,s=1/a,d=s;for(let n=0;n<1000;n++){ap++;d*=x/ap;s+=d;if(Math.abs(d)<Math.abs(s)*3e-15)break;}return s*Math.exp(-x+a*Math.log(x)-lgam(a));}
+let b=x+1-a,c=1/1e-300,d=1/b,h=d;for(let i=1;i<1000;i++){const an=-i*(i-a);b+=2;d=an*d+b;if(Math.abs(d)<1e-300)d=1e-300;c=b+an/c;if(Math.abs(c)<1e-300)c=1e-300;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<3e-15)break;}return 1-Math.exp(-x+a*Math.log(x)-lgam(a))*h;}
+const chiCdf=(q,k)=>gammp(k/2,q/2);
+const fCdf=(x,a,b)=>x<=0?0:ibeta(a/2,b/2,a*x/(a*x+b));
+function inv(cdf,p,lo,hi){for(let i=0;i<200;i++){const m=(lo+hi)/2;if(cdf(m)<p)lo=m;else hi=m;}return (lo+hi)/2;}
+const tcdf=(t,df)=>{const x=df/(df+t*t),tail=0.5*ibeta(df/2,0.5,x);return t>0?1-tail:tail;};
+const r3=v=>Math.round(v*1000)/1000;
+function rng(s){let seed=s;return ()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};}
+function gauss(r){let u=0;while(u===0)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());}
+const COL=["var(--acc)","var(--acc2)","#2a9d8f","#e9a23b","#8a63d2","var(--mut)"];
+const NAMES="ABCDEF";
+const DATA={
+ex:{name:"例題A（各2店）",g:[[1,3],[3,5],[5,7]]},
+b:{name:"例題B（各3店）",g:[[2,4,6],[5,7,9],[8,10,12]]},
+rep:{name:"例題Aを各4店に",g:[[1,3,1,3],[3,5,3,5],[5,7,5,7]]},
+two:{name:"AとCの2群",g:[[1,3],[5,7]]},
+uneq:{name:"店舗数が違う3群",g:[[2,4],[4,6,8],[7,9]]},
+flyer:{name:"チラシ3案（各4店）",g:[[10,12,11,13],[14,15,13,16],[12,11,13,12]]},
+promo:{name:"陳列3案（各3店）",g:[[20,22,24],[24,26,28],[26,28,30]]},
+four:{name:"4つの売場（各6店）",g:[[6,7.5,8,9,9.5,11],[7,8.5,9,10,10.5,12],[8,9.5,10,11,11.5,13],[9,10.5,11,12,12.5,14]]},
+five:{name:"3案（各5店）",g:[[7,8,9,10,11],[7,8,9,10,11],[10,11,12,13,14]]}};
+function aGroups(){const d=DATA[$("adata").value],kb=+$("akb").value,kw=+$("akw").value,rep=+$("arep").value;
+const base=d.g.map(g=>{let x=[];for(let i=0;i<rep;i++)x=x.concat(g);return x;});
+const all=base.flat(),m=all.reduce((s,x)=>s+x,0)/all.length;
+return base.map(g=>{const gm=g.reduce((s,x)=>s+x,0)/g.length;return g.map(x=>m+kb*(gm-m)+kw*(x-gm));});}
+function aVals(){const G=aGroups(),all=G.flat(),N=all.length,a=G.length,m=all.reduce((s,x)=>s+x,0)/N,gm=G.map(g=>g.reduce((s,x)=>s+x,0)/g.length);
+const ssb=G.reduce((s,g,i)=>s+g.length*(gm[i]-m)**2,0),ssw=G.reduce((s,g,i)=>s+g.reduce((t,x)=>t+(x-gm[i])**2,0),0),dfb=a-1,dfw=N-a;
+const msb=ssb/dfb,msw=ssw/dfw,F=msw>0?msb/msw:Infinity,p=isFinite(F)?1-fCdf(F,dfb,dfw):0,crit=r3(inv(x=>fCdf(x,dfb,dfw),0.95,0,1e4));
+return {G,N,a,m,gm,ssb,ssw,sst:ssb+ssw,dfb,dfw,msb,msw,F,p,crit,decision:F>crit?"棄却する":"棄却しない"};}
+function aRender(){const A=aVals(),all=A.G.flat(),lo0=Math.min(...all),hi0=Math.max(...all),pad=Math.max(1,(hi0-lo0)*0.08),lo=Math.floor(lo0-pad),hi=Math.ceil(hi0+pad),X=v=>40+(v-lo)/(hi-lo)*(W-56),rh=40;
+let s=`<svg viewBox="0 0 ${W} ${A.a*rh+34}" width="${W}" role="img" aria-label="群ごとの点と平均">`;
+s+=`<line x1="${X(A.m)}" y1="6" x2="${X(A.m)}" y2="${A.a*rh+12}" stroke="var(--fg)" stroke-dasharray="4 3" stroke-opacity=".7"/><text x="${X(A.m)}" y="${A.a*rh+26}" font-size="10.5" text-anchor="middle" fill="var(--fg)">全体の平均 ${f(A.m,2)}</text>`;
+A.G.forEach((g,i)=>{const y=i*rh+24,c=COL[i%6],gx=X(A.gm[i]);
+s+=`<text x="2" y="${y+4}" font-size="12" font-weight="700" fill="var(--fg)">${NAMES[i]}</text>`;
+s+=`<line x1="${X(A.m)}" y1="${y-12}" x2="${gx}" y2="${y-12}" stroke="${c}" stroke-width="3" stroke-opacity=".6"/>`;
+g.forEach((x,j)=>{const yy=y+((j%4)-1.5)*3.2;s+=`<line x1="${X(x)}" y1="${yy}" x2="${gx}" y2="${yy}" stroke="${c}" stroke-opacity=".35"/><circle cx="${X(x)}" cy="${yy}" r="4" fill="${c}" fill-opacity=".85"/>`;});
+s+=`<line x1="${gx}" y1="${y-14}" x2="${gx}" y2="${y+10}" stroke="${c}" stroke-width="3"/>`;});
+s+=`</svg><div class="legend mut"><span>太い横線＝群の平均のずれ（群間）</span><span>細い線＝群の中のずれ（群内）</span></div>`;
+$("aplot").innerHTML=s;
+$("asum").innerHTML=`<div>群間の平方和 ${f(A.ssb,3)}（自由度 ${A.dfb}）　群内の平方和 ${f(A.ssw,3)}（自由度 ${A.dfw}）</div><div>F＝(${f(A.ssb,3)}÷${A.dfb})÷(${f(A.ssw,3)}÷${A.dfw})＝<b>${f(A.F,3)}</b>　境目 F(${A.dfb}, ${A.dfw})＝${A.crit.toFixed(3)}</div><div>p 値 ${f(A.p)} → 「平均はすべて同じ」を <b>${A.decision}</b></div><div class="mut">平均のずれを2倍にすると群間の平方和は4倍。群の中のばらつきを2倍にすると群内の平方和は4倍。店舗をくり返すと群内の自由度が増え、境目が下がる。</div>`;
+$("atab").innerHTML=`<table><tr><th>変動</th><th>平方和</th><th>自由度</th><th>平均平方</th></tr><tr><td>群間</td><td>${f(A.ssb,3)}</td><td>${A.dfb}</td><td>${f(A.msb,3)}</td></tr><tr><td>群内</td><td>${f(A.ssw,3)}</td><td>${A.dfw}</td><td>${f(A.msw,3)}</td></tr><tr><td>全体</td><td>${f(A.sst,3)}</td><td>${A.N-1}</td><td>—</td></tr></table>`;}
+LK.register("anova",{name:"分散分析",
+init(){$("adata").innerHTML=Object.entries(DATA).map(([k,d])=>`<option value="${k}">${d.name}</option>`).join("");$("adata").onchange=aRender;["akb","akw","arep"].forEach(id=>LK.stepper($(id),aRender));aRender();},
+apply(s){if(s.data)$("adata").value=s.data;if(s.kb!==undefined)LK.setRange("akb",s.kb);if(s.kw!==undefined)LK.setRange("akw",s.kw);if(s.rep!==undefined)LK.setRange("arep",s.rep);aRender();},
+render:aRender,
+value(key){const A=aVals(),v=A[key];return {v,text:typeof v==="string"?v:f(v,key==="crit"?3:4)};}});
+const SIZE=Array.from({length:20},(_,i)=>20+2*i);   // 店の規模（施策なしの売上の見込み）
+function assign(method,r){const idx=SIZE.map((_,i)=>i);let T=[];
+if(method==="choose")T=idx.slice(10);
+else if(method==="block"){for(let k=0;k<20;k+=2)T.push(r()<0.5?k:k+1);}
+else{const a=[...idx];for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}T=a.slice(0,10);}
+return new Set(T);}
+let sCache={};
+function sSim(method,tau){const key=method+"|"+tau;if(sCache[key])return sCache[key];const r=rng(32032),est=[];let last=null;
+for(let k=0;k<500;k++){const T=assign(method,r);let st=0,sc=0;SIZE.forEach((b,i)=>{const y=b+(T.has(i)?tau:0)+gauss(r)*2;if(T.has(i))st+=y;else sc+=y;});est.push(st/10-sc/10);last=T;}
+const mean=est.reduce((a,b)=>a+b,0)/est.length,sd=Math.sqrt(est.reduce((a,b)=>a+(b-mean)**2,0)/(est.length-1));return sCache[key]={est,mean,sd,last};}
+function sVals(){const method=$("smethod").value,tau=+$("stau").value,R=sSim(method,tau),Rr=sSim("random",tau),bias=R.mean-tau,ratio=R.sd/Rr.sd;
+return {method,tau,mean:R.mean,bias,sd:R.sd,est:R.est,last:R.last,biased:Math.abs(bias)>1?"偏りあり":"偏りなし",spread:ratio<0.8?"くじより小さい":ratio>1.25?"くじより大きい":"くじと同じくらい",sdRandom:Rr.sd};}
+function sRender(){const S=sVals(),lo=Math.floor(Math.min(-6,...S.est)),hi=Math.ceil(Math.max(30,...S.est)),X=v=>16+(v-lo)/(hi-lo)*(W-32),bins=34,bw=(hi-lo)/bins,cnt=Array(bins).fill(0);
+S.est.forEach(e=>cnt[Math.min(bins-1,Math.max(0,Math.floor((e-lo)/bw)))]++);const mx=Math.max(...cnt),H=110;
+let s=`<div class="glab mut" style="font-size:12px">いまの割り当て（1回分）：●＝施策あり　○＝なし（左ほど小さい店）</div><svg viewBox="0 0 ${W} 30" width="${W}" role="img" aria-label="割り当て">`;
+SIZE.forEach((b,i)=>{const x=16+i*(W-32)/19;s+=S.last.has(i)?`<circle cx="${x}" cy="15" r="6" fill="var(--acc2)"/>`:`<circle cx="${x}" cy="15" r="6" fill="none" stroke="var(--fg)" stroke-opacity=".6"/>`;});
+s+=`</svg><svg viewBox="0 0 ${W} ${H+34}" width="${W}" role="img" aria-label="推定した効果のヒストグラム">`;
+cnt.forEach((n,b)=>{const h=n/mx*(H-14);s+=`<rect x="${X(lo+b*bw)}" y="${H-h}" width="${Math.max(1,X(lo+(b+1)*bw)-X(lo+b*bw)-1)}" height="${h}" fill="var(--acc)" fill-opacity=".7"/>`;});
+s+=`<line x1="${X(S.tau)}" y1="4" x2="${X(S.tau)}" y2="${H}" stroke="var(--ok)" stroke-width="2"/><text x="${X(S.tau)}" y="${H+14}" font-size="10.5" text-anchor="middle" fill="var(--ok)">本当 ${S.tau}</text>`;
+s+=`<line x1="${X(S.mean)}" y1="4" x2="${X(S.mean)}" y2="${H}" stroke="var(--acc2)" stroke-dasharray="4 3" stroke-width="2"/><text x="${X(S.mean)}" y="${H+28}" font-size="10.5" text-anchor="middle" fill="var(--acc2)">推定の平均 ${f(S.mean,1)}</text>`;
+s+=`<line x1="16" y1="${H}" x2="${W-16}" y2="${H}" stroke="var(--line)"/></svg>`;
+$("splot").innerHTML=s;
+$("ssum").innerHTML=`<div>500回の推定の平均 <b>${f(S.mean,2)}</b>（本当は ${S.tau}）→ 偏り ${f(S.bias,2)}：<b>${S.biased}</b></div><div>推定のばらつき（標準偏差）<b>${f(S.sd,2)}</b>（くじで半分なら ${f(S.sdRandom,2)}）→ <b>${S.spread}</b></div><div class="mut">大きい店を選ぶと、店の規模の差が効果に混ざる（交絡）。くじで割り当てると偏りは消えるが、規模の差がばらつきとして残る。規模の近い店どうしでくじを引く（ブロック化）と、そのばらつきも小さくなる。</div>`;}
+LK.register("assign",{name:"割り当て方",
+init(){$("smethod").onchange=sRender;LK.stepper($("stau"),sRender);sRender();},
+apply(s){if(s.method)$("smethod").value=s.method;if(s.tau!==undefined)LK.setRange("stau",s.tau);sRender();},
+render:sRender,
+value(key){const S=sVals(),v=S[key];return {v,text:typeof v==="string"?v:f(v,2)};}});
+let mCache={};
+function mSim(k,n){const key=k+"|"+n;if(mCache[key])return mCache[key];const r=rng(53032),dfT=2*n-2,tc=inv(t=>tcdf(t,dfT),0.975,0,1e3),dfb=k-1,dfw=k*n-k,fc=inv(x=>fCdf(x,dfb,dfw),0.95,0,1e4);let hitT=0,hitF=0;
+for(let s=0;s<2000;s++){const G=[];for(let i=0;i<k;i++){const g=[];for(let j=0;j<n;j++)g.push(gauss(r));G.push(g);}
+const m=G.map(g=>g.reduce((a,b)=>a+b,0)/n),v=G.map((g,i)=>g.reduce((a,b)=>a+(b-m[i])**2,0)/(n-1));let any=false;
+for(let i=0;i<k;i++)for(let j=i+1;j<k;j++){const sp=((n-1)*v[i]+(n-1)*v[j])/(2*n-2),t=(m[i]-m[j])/Math.sqrt(sp*2/n);if(Math.abs(t)>tc)any=true;}
+if(any)hitT++;const gm=m.reduce((a,b)=>a+b,0)/k,msb=n*m.reduce((a,b)=>a+(b-gm)**2,0)/dfb,msw=v.reduce((a,b)=>a+b,0)/k;if(msb/msw>fc)hitF++;}
+return mCache[key]={fwerT:hitT/2000,fwerF:hitF/2000};}
+function mVals(){const k=+$("mk").value,n=+$("mn").value,pairs=k*(k-1)/2,R=mSim(k,n);return {k,n,pairs,fwerT:R.fwerT,fwerF:R.fwerF,bonf:0.05/pairs,naive:1-Math.pow(0.95,pairs)};}
+function mRender(){const M=mVals(),H=130,bar=(x,v,c,l)=>{const h=v*(H-20)/0.5;return `<rect x="${x}" y="${H-h}" width="90" height="${h}" rx="3" fill="${c}" fill-opacity=".8"/><text x="${x+45}" y="${H-h-5}" font-size="12" text-anchor="middle" fill="var(--fg)">${f(v,3)}</text><text x="${x+45}" y="${H+15}" font-size="11.5" text-anchor="middle" fill="var(--fg)">${l}</text>`;};
+let s=`<svg viewBox="0 0 ${W} ${H+24}" width="${W}" role="img" aria-label="誤って有意になる割合">`;
+s+=`<line x1="10" y1="${H-0.05*(H-20)/0.5}" x2="${W-10}" y2="${H-0.05*(H-20)/0.5}" stroke="var(--ng)" stroke-dasharray="4 3"/><text x="${W-10}" y="${H-0.05*(H-20)/0.5-4}" font-size="10.5" text-anchor="end" fill="var(--ng)">5%</text>`;
+s+=bar(50,M.fwerT,"var(--acc2)",`t 検定 ${M.pairs} 組`)+bar(200,M.fwerF,"var(--acc)","F 検定 1回")+`<line x1="10" y1="${H}" x2="${W-10}" y2="${H}" stroke="var(--line)"/></svg>`;
+$("mplot").innerHTML=s;
+$("msum").innerHTML=`<div>群 ${M.k}・各 ${M.n} 店。組の数 ${M.k}×${M.k-1}÷2＝<b>${M.pairs}</b></div><div>どれかの組で偶然「有意」：t 検定のくり返し <b>${f(M.fwerT,3)}</b>　F 検定 <b>${f(M.fwerF,3)}</b></div><div class="mut">組ごとの検定は同じデータを使い回すので独立ではなく、1−0.95^${M.pairs}＝${f(M.naive,3)} より少し小さくなる。組ごとに比べるなら、たとえば 0.05÷${M.pairs}＝${f(M.bonf,4)} で判断する（ボンフェローニ）。</div>`;}
+LK.register("multi",{name:"t 検定をくり返す",
+init(){["mk","mn"].forEach(id=>LK.stepper($(id),mRender));mRender();},
+apply(s){if(s.k!==undefined)LK.setRange("mk",s.k);if(s.n!==undefined)LK.setRange("mn",s.n);mRender();},
+render:mRender,
+value(key){const M=mVals(),v=M[key];return {v,text:key==="pairs"?String(v):f(v,3)};}});
+function iVals(){const es=+$("ies").value,el=+$("iel").value,p=+$("ip").value;return {es,el,p,avg:p*es+(1-p)*el,inter:es-el};}
+function iRender(){const I=iVals(),base={s:20,l:30},lo=Math.min(14,base.s+Math.min(0,I.es),base.l+Math.min(0,I.el))-2,hi=Math.max(base.s+I.es,base.l+I.el,32)+2,H=150,Y=v=>H-8-(v-lo)/(hi-lo)*(H-20),x0=80,x1=W-60;
+let s=`<svg viewBox="0 0 ${W} ${H+22}" width="${W}" role="img" aria-label="交互作用の図">`;
+[["小型店",base.s,I.es,"var(--acc)"],["大型店",base.l,I.el,"var(--acc2)"]].forEach(([n,b,e,c])=>{s+=`<line x1="${x0}" y1="${Y(b)}" x2="${x1}" y2="${Y(b+e)}" stroke="${c}" stroke-width="3"/><circle cx="${x0}" cy="${Y(b)}" r="5" fill="${c}"/><circle cx="${x1}" cy="${Y(b+e)}" r="5" fill="${c}"/><text x="${x1+8}" y="${Y(b+e)+4}" font-size="11.5" fill="${c}">${n}</text><text x="${x0-8}" y="${Y(b)+4}" font-size="11" text-anchor="end" fill="${c}">${b}</text>`;});
+s+=`<text x="${x0}" y="${H+16}" font-size="11.5" text-anchor="middle" fill="var(--fg)">施策なし</text><text x="${x1}" y="${H+16}" font-size="11.5" text-anchor="middle" fill="var(--fg)">施策あり</text></svg><div class="mut" style="font-size:12px">線が平行なら交互作用なし。傾きが違えば、効果が店の型で違う。</div>`;
+$("iplot").innerHTML=s;
+$("isum").innerHTML=`<div>小型店の効果 ${f(I.es,1)}、大型店の効果 ${f(I.el,1)}、小型店の割合 ${f(I.p,1)}</div><div>平均の効果＝${f(I.p,1)}×${f(I.es,1)}＋${f(1-I.p,1)}×${f(I.el,1)}＝<b>${f(I.avg,2)}</b>　効果の違い（交互作用）＝<b>${f(I.inter,1)}</b></div><div class="mut">平均の効果1つにまとめると、「どの店で効くか」が消える。店の割合が変われば、平均の効果も変わる。</div>`;}
+LK.register("inter",{name:"効果が店で違う",
+init(){["ies","iel","ip"].forEach(id=>LK.stepper($(id),iRender));iRender();},
+apply(s){if(s.es!==undefined)LK.setRange("ies",s.es);if(s.el!==undefined)LK.setRange("iel",s.el);if(s.p!==undefined)LK.setRange("ip",s.p);iRender();},
+render:iRender,
+value(key){const I=iVals(),v=I[key];return {v,text:f(v,2)};}});
+LK.start("anova");
+window.__LAB__={LK,aVals,sVals,mVals,iVals,fCdf,tcdf};
+</script>
+</body></html>
