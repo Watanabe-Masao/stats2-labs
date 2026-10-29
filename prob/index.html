@@ -121,6 +121,9 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 .lk-embed.lk-touring [data-tour-anchor]>.legend span{margin-right:4px;font-size:12px}
 .lk-embed.lk-touring [data-tour-anchor]>.lk-tline span{padding:0 1px}
 .lk-embed.lk-touring [data-tour-anchor] .mut{display:none}
+/* 埋め込みは幅も狭いことがある（iPhone の Notion で約320px）。全文は「大きく開く」で読む。操作は1行に収める */
+.lk-embed #lk-all{display:none}
+.lk-embed .lk-tsub{flex-wrap:nowrap}
 .die{display:flex;gap:6px;justify-content:center;margin:8px 0}
 .die div{width:46px;height:46px;border-radius:9px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;background:var(--card);position:relative}
 .die .a{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 22%,var(--card))}
