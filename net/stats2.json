@@ -3938,10 +3938,34 @@
    "labs": [
     {
      "id": "LAB-pois",
+     "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=rel-approx-tour",
+     "title": "離散分布ラボ",
+     "preset": "rel-approx-tour",
+     "purpose": "解説付き再生。np＝3 を保って n を 10→100 にし、二項分布がポアソン分布に重なるのを段ごとに見る"
+    },
+    {
+     "id": "LAB-pois",
      "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=rel-approx",
      "title": "離散分布ラボ",
      "preset": "rel-approx",
      "purpose": "np を保って n を大きくすると、二項分布がポアソン分布に重なる"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-LAB-pois-rel-approx-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-1.svg",
+     "caption": "1／4 λ を決める：二項分布で n×p＝λ を一定に保つ。λ＝3、まず n＝10・p＝0.3。（n＝10、p＝0.3、np＝3。差の最大 0.043）"
+    },
+    {
+     "id": "FIG-LAB-pois-rel-approx-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-2.svg",
+     "caption": "2／4 n を大きく・p を小さく：n を大きくすると p＝λ÷n は小さくなる。n×p は3のまま。（n＝30、p＝0.1、np＝3。差の最大 0.012）"
+    },
+    {
+     "id": "FIG-LAB-pois-rel-approx-tour-3",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-3.svg",
+     "caption": "3／4 さらに大きく：n＝100（p＝0.03）まで進めて、棒の形を見る。（n＝100、p＝0.03、np＝3。差の最大 0.003）"
     }
    ]
   },
