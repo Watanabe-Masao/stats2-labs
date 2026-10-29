@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 1,
- "schema_revision": 3,
+ "schema_revision": 4,
  "course": {
   "id": "stats2",
   "title": "統計検定2級",
@@ -964,6 +964,13 @@
      "purpose": "平均と標準偏差から、区間の確率を面積で読む"
     }
    ],
+   "figures": [
+    {
+     "id": "FIG-U16-concept",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg",
+     "caption": "平均100・標準偏差10 の正規分布（例題A）。90〜110 に約68%、80〜120 の外側に合わせて約5%。確率は高さではなく面積。"
+    }
+   ],
    "sources": [
     {
      "title": "公式2級範囲表",
@@ -1183,6 +1190,13 @@
      "title": "期待値ラボ",
      "preset": "s1-dist",
      "purpose": "期待値が分布の重心になることを、予想してから確かめる"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-U13-concept",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U13-concept.svg",
+     "caption": "1人が買う個数 X の確率分布（例題A）。▲が期待値1.1（分布の重心）、薄い帯が期待値±標準偏差（0.4〜1.8）。"
     }
    ],
    "sources": [
@@ -1555,6 +1569,13 @@
      "title": "期待値ラボ",
      "preset": "s1-dist",
      "purpose": "値と確率の一覧を変えると、期待値（重心）がどう動くかを見る"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-U13-concept",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U13-concept.svg",
+     "caption": "1人が買う個数 X の確率分布（例題A）。▲が期待値1.1（分布の重心）、薄い帯が期待値±標準偏差（0.4〜1.8）。"
     }
    ],
    "sources": [
@@ -2159,6 +2180,13 @@
      "purpose": "並び方の数×1つの並びの確率を、予想してから確かめる"
     }
    ],
+   "figures": [
+    {
+     "id": "FIG-U14-concept",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg",
+     "caption": "二項分布 B(4, 0.25)。購入率25%の売場に4人。ちょうど1人がいちばん起きやすく、▲の平均 np＝1人。"
+    }
+   ],
    "sources": [
     {
      "title": "公式2級範囲表",
@@ -2387,6 +2415,13 @@
      "title": "離散分布ラボ",
      "preset": "s1-pois",
      "purpose": "平均件数 λ から、k 件の確率を読む"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-U15-concept",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.svg",
+     "caption": "ポアソン分布（λ＝2）。1時間に平均2件。1件と2件がいちばん高く、右に裾が伸びる。▲の平均と分散はどちらも2。"
     }
    ],
    "sources": [
