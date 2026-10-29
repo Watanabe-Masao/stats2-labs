@@ -2183,6 +2183,14 @@
    "labs": [
     {
      "id": "LAB-binom",
+     "url": "https://watanabe-masao.github.io/stats2-labs/binom/?p=def-tour",
+     "title": "二項分布ラボ",
+     "kind": "tour",
+     "preset": "def-tour",
+     "purpose": "1回の試行から、並び1つの確率×並びの数で式を組み立てる"
+    },
+    {
+     "id": "LAB-binom",
      "url": "https://watanabe-masao.github.io/stats2-labs/binom/?p=s1-path",
      "title": "二項分布ラボ",
      "kind": "check",
@@ -2195,6 +2203,21 @@
      "id": "FIG-U14-concept",
      "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg",
      "caption": "二項分布 B(4, 0.25)。購入率25%の売場に4人。ちょうど1人がいちばん起きやすく、▲の平均 np＝1人。"
+    },
+    {
+     "id": "FIG-LAB-binom-def-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-1.svg",
+     "caption": "1回だけ試す：成功（🛒）の確率は p、失敗（❌）は 1−p。p＝0.3 で1回だけ試す。"
+    },
+    {
+     "id": "FIG-LAB-binom-def-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-2.svg",
+     "caption": "n 回くり返す：n 回くり返すと、成功1回の並びは n 通りに増える。"
+    },
+    {
+     "id": "FIG-LAB-binom-def-tour-3",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-3.svg",
+     "caption": "並び1つの確率：成功を2回にする。どの並びも確率は同じ pᵏ(1−p)ⁿ⁻ᵏ（独立なので掛け算）。"
     }
    ],
    "sources": [
