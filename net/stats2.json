@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 1,
- "schema_revision": 6,
+ "schema_revision": 8,
  "course": {
   "id": "stats2",
   "title": "統計検定2級",
@@ -264,7 +264,8 @@
        "meaning": "X の期待値 E(X)",
        "key": "mu",
        "concept": "stats2:TERM-expect",
-       "kind": "param"
+       "kind": "param",
+       "of": "X"
       }
      ],
      "tree": {
@@ -505,7 +506,12 @@
        "meaning": "標準偏差",
        "range": "0以上",
        "key": "sigma",
-       "kind": "param"
+       "kind": "param",
+       "of": "X",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       },
       {
        "symbol": "V( )",
@@ -623,7 +629,8 @@
        "meaning": "X の期待値 E(X)",
        "key": "mu",
        "concept": "stats2:TERM-expect",
-       "kind": "param"
+       "kind": "param",
+       "of": "X"
       },
       {
        "symbol": "σ",
@@ -631,7 +638,12 @@
        "range": "0より大きい",
        "key": "sigma",
        "concept": "stats2:TERM-sd",
-       "kind": "param"
+       "kind": "param",
+       "of": "X",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       }
      ],
      "tree": {
@@ -821,7 +833,11 @@
        "range": "0より大きい",
        "key": "sigma",
        "concept": "stats2:TERM-sd",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       },
       {
        "symbol": "π",
@@ -1077,6 +1093,48 @@
          }
         ],
         "var": "x"
+       }
+      ]
+     }
+    },
+    {
+     "tex": "\\mu=E(X)",
+     "label": "記号 μ",
+     "symbols": [
+      {
+       "symbol": "μ",
+       "meaning": "X の期待値 E(X) を短く書く記号",
+       "key": "mu",
+       "kind": "param",
+       "of": "X"
+      },
+      {
+       "symbol": "E( )",
+       "meaning": "期待値（値×確率を足す）",
+       "key": "E",
+       "concept": "stats2:TERM-expect"
+      },
+      {
+       "symbol": "X",
+       "meaning": "確率変数",
+       "key": "X",
+       "kind": "rv"
+      }
+     ],
+     "tree": {
+      "op": "eq",
+      "args": [
+       {
+        "sym": "mu"
+       },
+       {
+        "op": "fn",
+        "args": [
+         {
+          "sym": "X"
+         }
+        ],
+        "name": "E"
        }
       ]
      }
@@ -1645,14 +1703,16 @@
        "meaning": "X の期待値",
        "key": "muX",
        "concept": "stats2:TERM-expect",
-       "kind": "param"
+       "kind": "param",
+       "of": "X"
       },
       {
        "symbol": "μ_Y",
        "meaning": "Y の期待値",
        "key": "muY",
        "concept": "stats2:TERM-expect",
-       "kind": "param"
+       "kind": "param",
+       "of": "Y"
       }
      ],
      "tree": {
@@ -1934,21 +1994,34 @@
        "meaning": "試行の回数",
        "range": "1以上の整数",
        "key": "n",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "k",
        "meaning": "成功の回数",
        "range": "0以上 n 以下の整数",
        "key": "k",
-       "kind": "value"
+       "kind": "value",
+       "domain": {
+        "min": 0,
+        "max": "n",
+        "integer": true
+       }
       },
       {
        "symbol": "p",
        "meaning": "1回の成功確率",
        "range": "0以上1以下",
        "key": "p",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       },
       {
        "symbol": "ₙCₖ",
@@ -2033,7 +2106,33 @@
         ]
        }
       ]
-     }
+     },
+     "parts": [
+      {
+       "path": [
+        1,
+        0
+       ],
+       "name": "並び方の数",
+       "meaning": "n 回のうち、どの k 回が成功かの選び方の数。どの並びも確率は同じなので、この数だけ足し合わせる"
+      },
+      {
+       "path": [
+        1,
+        1
+       ],
+       "name": "成功が k 回の確率",
+       "meaning": "1回の成功確率 p を、成功の回数 k だけ掛け合わせる（各回は独立）"
+      },
+      {
+       "path": [
+        1,
+        2
+       ],
+       "name": "失敗が n−k 回の確率",
+       "meaning": "1回の失敗確率 1−p を、失敗の回数 n−k だけ掛け合わせる"
+      }
+     ]
     },
     {
      "tex": "E(X)=np",
@@ -2056,14 +2155,22 @@
        "meaning": "試行の回数",
        "range": "1以上の整数",
        "key": "n",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "p",
        "meaning": "1回の成功確率",
        "range": "0以上1以下",
        "key": "p",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       }
      ],
      "tree": {
@@ -2113,14 +2220,22 @@
        "meaning": "試行の回数",
        "range": "1以上の整数",
        "key": "n",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "p",
        "meaning": "1回の成功確率",
        "range": "0以上1以下",
        "key": "p",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       }
      ],
      "tree": {
@@ -2180,6 +2295,15 @@
      "correction": "np 回はいちばん起きやすい付近だが、その確率自体は小さいことが多い（n が大きいほど小さい）"
     }
    ],
+   "workspace": {
+    "formula": 0,
+    "vary": [
+     "n",
+     "p"
+    ],
+    "over": "k",
+    "mean": 1
+   },
    "labs": [
     {
      "id": "LAB-binom",
@@ -2274,14 +2398,22 @@
        "meaning": "一定の範囲あたりの平均件数",
        "range": "0より大きい",
        "key": "lambda",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       },
       {
        "symbol": "k",
        "meaning": "起きた件数",
        "range": "0以上の整数",
        "key": "k",
-       "kind": "value"
+       "kind": "value",
+       "domain": {
+        "min": 0,
+        "integer": true
+       }
       },
       {
        "symbol": "e",
@@ -2392,7 +2524,11 @@
        "meaning": "一定の範囲あたりの平均件数",
        "range": "0より大きい",
        "key": "lambda",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       }
      ],
      "tree": {
@@ -2502,14 +2638,22 @@
        "meaning": "初めて成功した回（成功した回も数える）",
        "range": "1以上の整数",
        "key": "k",
-       "kind": "value"
+       "kind": "value",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "p",
        "meaning": "1回の成功確率",
        "range": "0より大きく1以下",
        "key": "p",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       }
      ],
      "tree": {
@@ -2591,7 +2735,11 @@
        "meaning": "1回の成功確率",
        "range": "0より大きく1以下",
        "key": "p",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       }
      ],
      "tree": {
@@ -2641,7 +2789,11 @@
        "meaning": "1回の成功確率",
        "range": "0より大きく1以下",
        "key": "p",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       }
      ],
      "tree": {
@@ -2761,21 +2913,33 @@
        "meaning": "r 回目の成功が起きた回（成功した回も数える）",
        "key": "k",
        "kind": "value",
-       "range": "r 以上の整数"
+       "range": "r 以上の整数",
+       "domain": {
+        "min": "r",
+        "integer": true
+       }
       },
       {
        "symbol": "r",
        "meaning": "待つ成功の回数",
        "key": "r",
        "kind": "param",
-       "range": "1以上の整数"
+       "range": "1以上の整数",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "p",
        "meaning": "1回の成功確率",
        "key": "p",
        "kind": "param",
-       "range": "0より大きく1以下"
+       "range": "0より大きく1以下",
+       "domain": {
+        "min": 0,
+        "max": 1
+       }
       },
       {
        "symbol": "ₖ₋₁C_{r−1}",
@@ -2936,25 +3100,41 @@
        "symbol": "N",
        "meaning": "集団の個数",
        "key": "N",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "integer": true
+       }
       },
       {
        "symbol": "M",
        "meaning": "集団の中の当たりの個数",
        "key": "M",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "integer": true
+       }
       },
       {
        "symbol": "n",
        "meaning": "取り出す個数",
        "key": "n",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "k",
        "meaning": "取り出した中の当たりの個数",
        "key": "k",
-       "kind": "value"
+       "kind": "value",
+       "domain": {
+        "min": 0,
+        "integer": true
+       }
       },
       {
        "symbol": "C( , )",
@@ -3068,19 +3248,31 @@
        "symbol": "n",
        "meaning": "取り出す個数",
        "key": "n",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 1,
+        "integer": true
+       }
       },
       {
        "symbol": "M",
        "meaning": "集団の中の当たりの個数",
        "key": "M",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "integer": true
+       }
       },
       {
        "symbol": "N",
        "meaning": "集団の個数",
        "key": "N",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "integer": true
+       }
       }
      ],
      "tree": {
@@ -3186,7 +3378,11 @@
        "meaning": "単位時間あたりに起きる平均の回数",
        "range": "0より大きい",
        "key": "lambda",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       },
       {
        "symbol": "x",
@@ -3270,7 +3466,11 @@
        "meaning": "単位時間あたりに起きる平均の回数",
        "range": "0より大きい",
        "key": "lambda",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       },
       {
        "symbol": "x",
@@ -3355,7 +3555,11 @@
        "meaning": "単位時間あたりに起きる平均の回数",
        "range": "0より大きい",
        "key": "lambda",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       }
      ],
      "tree": {
@@ -3405,7 +3609,11 @@
        "meaning": "単位時間あたりに起きる平均の回数",
        "range": "0より大きい",
        "key": "lambda",
-       "kind": "param"
+       "kind": "param",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
       }
      ],
      "tree": {
