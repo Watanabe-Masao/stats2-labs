@@ -4217,7 +4217,37 @@
    "units": [
     "stats2:U13"
    ],
-   "gist": "分散は「1つの量が平均からどれだけずれるか」。共分散は「2つの量が一緒にずれるか」。同じものどうしの共分散が分散。"
+   "gist": "分散は「1つの量が平均からどれだけずれるか」。共分散は「2つの量が一緒にずれるか」。同じものどうしの共分散が分散。",
+   "labs": [
+    {
+     "id": "LAB-expect",
+     "url": "https://watanabe-masao.github.io/stats2-labs/expect/?p=rel-varcov-tour",
+     "title": "期待値ラボ",
+     "kind": "tour",
+     "preset": "rel-varcov-tour",
+     "purpose": "Y を X と同じにすると、共分散が分散になるのを見る"
+    },
+    {
+     "id": "LAB-expect",
+     "url": "https://watanabe-masao.github.io/stats2-labs/expect/?p=s5-free",
+     "title": "期待値ラボ",
+     "kind": "check",
+     "preset": "s5-free",
+     "purpose": "同時確率を自分で動かし、共分散の符号と大きさを見る"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-LAB-expect-rel-varcov-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-varcov-tour-1.svg",
+     "caption": "共分散は X と Y のずれの積の平均。弁当とお茶なら Cov＝0.1。"
+    },
+    {
+     "id": "FIG-LAB-expect-rel-varcov-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-varcov-tour-2.svg",
+     "caption": "Y＝X にすると Cov(X, X)＝V(X)＝0.25。分散は共分散の特別な場合。"
+    }
+   ]
   },
   {
    "id": "stats2:REL-indep-cov",
@@ -4237,11 +4267,36 @@
    "labs": [
     {
      "id": "LAB-expect",
+     "url": "https://watanabe-masao.github.io/stats2-labs/expect/?p=rel-indep-tour",
+     "title": "期待値ラボ",
+     "kind": "tour",
+     "preset": "rel-indep-tour",
+     "purpose": "X と Y の割合は同じまま、両方の確率だけを変えて共分散の符号を見る"
+    },
+    {
+     "id": "LAB-expect",
      "url": "https://watanabe-masao.github.io/stats2-labs/expect/?p=s5-free",
      "title": "期待値ラボ",
      "kind": "check",
      "preset": "s5-free",
      "purpose": "独立なら共分散が0。0でも独立とは限らないことも確かめる"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-LAB-expect-rel-indep-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-1.svg",
+     "caption": "両方＝20%＝50%×40%。独立なら E(XY)＝E(X)E(Y) で 共分散は0。"
+    },
+    {
+     "id": "FIG-LAB-expect-rel-indep-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-2.svg",
+     "caption": "両方を30%にする（XとYの割合は同じ）。一緒に起きやすいと共分散は正。"
+    },
+    {
+     "id": "FIG-LAB-expect-rel-indep-tour-3",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-3.svg",
+     "caption": "両方を10%にすると共分散は負。0でないので独立ではない。"
     }
    ]
   },
@@ -4318,11 +4373,31 @@
    "labs": [
     {
      "id": "LAB-pois",
+     "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=rel-hyper-tour",
+     "title": "離散分布ラボ",
+     "kind": "tour",
+     "preset": "rel-hyper-tour",
+     "purpose": "割合0.3を保って箱を大きくし、補正 (N−n)/(N−1) が1に近づくのを段ごとに見る"
+    },
+    {
+     "id": "LAB-pois",
      "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=rel-hyper",
      "title": "離散分布ラボ",
      "kind": "check",
      "preset": "rel-hyper",
      "purpose": "集団を大きくすると、戻さない確率が戻す確率に近づく"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-LAB-pois-rel-hyper-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-tour-1.svg",
+     "caption": "20個中6個（割合0.3）の箱から5個取る。戻さない方の分散は、戻す二項の ×0.789。"
+    },
+    {
+     "id": "FIG-LAB-pois-rel-hyper-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-tour-2.svg",
+     "caption": "割合0.3のまま箱を大きくすると、補正 (N−n)/(N−1) が 1に近づく。"
     }
    ]
   },
@@ -4392,11 +4467,31 @@
    "labs": [
     {
      "id": "LAB-pois",
+     "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=rel-expo-tour",
+     "title": "離散分布ラボ",
+     "kind": "tour",
+     "preset": "rel-expo-tour",
+     "purpose": "t 時間に0件の確率が、次の1件まで t より長く待つ確率になることを段ごとに見る"
+    },
+    {
+     "id": "LAB-pois",
      "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=s5-free",
      "title": "離散分布ラボ",
      "kind": "check",
      "preset": "s5-free",
      "purpose": "0件の確率を時間を延ばして見ると、待ち時間の確率になる"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-LAB-pois-rel-expo-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.svg",
+     "caption": "1時間に平均2件（λ＝2）。1時間に0件の確率は e⁻²≒0.135。"
+    },
+    {
+     "id": "FIG-LAB-pois-rel-expo-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.svg",
+     "caption": "時間 t を延ばすと λ＝2t が増え、0件の確率 e^(−2t) は小さくなる。"
     }
    ]
   },
@@ -4470,7 +4565,37 @@
    "units": [
     "stats2:U15"
    ],
-   "gist": "幾何は「最初の当たりまで」待つ。負の二項は「r 回目の当たりまで」待つ。r＝1 にすると幾何に戻る。"
+   "gist": "幾何は「最初の当たりまで」待つ。負の二項は「r 回目の当たりまで」待つ。r＝1 にすると幾何に戻る。",
+   "labs": [
+    {
+     "id": "LAB-pois",
+     "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=rel-negbinom-tour",
+     "title": "離散分布ラボ",
+     "kind": "tour",
+     "preset": "rel-negbinom-tour",
+     "purpose": "待つ当たりを1回→3回に広げ、平均が r/p になるのを段ごとに見る"
+    },
+    {
+     "id": "LAB-pois",
+     "url": "https://watanabe-masao.github.io/stats2-labs/poisson/?p=s5-free",
+     "title": "離散分布ラボ",
+     "kind": "check",
+     "preset": "s5-free",
+     "purpose": "p・r・k を自分で動かし、幾何（r＝1）と負の二項を比べる"
+    }
+   ],
+   "figures": [
+    {
+     "id": "FIG-LAB-pois-rel-negbinom-tour-1",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.svg",
+     "caption": "幾何分布：当たり（p＝0.3）の 1回目が何回目に来るか。平均 1/p≒3.3回。"
+    },
+    {
+     "id": "FIG-LAB-pois-rel-negbinom-tour-2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.svg",
+     "caption": "待つ当たりを r 回に広げると負の二項分布。平均 r/p も r 倍に。"
+    }
+   ]
   }
  ],
  "derivations": [
