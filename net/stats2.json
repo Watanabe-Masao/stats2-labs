@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 1,
- "schema_revision": 12,
+ "schema_revision": 13,
  "course": {
   "id": "stats2",
   "title": "統計検定2級",
@@ -3019,7 +3019,7 @@
    "principle": "n 個を1列に並べる n! 通りのうち、選んだ k 個の中の並び（k! 通り）と、残した n−k 個の中の並び（(n−k)! 通り）は区別しないので、その分で割る。",
    "formulas": [
     {
-     "tex": "{}_{n}\\mathrm{C}_{k}=\\dfrac{n!}{k!\\,(n-k)!}",
+     "id": "F-comb-def",
      "label": "階乗で表す",
      "symbols": [
       {
@@ -3145,7 +3145,8 @@
        "name": "残した中の並べ方",
        "meaning": "残した n−k 個も順番を区別しないので、その並べ方の数で割る"
       }
-     ]
+     ],
+     "tex": "{}_{n}\\mathrm{C}_{k}=\\dfrac{n!}{k!(n-k)!}"
     }
    ],
    "conditions": {
@@ -3201,7 +3202,7 @@
    "principle": "n 個のものを1列に並べる並べ方の数。先頭は n 通り、次は n−1 通り……と1つずつ減るので、それを全部掛け合わせる。",
    "formulas": [
     {
-     "tex": "n!=\\prod_{i=1}^{n} i",
+     "id": "F-fact-def",
      "label": "1 から n までの積",
      "symbols": [
       {
@@ -3255,7 +3256,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "n!=\\prod_{i=1}^{n}i"
     }
    ],
    "conditions": {
@@ -3639,7 +3641,7 @@
    "principle": "(X−μ)² の期待値。2乗するので向きが消え、大きなずれほど重く効く。単位は元の単位の2乗になる。",
    "formulas": [
     {
-     "tex": "V(X)=E\\big[(X-\\mu)^2\\big]=E(X^2)-\\{E(X)\\}^2",
+     "id": "F-var-def",
      "symbols": [
       {
        "symbol": "V( )",
@@ -3745,10 +3747,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(X)=E((X-\\mu)^{2})=E(X^{2})-(E(X))^{2}"
     },
     {
-     "tex": "V(aX+b)=a^2V(X)",
+     "id": "F-var-linear",
      "label": "1次式の分散",
      "symbols": [
       {
@@ -3830,7 +3833,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(aX+b)=a^{2}V(X)"
     }
    ],
    "conditions": {
@@ -3915,7 +3919,7 @@
    "principle": "分散は単位が2乗になるので、平方根をとって元の単位に戻す。期待値（平均）からの典型的なずれの大きさの目安。",
    "formulas": [
     {
-     "tex": "\\sigma=\\sqrt{V(X)}",
+     "id": "F-sd-def",
      "symbols": [
       {
        "symbol": "σ",
@@ -3963,7 +3967,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "\\sigma=\\sqrt{V(X)}"
     }
    ],
    "conditions": {
@@ -4053,7 +4058,7 @@
    "principle": "1次の変換なので分布の形は変わらない。単位や大きさの違う値を「平均から標準偏差いくつ分か」で比べられる。正規分布なら標準正規分布 N(0, 1) になり、1つの表で確率が読める。",
    "formulas": [
     {
-     "tex": "Z=\\dfrac{X-\\mu}{\\sigma}",
+     "id": "F-std-def",
      "symbols": [
       {
        "symbol": "Z",
@@ -4115,10 +4120,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "Z=\\dfrac{X-\\mu}{\\sigma}"
     },
     {
-     "tex": "E(Z)=0",
+     "id": "F-std-mean",
      "label": "標準化した値の期待値",
      "symbols": [
       {
@@ -4150,10 +4156,11 @@
         "num": 0
        }
       ]
-     }
+     },
+     "tex": "E(Z)=0"
     },
     {
-     "tex": "V(Z)=1",
+     "id": "F-std-var",
      "label": "標準化した値の分散",
      "symbols": [
       {
@@ -4185,7 +4192,8 @@
         "num": 1
        }
       ]
-     }
+     },
+     "tex": "V(Z)=1"
     }
    ],
    "conditions": {
@@ -4276,7 +4284,7 @@
    "principle": "小さな独立の要因がたくさん足し合わさると、この形に近づく（中心極限定理）。μ と σ の2つで形が決まり、μ±σ に約68%、μ±2σ に約95% が入る。",
    "formulas": [
     {
-     "tex": "f(x)=\\dfrac{1}{\\sqrt{2\\pi}\\,\\sigma}\\exp\\!\\Big(-\\dfrac{(x-\\mu)^2}{2\\sigma^2}\\Big)",
+     "id": "F-normal-pdf",
      "symbols": [
       {
        "symbol": "f(x)",
@@ -4291,11 +4299,18 @@
        "kind": "value"
       },
       {
+       "symbol": "X",
+       "meaning": "この密度に従う確率変数（μ・σ は X の期待値・標準偏差。#118 D7）",
+       "key": "X",
+       "kind": "rv"
+      },
+      {
        "symbol": "μ",
        "meaning": "平均（山の中心）",
        "key": "mu",
        "concept": "stats2:TERM-expect",
-       "kind": "param"
+       "kind": "param",
+       "of": "X"
       },
       {
        "symbol": "σ",
@@ -4304,6 +4319,7 @@
        "key": "sigma",
        "concept": "stats2:TERM-sd",
        "kind": "param",
+       "of": "X",
        "domain": {
         "min": 0,
         "minOpen": true
@@ -4420,7 +4436,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "f(x)=\\dfrac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\left(-\\dfrac{(x-\\mu)^{2}}{2\\sigma^{2}}\\right)"
     }
    ],
    "conditions": {
@@ -4502,7 +4519,7 @@
    "principle": "値×確率の和。同じ試行を何度もくり返したときの平均の行き着く先になる（大数の法則）。和の期待値は期待値の和（線形性）。",
    "formulas": [
     {
-     "tex": "E(X)=\\sum_x x\\,p(x)",
+     "id": "F-expect-def",
      "symbols": [
       {
        "symbol": "E( )",
@@ -4566,10 +4583,11 @@
         "var": "x"
        }
       ]
-     }
+     },
+     "tex": "E(X)=\\sum_{x}xp(x)"
     },
     {
-     "tex": "\\mu=E(X)",
+     "id": "F-expect-mu",
      "label": "記号 μ",
      "symbols": [
       {
@@ -4608,10 +4626,11 @@
         "name": "E"
        }
       ]
-     }
+     },
+     "tex": "\\mu=E(X)"
     },
     {
-     "tex": "E(aX+b)=aE(X)+b",
+     "id": "F-expect-linear",
      "label": "線形性",
      "symbols": [
       {
@@ -4693,7 +4712,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "E(aX+b)=aE(X)+b"
     }
    ],
    "conditions": {
@@ -4853,7 +4873,7 @@
    "principle": "P(A∩B)＝P(A)P(B)。確率変数なら同時の確率が積に分かれる。独立なら共分散は0になり、和の分散は分散の和になる。",
    "formulas": [
     {
-     "tex": "P(A\\cap B)=P(A)\\,P(B)",
+     "id": "F-indep-def",
      "symbols": [
       {
        "symbol": "P( )",
@@ -4916,7 +4936,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "P(A\\cap B)=P(A)\\,P(B)"
     }
    ],
    "conditions": {
@@ -5022,7 +5043,7 @@
    "principle": "起こりうる値と、その確率の組（確率分布）で性質が決まる。1つの記録された値ではなく、記録する前の「値の出方」を扱う。",
    "formulas": [
     {
-     "tex": "P(X=x)=p(x)",
+     "id": "F-rv-pmf",
      "symbols": [
       {
        "symbol": "P( )",
@@ -5080,17 +5101,18 @@
         "name": "p"
        }
       ]
-     }
+     },
+     "tex": "P(X=x)=p(x)"
     },
     {
-     "tex": "\\sum_x p(x)=1",
-     "label": "確率の合計",
+     "id": "F-dist-sum",
+     "label": "確率の合計は1",
      "symbols": [
       {
        "symbol": "p(x)",
        "meaning": "X が x になる確率",
-       "key": "p",
-       "concept": "stats2:TERM-dist"
+       "range": "0以上1以下",
+       "key": "p"
       },
       {
        "symbol": "x",
@@ -5121,7 +5143,9 @@
         "num": 1
        }
       ]
-     }
+     },
+     "defined_in": "stats2:TERM-dist",
+     "tex": "\\sum_{x}p(x)=1"
     }
    ],
    "conditions": {
@@ -5177,7 +5201,7 @@
    "principle": "起こりうる値を全部挙げ、確率を割り振ったもの。確率は0以上で、合計（連続なら面積）が1。期待値や分散は、分布を1つの数に要約したもの。",
    "formulas": [
     {
-     "tex": "\\sum_x p(x)=1",
+     "id": "F-dist-sum",
      "label": "確率の合計は1",
      "symbols": [
       {
@@ -5215,7 +5239,8 @@
         "num": 1
        }
       ]
-     }
+     },
+     "tex": "\\sum_{x}p(x)=1"
     }
    ],
    "conditions": {
@@ -5282,7 +5307,7 @@
    "principle": "(X−μ_X)(Y−μ_Y) の期待値。同じ向きのずれが多いと正、逆向きが多いと負。和の分散に 2Cov として効く。",
    "formulas": [
     {
-     "tex": "\\mathrm{Cov}(X,Y)=E\\big[(X-\\mu_X)(Y-\\mu_Y)\\big]=E(XY)-E(X)E(Y)",
+     "id": "F-cov-def",
      "symbols": [
       {
        "symbol": "Cov(X, Y)",
@@ -5418,10 +5443,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "\\mathrm{Cov}(X,\\,Y)=E((X-\\mu_X)(Y-\\mu_Y))=E(XY)-E(X)\\,E(Y)"
     },
     {
-     "tex": "V(X+Y)=V(X)+V(Y)+2\\,\\mathrm{Cov}(X,Y)",
+     "id": "F-cov-varsum",
      "label": "和の分散",
      "symbols": [
       {
@@ -5513,7 +5539,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(X+Y)=V(X)+V(Y)+2\\mathrm{Cov}(X,\\,Y)"
     }
    ],
    "conditions": {
@@ -5585,7 +5612,7 @@
    "principle": "「どの k 回が成功か」の組合せ ₙCₖ と、その1通りの確率 pᵏ(1−p)ⁿ⁻ᵏ の積。成功回数は n 個の「成功1・失敗0」の和なので、期待値と分散が和から求まる。",
    "formulas": [
     {
-     "tex": "P(X=k)={}_nC_k\\,p^k(1-p)^{n-k}",
+     "id": "F-binom-pmf",
      "symbols": [
       {
        "symbol": "P( )",
@@ -5742,10 +5769,11 @@
        "name": "失敗が n−k 回の確率",
        "meaning": "1回の失敗確率 1−p を、失敗の回数 n−k だけ掛け合わせる"
       }
-     ]
+     ],
+     "tex": "P(X=k)={}_{n}\\mathrm{C}_{k}p^{k}(1-p)^{n-k}"
     },
     {
-     "tex": "E(X)=np",
+     "id": "F-binom-mean",
      "label": "期待値",
      "symbols": [
       {
@@ -5807,10 +5835,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "E(X)=np"
     },
     {
-     "tex": "V(X)=np(1-p)",
+     "id": "F-binom-var",
      "label": "分散",
      "symbols": [
       {
@@ -5883,7 +5912,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(X)=np(1-p)"
     }
    ],
    "conditions": {
@@ -5990,7 +6020,7 @@
    "principle": "二項分布で n を大きく、p を小さくし、np＝λ を保ったときに行き着く形。期待値と分散がどちらも λ になる。",
    "formulas": [
     {
-     "tex": "P(X=k)=\\dfrac{e^{-\\lambda}\\lambda^k}{k!}",
+     "id": "F-poisson-pmf",
      "symbols": [
       {
        "symbol": "P( )",
@@ -6106,10 +6136,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "P(X=k)=\\dfrac{e^{-\\lambda}\\lambda^{k}}{k!}"
     },
     {
-     "tex": "E(X)=V(X)=\\lambda",
+     "id": "F-poisson-moments",
      "label": "期待値と分散",
      "symbols": [
       {
@@ -6167,7 +6198,8 @@
         "sym": "lambda"
        }
       ]
-     }
+     },
+     "tex": "E(X)=V(X)=\\lambda"
     }
    ],
    "conditions": {
@@ -6231,7 +6263,7 @@
    "principle": "k−1 回続けて失敗してから成功する確率なので (1−p)^(k−1)p。毎回の確率が同じで独立なので、それまでの失敗は次の確率を変えない（無記憶性）。",
    "formulas": [
     {
-     "tex": "P(X=k)=(1-p)^{k-1}p\\quad(k=1,2,\\dots)",
+     "id": "F-geom-pmf",
      "symbols": [
       {
        "symbol": "P( )",
@@ -6264,7 +6296,8 @@
        "kind": "param",
        "domain": {
         "min": 0,
-        "max": 1
+        "max": 1,
+        "minOpen": true
        }
       }
      ],
@@ -6324,10 +6357,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "P(X=k)=(1-p)^{k-1}p"
     },
     {
-     "tex": "E(X)=\\frac{1}{p}",
+     "id": "F-geom-mean",
      "label": "期待値",
      "symbols": [
       {
@@ -6350,7 +6384,8 @@
        "kind": "param",
        "domain": {
         "min": 0,
-        "max": 1
+        "max": 1,
+        "minOpen": true
        }
       }
      ],
@@ -6378,10 +6413,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "E(X)=\\dfrac{1}{p}"
     },
     {
-     "tex": "V(X)=\\frac{1-p}{p^2}",
+     "id": "F-geom-var",
      "label": "分散",
      "symbols": [
       {
@@ -6404,7 +6440,8 @@
        "kind": "param",
        "domain": {
         "min": 0,
-        "max": 1
+        "max": 1,
+        "minOpen": true
        }
       }
      ],
@@ -6448,7 +6485,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(X)=\\dfrac{1-p}{p^{2}}"
     }
    ],
    "conditions": {
@@ -6507,7 +6545,7 @@
    "principle": "k 回目に r 回目の成功が起きるのは、それまでの k−1 回にちょうど r−1 回成功し、k 回目に成功するとき。並び方の数 ₖ₋₁C_{r−1} を掛ける。r＝1 なら幾何分布。",
    "formulas": [
     {
-     "tex": "P(X=k)={}_{k-1}C_{r-1}\\,p^r(1-p)^{k-r}\\quad(k=r,r+1,\\dots)",
+     "id": "F-negbinom-pmf",
      "symbols": [
       {
        "symbol": "P( )",
@@ -6653,7 +6691,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "P(X=k)={}_{k-1}\\mathrm{C}_{r-1}p^{r}(1-p)^{k-r}"
     }
    ],
    "conditions": {
@@ -6696,7 +6735,7 @@
    "principle": "取り出し方の組合せの数の比。戻さないので、1個取るたびに残りの当たりの割合が変わる（各回は独立ではない）。",
    "formulas": [
     {
-     "tex": "P(X=k)=\\frac{\\binom{M}{k}\\binom{N-M}{n-k}}{\\binom{N}{n}}",
+     "id": "F-hyper-pmf",
      "symbols": [
       {
        "symbol": "P( )",
@@ -6727,6 +6766,7 @@
        "kind": "param",
        "domain": {
         "min": 0,
+        "max": "N",
         "integer": true
        }
       },
@@ -6737,6 +6777,7 @@
        "kind": "param",
        "domain": {
         "min": 1,
+        "max": "N",
         "integer": true
        }
       },
@@ -6747,6 +6788,7 @@
        "kind": "value",
        "domain": {
         "min": 0,
+        "max": "n",
         "integer": true
        }
       },
@@ -6840,10 +6882,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "P(X=k)=\\dfrac{{}_{M}\\mathrm{C}_{k}\\,{}_{N-M}\\mathrm{C}_{n-k}}{{}_{N}\\mathrm{C}_{n}}"
     },
     {
-     "tex": "E(X)=n\\frac{M}{N}",
+     "id": "F-hyper-mean",
      "label": "期待値",
      "symbols": [
       {
@@ -6865,6 +6908,7 @@
        "kind": "param",
        "domain": {
         "min": 1,
+        "max": "N",
         "integer": true
        }
       },
@@ -6875,6 +6919,7 @@
        "kind": "param",
        "domain": {
         "min": 0,
+        "max": "N",
         "integer": true
        }
       },
@@ -6921,7 +6966,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "E(X)=n\\dfrac{M}{N}"
     }
    ],
    "conditions": {
@@ -6980,7 +7026,7 @@
    "principle": "密度 λe^(−λx)。待つほど密度が下がる、右に裾の長い形。すでに待った時間は残りの待ち時間を変えない（無記憶性）。ポアソン分布で数える出来事の間隔にあたる。",
    "formulas": [
     {
-     "tex": "f(x)=\\lambda e^{-\\lambda x}\\quad(x\\ge 0)",
+     "id": "F-expo-pdf",
      "symbols": [
       {
        "symbol": "f(x)",
@@ -7058,10 +7104,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "f(x)=\\lambda e^{-\\lambda x}"
     },
     {
-     "tex": "P(X>x)=e^{-\\lambda x}",
+     "id": "F-expo-surv",
      "label": "待ち時間が x を超える確率",
      "symbols": [
       {
@@ -7147,10 +7194,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "P(X>x)=e^{-\\lambda x}"
     },
     {
-     "tex": "E(X)=\\frac{1}{\\lambda}",
+     "id": "F-expo-mean",
      "label": "期待値",
      "symbols": [
       {
@@ -7201,10 +7249,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "E(X)=\\dfrac{1}{\\lambda}"
     },
     {
-     "tex": "V(X)=\\frac{1}{\\lambda^2}",
+     "id": "F-expo-var",
      "label": "分散",
      "symbols": [
       {
@@ -7263,7 +7312,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(X)=\\dfrac{1}{\\lambda^{2}}"
     }
    ],
    "conditions": {
@@ -7319,7 +7369,7 @@
    "principle": "連続では1点の確率は0で、確率は面積（積分）で決まる。高さ f(x) は「その付近の出やすさの密度」。",
    "formulas": [
     {
-     "tex": "P(a\\le X\\le b)=\\int_a^b f(x)\\,dx",
+     "id": "F-pdf-interval",
      "symbols": [
       {
        "symbol": "P( )",
@@ -7404,10 +7454,11 @@
         }
        }
       ]
-     }
+     },
+     "tex": "P(a\\le X\\le b)=\\int_{a}^{b}f(x)\\,dx"
     },
     {
-     "tex": "\\int_{-\\infty}^{\\infty} f(x)\\,dx=1",
+     "id": "F-pdf-total",
      "label": "全体の面積は1",
      "symbols": [
       {
@@ -7444,7 +7495,8 @@
         "num": 1
        }
       ]
-     }
+     },
+     "tex": "\\int_{-\\infty}^{\\infty}f(x)\\,dx=1"
     }
    ],
    "conditions": {
@@ -7502,7 +7554,7 @@
    "principle": "密度は 1/(b−a) で一定なので、確率は区間の長さに比例する。",
    "formulas": [
     {
-     "tex": "f(x)=\\frac{1}{b-a}\\quad(a\\le x\\le b)",
+     "id": "F-uniform-pdf",
      "symbols": [
       {
        "symbol": "f(x)",
@@ -7527,6 +7579,10 @@
        "meaning": "値のとりうる範囲の右端",
        "range": "a より大きい",
        "key": "b",
+       "domain": {
+        "min": "a",
+        "minOpen": true
+       },
        "kind": "param"
       }
      ],
@@ -7562,10 +7618,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "f(x)=\\dfrac{1}{b-a}"
     },
     {
-     "tex": "E(X)=\\frac{a+b}{2}",
+     "id": "F-uniform-mean",
      "label": "期待値",
      "symbols": [
       {
@@ -7591,6 +7648,10 @@
        "meaning": "値のとりうる範囲の右端",
        "range": "a より大きい",
        "key": "b",
+       "domain": {
+        "min": "a",
+        "minOpen": true
+       },
        "kind": "param"
       }
      ],
@@ -7626,10 +7687,11 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "E(X)=\\dfrac{a+b}{2}"
     },
     {
-     "tex": "V(X)=\\frac{(b-a)^2}{12}",
+     "id": "F-uniform-var",
      "label": "分散",
      "symbols": [
       {
@@ -7655,6 +7717,10 @@
        "meaning": "値のとりうる範囲の右端",
        "range": "a より大きい",
        "key": "b",
+       "domain": {
+        "min": "a",
+        "minOpen": true
+       },
        "kind": "param"
       }
      ],
@@ -7698,7 +7764,8 @@
         ]
        }
       ]
-     }
+     },
+     "tex": "V(X)=\\dfrac{(b-a)^{2}}{12}"
     }
    ],
    "conditions": {
