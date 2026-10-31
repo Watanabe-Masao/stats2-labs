@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 1,
- "schema_revision": 13,
+ "schema_revision": 14,
  "course": {
   "id": "stats2",
   "title": "統計検定2級",
@@ -3146,7 +3146,8 @@
        "meaning": "残した n−k 個も順番を区別しないので、その並べ方の数で割る"
       }
      ],
-     "tex": "{}_{n}\\mathrm{C}_{k}=\\dfrac{n!}{k!(n-k)!}"
+     "tex": "{}_{n}\\mathrm{C}_{k}=\\dfrac{n!}{k!(n-k)!}",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -3257,7 +3258,8 @@
        }
       ]
      },
-     "tex": "n!=\\prod_{i=1}^{n}i"
+     "tex": "n!=\\prod_{i=1}^{n}i",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -3748,7 +3750,8 @@
        }
       ]
      },
-     "tex": "V(X)=E((X-\\mu)^{2})=E(X^{2})-(E(X))^{2}"
+     "tex": "V(X)=E((X-\\mu)^{2})=E(X^{2})-(E(X))^{2}",
+     "review_pending": true
     },
     {
      "id": "F-var-linear",
@@ -3834,7 +3837,8 @@
        }
       ]
      },
-     "tex": "V(aX+b)=a^{2}V(X)"
+     "tex": "V(aX+b)=a^{2}V(X)",
+     "review_pending": true
     }
    ],
    "conditions": {
@@ -3968,7 +3972,9 @@
        }
       ]
      },
-     "tex": "\\sigma=\\sqrt{V(X)}"
+     "tex": "\\sigma=\\sqrt{V(X)}",
+     "unverified": true,
+     "review_pending": true
     }
    ],
    "conditions": {
@@ -4121,7 +4127,8 @@
        }
       ]
      },
-     "tex": "Z=\\dfrac{X-\\mu}{\\sigma}"
+     "tex": "Z=\\dfrac{X-\\mu}{\\sigma}",
+     "review_pending": true
     },
     {
      "id": "F-std-mean",
@@ -4437,7 +4444,9 @@
        }
       ]
      },
-     "tex": "f(x)=\\dfrac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\left(-\\dfrac{(x-\\mu)^{2}}{2\\sigma^{2}}\\right)"
+     "tex": "f(x)=\\dfrac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\left(-\\dfrac{(x-\\mu)^{2}}{2\\sigma^{2}}\\right)",
+     "unverified": true,
+     "review_pending": true
     }
    ],
    "conditions": {
@@ -4584,7 +4593,8 @@
        }
       ]
      },
-     "tex": "E(X)=\\sum_{x}xp(x)"
+     "tex": "E(X)=\\sum_{x}xp(x)",
+     "review_pending": true
     },
     {
      "id": "F-expect-mu",
@@ -4937,7 +4947,9 @@
        }
       ]
      },
-     "tex": "P(A\\cap B)=P(A)\\,P(B)"
+     "tex": "P(A\\cap B)=P(A)\\,P(B)",
+     "unverified": true,
+     "review_pending": true
     }
    ],
    "conditions": {
@@ -5102,7 +5114,8 @@
        }
       ]
      },
-     "tex": "P(X=x)=p(x)"
+     "tex": "P(X=x)=p(x)",
+     "unverified": true
     },
     {
      "id": "F-dist-sum",
@@ -5145,7 +5158,8 @@
       ]
      },
      "defined_in": "stats2:TERM-dist",
-     "tex": "\\sum_{x}p(x)=1"
+     "tex": "\\sum_{x}p(x)=1",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -5240,7 +5254,8 @@
        }
       ]
      },
-     "tex": "\\sum_{x}p(x)=1"
+     "tex": "\\sum_{x}p(x)=1",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -5444,7 +5459,9 @@
        }
       ]
      },
-     "tex": "\\mathrm{Cov}(X,\\,Y)=E((X-\\mu_X)(Y-\\mu_Y))=E(XY)-E(X)\\,E(Y)"
+     "tex": "\\mathrm{Cov}(X,\\,Y)=E((X-\\mu_X)(Y-\\mu_Y))=E(XY)-E(X)\\,E(Y)",
+     "unverified": true,
+     "review_pending": true
     },
     {
      "id": "F-cov-varsum",
@@ -5540,7 +5557,8 @@
        }
       ]
      },
-     "tex": "V(X+Y)=V(X)+V(Y)+2\\mathrm{Cov}(X,\\,Y)"
+     "tex": "V(X+Y)=V(X)+V(Y)+2\\mathrm{Cov}(X,\\,Y)",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -5770,7 +5788,8 @@
        "meaning": "1回の失敗確率 1−p を、失敗の回数 n−k だけ掛け合わせる"
       }
      ],
-     "tex": "P(X=k)={}_{n}\\mathrm{C}_{k}p^{k}(1-p)^{n-k}"
+     "tex": "P(X=k)={}_{n}\\mathrm{C}_{k}p^{k}(1-p)^{n-k}",
+     "review_pending": true
     },
     {
      "id": "F-binom-mean",
@@ -6137,7 +6156,9 @@
        }
       ]
      },
-     "tex": "P(X=k)=\\dfrac{e^{-\\lambda}\\lambda^{k}}{k!}"
+     "tex": "P(X=k)=\\dfrac{e^{-\\lambda}\\lambda^{k}}{k!}",
+     "unverified": true,
+     "review_pending": true
     },
     {
      "id": "F-poisson-moments",
@@ -6199,7 +6220,8 @@
        }
       ]
      },
-     "tex": "E(X)=V(X)=\\lambda"
+     "tex": "E(X)=V(X)=\\lambda",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -6358,7 +6380,8 @@
        }
       ]
      },
-     "tex": "P(X=k)=(1-p)^{k-1}p"
+     "tex": "P(X=k)=(1-p)^{k-1}p",
+     "unverified": true
     },
     {
      "id": "F-geom-mean",
@@ -6414,7 +6437,8 @@
        }
       ]
      },
-     "tex": "E(X)=\\dfrac{1}{p}"
+     "tex": "E(X)=\\dfrac{1}{p}",
+     "unverified": true
     },
     {
      "id": "F-geom-var",
@@ -6486,7 +6510,8 @@
        }
       ]
      },
-     "tex": "V(X)=\\dfrac{1-p}{p^{2}}"
+     "tex": "V(X)=\\dfrac{1-p}{p^{2}}",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -6692,7 +6717,25 @@
        }
       ]
      },
-     "tex": "P(X=k)={}_{k-1}\\mathrm{C}_{r-1}p^{r}(1-p)^{k-r}"
+     "tex": "P(X=k)={}_{k-1}\\mathrm{C}_{r-1}p^{r}(1-p)^{k-r}",
+     "conditions": [
+      {
+       "text": "r ≦ k（r 回目の成功は r 回目より前には起きない）",
+       "tree": {
+        "op": "fn",
+        "name": "le",
+        "args": [
+         {
+          "sym": "r"
+         },
+         {
+          "sym": "k"
+         }
+        ]
+       }
+      }
+     ],
+     "unverified": true
     }
    ],
    "conditions": {
@@ -6883,7 +6926,56 @@
        }
       ]
      },
-     "tex": "P(X=k)=\\dfrac{{}_{M}\\mathrm{C}_{k}\\,{}_{N-M}\\mathrm{C}_{n-k}}{{}_{N}\\mathrm{C}_{n}}"
+     "tex": "P(X=k)=\\dfrac{{}_{M}\\mathrm{C}_{k}\\,{}_{N-M}\\mathrm{C}_{n-k}}{{}_{N}\\mathrm{C}_{n}}",
+     "conditions": [
+      {
+       "text": "k ≦ M（当たりの数より多くは引けない）",
+       "tree": {
+        "op": "fn",
+        "name": "le",
+        "args": [
+         {
+          "sym": "k"
+         },
+         {
+          "sym": "M"
+         }
+        ]
+       }
+      },
+      {
+       "text": "n−(N−M) ≦ k（外れを全部引いても足りない分は当たり）",
+       "tree": {
+        "op": "fn",
+        "name": "ge",
+        "args": [
+         {
+          "sym": "k"
+         },
+         {
+          "op": "sub",
+          "args": [
+           {
+            "sym": "n"
+           },
+           {
+            "op": "sub",
+            "args": [
+             {
+              "sym": "N"
+             },
+             {
+              "sym": "M"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      }
+     ],
+     "unverified": true
     },
     {
      "id": "F-hyper-mean",
@@ -6967,7 +7059,8 @@
        }
       ]
      },
-     "tex": "E(X)=n\\dfrac{M}{N}"
+     "tex": "E(X)=n\\dfrac{M}{N}",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -7105,7 +7198,9 @@
        }
       ]
      },
-     "tex": "f(x)=\\lambda e^{-\\lambda x}"
+     "tex": "f(x)=\\lambda e^{-\\lambda x}",
+     "unverified": true,
+     "review_pending": true
     },
     {
      "id": "F-expo-surv",
@@ -7195,7 +7290,8 @@
        }
       ]
      },
-     "tex": "P(X>x)=e^{-\\lambda x}"
+     "tex": "P(X>x)=e^{-\\lambda x}",
+     "unverified": true
     },
     {
      "id": "F-expo-mean",
@@ -7250,7 +7346,8 @@
        }
       ]
      },
-     "tex": "E(X)=\\dfrac{1}{\\lambda}"
+     "tex": "E(X)=\\dfrac{1}{\\lambda}",
+     "unverified": true
     },
     {
      "id": "F-expo-var",
@@ -7313,7 +7410,8 @@
        }
       ]
      },
-     "tex": "V(X)=\\dfrac{1}{\\lambda^{2}}"
+     "tex": "V(X)=\\dfrac{1}{\\lambda^{2}}",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -7455,7 +7553,25 @@
        }
       ]
      },
-     "tex": "P(a\\le X\\le b)=\\int_{a}^{b}f(x)\\,dx"
+     "tex": "P(a\\le X\\le b)=\\int_{a}^{b}f(x)\\,dx",
+     "conditions": [
+      {
+       "text": "a ≦ b",
+       "tree": {
+        "op": "fn",
+        "name": "le",
+        "args": [
+         {
+          "sym": "a"
+         },
+         {
+          "sym": "b"
+         }
+        ]
+       }
+      }
+     ],
+     "unverified": true
     },
     {
      "id": "F-pdf-total",
@@ -7496,7 +7612,8 @@
        }
       ]
      },
-     "tex": "\\int_{-\\infty}^{\\infty}f(x)\\,dx=1"
+     "tex": "\\int_{-\\infty}^{\\infty}f(x)\\,dx=1",
+     "unverified": true
     }
    ],
    "conditions": {
@@ -7619,7 +7736,8 @@
        }
       ]
      },
-     "tex": "f(x)=\\dfrac{1}{b-a}"
+     "tex": "f(x)=\\dfrac{1}{b-a}",
+     "unverified": true
     },
     {
      "id": "F-uniform-mean",
@@ -7688,7 +7806,8 @@
        }
       ]
      },
-     "tex": "E(X)=\\dfrac{a+b}{2}"
+     "tex": "E(X)=\\dfrac{a+b}{2}",
+     "unverified": true
     },
     {
      "id": "F-uniform-var",
@@ -7765,7 +7884,8 @@
        }
       ]
      },
-     "tex": "V(X)=\\dfrac{(b-a)^{2}}{12}"
+     "tex": "V(X)=\\dfrac{(b-a)^{2}}{12}",
+     "unverified": true
     }
    ],
    "conditions": {
