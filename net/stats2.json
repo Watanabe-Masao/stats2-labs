@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 1,
- "schema_revision": 15,
+ "schema_revision": 16,
  "course": {
   "id": "stats2",
   "title": "統計検定2級",
@@ -6016,6 +6016,93 @@
       ]
      },
      "tex": "V(X)=np(1-p)"
+    },
+    {
+     "id": "F-expect-linear",
+     "label": "線形性",
+     "symbols": [
+      {
+       "symbol": "E( )",
+       "meaning": "期待値（値×確率を足す。連続なら密度で重み付けして積分）",
+       "key": "E",
+       "concept": "stats2:TERM-expect"
+      },
+      {
+       "symbol": "X",
+       "meaning": "確率変数",
+       "key": "X",
+       "kind": "rv"
+      },
+      {
+       "symbol": "a",
+       "meaning": "掛ける定数（単位の換算）",
+       "key": "a",
+       "kind": "const"
+      },
+      {
+       "symbol": "b",
+       "meaning": "足す定数（一律の上乗せ）",
+       "key": "b",
+       "kind": "const"
+      }
+     ],
+     "tree": {
+      "op": "eq",
+      "args": [
+       {
+        "op": "fn",
+        "args": [
+         {
+          "op": "add",
+          "args": [
+           {
+            "op": "mul",
+            "args": [
+             {
+              "sym": "a"
+             },
+             {
+              "sym": "X"
+             }
+            ]
+           },
+           {
+            "sym": "b"
+           }
+          ]
+         }
+        ],
+        "name": "E"
+       },
+       {
+        "op": "add",
+        "args": [
+         {
+          "op": "mul",
+          "args": [
+           {
+            "sym": "a"
+           },
+           {
+            "op": "fn",
+            "args": [
+             {
+              "sym": "X"
+             }
+            ],
+            "name": "E"
+           }
+          ]
+         },
+         {
+          "sym": "b"
+         }
+        ]
+       }
+      ]
+     },
+     "defined_in": "stats2:TERM-expect",
+     "tex": "E(aX+b)=aE(X)+b"
     }
    ],
    "conditions": {
@@ -6044,7 +6131,8 @@
      "p"
     ],
     "over": "k",
-    "mean": 1
+    "mean": 1,
+    "linear": 3
    },
    "labs": [
     {
