@@ -196,6 +196,67 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 </div>
 <script>
 window.__LABPRESETS__={"s1-p1": {"mode": "p1", "set": {"side": "two", "alpha": 0.05, "x": 30, "n": 100, "p0": 0.2}, "task": "例年の購入率20%。今年は100人中30人が購入。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "SE は p₀ から √(0.2×0.8÷100)＝0.04、z＝0.1÷0.04＝2.5、p≒0.012。5%で棄却する。"}, "s1-var": {"mode": "var", "set": {"side": "two", "alpha": 0.05, "n": 10, "s2": 16, "v0": 9}, "task": "基準の分散9。10回測った不偏分散は16。両側5%で H₀（σ²＝9）をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "χ²＝9×16÷9＝16。χ²(9) の境目2.700と19.023の間にあるので棄却しない。s² が基準の約1.8倍でも、10回では偶然の範囲。"}, "s1-p2": {"mode": "p2", "set": {"side": "two", "alpha": 0.05, "x1": 20, "n1": 100, "x2": 30, "n2": 100}, "task": "A店は100人中20人、B店は100人中30人が購入。両側5%で「差がない」をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "p̄＝0.25、SE≒0.0612、z≒−1.63。各200人（40人と60人）にすると z≒−2.31 で棄却する。"}, "s3-free": {"mode": "p1", "modes": ["p1", "p2", "var", "ratio"], "task": "解いてから、何の検定か（1つの比率・2つの比率・母分散・分散の比）に合うモードで確かめる。"}, "s4-free": {"mode": "p2", "modes": ["p1", "p2", "var", "ratio"], "task": "自分の売場の数字（購入数と人数、日々のばらつき）を入れ、z・χ²・F と p 値を読む。"}, "s5-free": {"mode": "p1", "modes": ["p1", "p2"], "task": "「1つの比率」で np₀ が5未満になる n にして、正規近似と二項分布の p 値を比べる（発展1）。「2つの比率」で z² を見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（1つの比率、2つの比率、母分散、分散の比）。"}, "Q-U26-001": {"mode": "p1", "set": {"side": "two", "alpha": 0.05, "x": 220, "n": 400, "p0": 0.5}, "task": "400人中220人、基準 p₀＝0.5。両側の z は（小数で）？", "predict": {"type": "number", "key": "z", "label": "z"}, "why": "SE＝√(0.25÷400)＝0.025、z＝0.05÷0.025＝2。p≒0.046 で5%以下。"}, "Q-U26-002": {"mode": "p2", "set": {"side": "two", "alpha": 0.05, "x1": 40, "n1": 200, "x2": 60, "n2": 200}, "task": "A店200人中40人、B店200人中60人。両側5%で「差がない」をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "z≒−2.31、p≒0.021。各100人に戻すと z≒−1.63 で棄却しない。"}, "Q-U26-003": {"mode": "p1", "set": {"side": "upper", "alpha": 0.05, "x": 28, "n": 400, "p0": 0.05}, "task": "400個中28個が不良、基準5%。右片側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "z≒1.84、右側の面積は約0.033。両側にすると約0.066 で5%を超える。片側か両側かは先に決める。"}, "Q-U26-004": {"mode": "var", "set": {"side": "upper", "alpha": 0.05, "n": 16, "s2": 7, "v0": 4}, "task": "基準 σ₀²＝4、16袋の s²＝7。右片側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "χ²＝26.25 が境目24.996 を超える（p≒0.035）。s²＝6 にすると χ²＝22.5 で棄却しない。"}, "Q-U26-005": {"mode": "ratio", "set": {"side": "two", "alpha": 0.05, "n1": 13, "s1": 900, "n2": 11, "s2": 400}, "task": "店A（13日、s²＝900）と店B（11日、s²＝400）。両側5%で H₀（ばらつきが同じ）をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "F＝2.25 は上側の点3.621 より小さい（p≒0.21）。分散が2倍以上違って見えても、10日ほどでは偶然の範囲。"}, "Q-U26-010": {"mode": "p1", "set": {"side": "two", "alpha": 0.05, "x": 40, "n": 100, "p0": 0.3}, "task": "100人中40人、基準 p₀＝0.3。検定の SE は（小数で）？", "predict": {"type": "number", "key": "se", "label": "検定の SE"}, "why": "√(0.3×0.7÷100)≒0.0458。「くわしく」の区間推定の SE（p̂ で作る）は約0.049。"}, "Q-U26-011": {"mode": "p2", "set": {"side": "two", "alpha": 0.05, "x1": 200, "n1": 1000, "x2": 240, "n2": 1000}, "task": "A 1000人中200人、B 1000人中240人。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "z≒−2.16、p≒0.031。各100人（20人と24人）なら z≒−0.68 で、とても有意にならない。"}, "Q-U26-012": {"mode": "p1", "set": {"side": "two", "alpha": 0.05, "x": 15, "n": 20, "p0": 0.5}, "task": "20回中15回、p₀＝0.5。正規近似の z は（小数で）？", "predict": {"type": "number", "key": "z", "label": "z"}, "why": "z≒2.24、p≒0.025。「くわしく」の二項分布の p 値は約0.041。人数が少ないと、近似の p 値は直接計算とずれる。"}, "Q-U26-020": {"mode": "ratio", "set": {"side": "two", "alpha": 0.05, "n1": 16, "s1": 2.5, "n2": 16, "s2": 1}, "task": "旧レジ s²＝2.5、新レジ s²＝1（各16回）。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "F＝2.5 は上側2.5%点2.862 より小さい（p≒0.086）。右片側に切り替えると境目は2.403 で棄却する。"}, "Q-U26-021": {"mode": "var", "set": {"side": "lower", "alpha": 0.05, "n": 21, "s2": 4.5, "v0": 9}, "task": "σ₀²＝9、21個の s²＝4.5。左片側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "χ²＝10 は左側の境目10.851 より小さく、左側の面積は約0.032。"}, "Q-U26-022": {"mode": "p1", "set": {"side": "upper", "alpha": 0.05, "x": 4, "n": 30, "p0": 0.05}, "task": "30個中4個、基準5%、右片側。二項分布で直接計算した p 値は（小数で）？", "predict": {"type": "number", "key": "pexact", "label": "二項分布の p 値"}, "why": "P(X≧4)≒0.061 で棄却しない。正規近似の p 値（約0.018）は小さすぎる。np₀＝1.5 では近似が崩れる。"}, "Q-U26-023": {"mode": "p2", "set": {"side": "two", "alpha": 0.05, "x1": 20, "n1": 100, "x2": 30, "n2": 100}, "task": "A店100人中20人、B店100人中30人。H₀ のもとでの合わせた比率 p̄ は（小数で）？", "predict": {"type": "number", "key": "pool", "label": "p̄"}, "why": "(20＋30)÷200＝0.25。SE はこの p̄ で作る。「くわしく」の区間推定の SE（各群の p̂）と比べる。"}, "Q-U26-030": {"mode": "p2", "set": {"side": "two", "alpha": 0.05, "x1": 90, "n1": 500, "x2": 60, "n2": 500}, "task": "A 500人中90人、B 500人中60人。両側の z は（小数で）？", "predict": {"type": "number", "key": "z", "label": "z"}, "why": "z≒2.66、p≒0.008。差の区間が0を含まないことと一致する。"}, "Q-U26-031": {"mode": "var", "set": {"side": "upper", "alpha": 0.05, "n": 25, "s2": 6.76, "v0": 4}, "task": "σ₀²＝4、25袋の s²＝6.76。右片側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "χ²＝40.56 が境目36.415 を超える（p≒0.019）。"}, "Q-U26-032": {"mode": "p1", "set": {"side": "two", "alpha": 0.05, "x": 135, "n": 250, "p0": 0.6}, "task": "250人中135人、基準 p₀＝0.6。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "z≒−1.94、p≒0.053。わずかに5%を超える。左片側に切り替えると約0.026。"}, "Q-U26-040": {"mode": "p2", "set": {"side": "two", "alpha": 0.05, "x1": 20, "n1": 100, "x2": 30, "n2": 100}, "task": "A店100人中20人、B店100人中30人。z² は（小数で）？（「くわしく」に出る）", "predict": {"type": "number", "key": "chi2", "label": "z²"}, "why": "z²＝(−1.633)²≒2.667。自由度1の χ² の点3.841 は1.96² と同じ。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -337,7 +398,8 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$,esc=LK.esc;

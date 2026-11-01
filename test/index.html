@@ -183,6 +183,67 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 </div>
 <script>
 window.__LABPRESETS__={"s1-z": {"mode": "z", "set": {"side": "two", "alpha": 0.05, "xbar": 104.4, "mu0": 100, "sigma": 10, "n": 25}, "task": "従来の平均100・σ＝10。25人の平均が104.4。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "z＝4.4÷2＝2.2、p＝2×(1−Φ(2.2))≒0.028。0.05 以下なので H₀ を棄却する。α＝1% なら棄却しない。"}, "s1-power": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 104, "sigma": 10, "n": 25}, "task": "本当の平均が104のとき、25人・両側5%の検定で H₀（μ＝100）を棄却できる確率（検出力）は（小数で）？", "predict": {"type": "number", "key": "power", "label": "検出力 1−β"}, "why": "本当の z の中心は 4÷2＝2。境目1.96を超える確率は約0.52。約半分は差を見逃す（β≒0.48）。n を100にすると約0.98。"}, "s3-free": {"mode": "z", "modes": ["z", "power", "multi"], "task": "解いてから、問題が聞いていること（p 値と判断か、検出力と過誤か、何度も検定することか）に合うモードで確かめる。"}, "s4-free": {"mode": "z", "modes": ["z", "power", "multi"], "task": "自分の売場の数字（基準の平均、施策後の平均、σ、人数）を入れ、p 値と、その人数で差を見つけられる確率を読む。"}, "s3-rule": {"mode": "power", "steps": [{"label": "n＝25・差4・α5%", "task": "本当の平均104、σ＝10、25人、両側5%。検出力は（小数で）？", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 104, "sigma": 10, "n": 25}, "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "本当の z の中心は 4÷2＝2。境目1.96 をやっと超える位置なので、約半分。"}, {"label": "n＝100（4倍）", "task": "人数だけを4倍の100人にする。検出力は（小数で）？", "set": {"n": 100}, "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "SE が半分の1になり、中心が2から4へ。人数を4倍にすると中心が2倍になる。"}, {"label": "n＝100・差2（半分）", "task": "100人のまま、本当の差を半分の2（μ₁＝102）にする。検出力は（小数で）？", "set": {"mu1": 102}, "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "1つ目と同じ値に戻った。差を半分にしても、人数を4倍にすれば中心は同じ2。"}, {"label": "n＝25・差4・α1%", "task": "1つ目の条件に戻し、有意水準だけを1%にする。検出力は（小数で）？", "set": {"alpha": 0.01, "mu1": 104, "n": 25}, "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "境目が2.576 に外へ動き、中心2 の山の大半が内側に入る。"}], "law": {"title": "式で説明する", "lines": ["本当の z の中心 ＝ (μ₁−μ₀)÷(σ÷√n) ＝ Δ×√n÷σ", "検出力 ≒ P(Z ＞ 境目 − Δ×√n÷σ)", "Δ を半分にしても、√n が2倍（n が4倍）なら中心は同じ"], "text": "検出力は「差 Δ」「人数 n」「ばらつき σ」が Δ×√n÷σ の形でまとめて効き、境目（α）で決まる。だから必要な人数は n≒((境目＋0.84)×σ÷Δ)² と見積もれる（発展2）。", "limit": "σ を知らずに s で代わりにする（t 検定）と、少ない n では境目が外へ動き、検出力はこの見積もりより低くなる。店ごとの効果がばらばら（平均だけでは語れない）なときも、この式の外。"}}, "s5-free": {"mode": "power", "modes": ["power", "multi"], "task": "「検出力と過誤」で μ₁ を μ₀ に重ねたとき検出力が α になることを見る（発展1）。「何度も検定」で α÷k の調整を切り替える（発展3）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（z 検定と p 値、検出力と過誤、何度も検定）。"}, "Q-U24-001": {"mode": "z", "set": {"side": "upper", "alpha": 0.05, "xbar": 104, "mu0": 100, "sigma": 12, "n": 36}, "task": "μ₀＝100、σ＝12、36人の平均104。右片側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "z＝2、右側の面積は約0.023。両側にすると2倍の約0.046 で、どちらでも5%以下。"}, "Q-U24-002": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 105.6, "sigma": 10, "n": 25}, "task": "μ₀＝100、本当の μ₁＝105.6、σ＝10、25人、両側5%。第2種の過誤の確率 β は（小数で）？", "predict": {"type": "number", "key": "beta", "label": "β"}, "why": "本当の z の中心は 5.6÷2＝2.8。境目1.96を超える確率（検出力）が約0.80、見逃す確率 β が約0.20。"}, "Q-U24-003": {"mode": "z", "set": {"side": "two", "alpha": 0.05, "xbar": 103, "mu0": 100, "sigma": 10, "n": 25}, "task": "μ₀＝100、σ＝10、25人の平均103。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "z＝1.5、p≒0.13。偶然でもこれくらいのずれは13%ほど起こる。"}, "Q-U24-004": {"mode": "z", "set": {"side": "upper", "alpha": 0.05, "xbar": 103.6, "mu0": 100, "sigma": 10, "n": 25}, "task": "μ₀＝100、σ＝10、25人の平均103.6。右片側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "右側だけの面積で約0.036。両側に切り替えると約0.072 で5%を超える。"}, "Q-U24-005": {"mode": "multi", "set": {"alpha": 0.05, "k": 20, "bonf": false}, "task": "本当は差がない検定を5%で20回。どれかが有意になる確率は（小数で）？", "predict": {"type": "number", "key": "fwer", "label": "どれかが有意になる確率"}, "why": "1−0.95²⁰≒0.64。「α÷k で判断」に切り替えると約0.049 に下がる。"}, "Q-U24-010": {"mode": "z", "set": {"side": "two", "alpha": 0.01, "xbar": 104.4, "mu0": 100, "sigma": 10, "n": 25}, "task": "例題Aの数で、有意水準1%（両側）。H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "境目が2.576 に広がり、z＝2.2 は内側。α を5%に戻すと棄却する。"}, "Q-U24-011": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 104, "sigma": 10, "n": 100}, "task": "μ₀＝100、μ₁＝104、σ＝10、n＝100、両側5%。検出力は（小数で）？", "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "中心4が境目1.96を大きく超え、ほとんど見逃さない。n＝25 では約0.52。"}, "Q-U24-012": {"mode": "z", "set": {"side": "two", "alpha": 0.05, "xbar": 50, "mu0": 52, "sigma": 10, "n": 100}, "task": "x̄＝50、μ₀＝52、σ＝10、n＝100。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "z＝−2、p≒0.046。μ₀ を51 にすると z＝−1、区間の中なので棄却しない。"}, "Q-U24-020": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 104, "sigma": 10, "n": 25}, "task": "μ₀＝100、μ₁＝104、σ＝10、両側5%。検出力0.8 に必要な最小の n は？", "predict": {"type": "number", "key": "n80", "label": "必要な n"}, "why": "n＝49 で約0.7995、50 で約0.807。表の0.84 を使った見積もり49 は、ちょうど境目。"}, "Q-U24-021": {"mode": "power", "set": {"side": "two", "alpha": 0.01, "mu0": 100, "mu1": 104, "sigma": 10, "n": 25}, "task": "μ₁＝104、n＝25、両側1%。検出力は（小数で）？", "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "境目が2.576 に広がり、本当の中心2 の山の大半が内側に入る。α と β は片方を減らすともう片方が増える。"}, "Q-U24-022": {"mode": "multi", "set": {"alpha": 0.05, "k": 10, "bonf": true}, "task": "10回の検定を α÷10 で判断する。どれかが偶然有意になる確率は（小数で）？", "predict": {"type": "number", "key": "fwer", "label": "どれかが有意になる確率"}, "why": "1−0.995¹⁰≒0.049。調整を外すと約0.40。"}, "Q-U24-023": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 104, "sigma": 10, "n": 25}, "task": "μ₁＝104、n＝25、両側5%。検出力は（小数で）？（α を1%に変えて比べる）", "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "約0.52。α を1%にすると約0.28 に下がり、β が増える。"}, "Q-U24-030": {"mode": "z", "set": {"side": "two", "alpha": 0.05, "xbar": 1060, "mu0": 1000, "sigma": 300, "n": 100}, "task": "μ₀＝1000、σ＝300、100人の平均1060。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "z＝2 で境目1.96をわずかに超える（p≒0.046）。50人なら z≒1.41 で棄却しない。"}, "Q-U24-031": {"mode": "z", "set": {"side": "two", "alpha": 0.05, "xbar": 1006, "mu0": 1000, "sigma": 300, "n": 10000}, "task": "μ₀＝1000、σ＝300、1万人の平均1006。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "SE が3円しかないので、6円の差でも z＝2。有意かどうかと、差が大きいかどうかは別。"}, "Q-U24-032": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 1000, "mu1": 1100, "sigma": 300, "n": 16}, "task": "σ＝300、本当の差100円、16店、両側5%。検出力は（小数で）？", "predict": {"type": "number", "key": "power", "label": "検出力"}, "why": "約0.27。検出力0.8 にするには71店が要る（「必要な n」を見る）。"}, "Q-U24-040": {"mode": "power", "set": {"side": "two", "alpha": 0.05, "mu0": 100, "mu1": 100, "sigma": 10, "n": 25}, "task": "μ₁＝μ₀＝100、両側5%。「検出力」（棄却する確率）は（小数で）？", "predict": {"type": "number", "key": "power", "label": "棄却する確率"}, "why": "約0.05。H₀ が正しいときに棄却するのは第1種の過誤。μ₁ を少しずつ動かすと、検出力が0.05 から上がっていく。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -324,7 +385,8 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$,esc=LK.esc;
@@ -334,7 +396,7 @@ function erf(x){const s=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.5*x);const y=t*Mat
 const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
 const dn=x=>Math.exp(-x*x/2)/Math.sqrt(2*Math.PI);
 const ZQ={two:{"0.1":1.645,"0.05":1.96,"0.01":2.576},one:{"0.1":1.282,"0.05":1.645,"0.01":2.326}};   // 2級の数表の値
-function rng(s){let seed=s;return ()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};}
+function rng(s){return LK.rng(s);}
 function curve(shade,lines,label,curves){const H=150,L=12,R=W-12,base=H-26,top=26,x0=-4.5,x1=4.5,X=x=>L+(x-x0)/(x1-x0)*(R-L),cs=curves||[{m:0,col:"var(--acc)"}],mx=dn(0)*1.1,Y=y=>base-y/mx*(base-top);
 let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="${esc(label)}">`;
 shade.forEach(([a,b,c,m])=>{const lo=Math.max(a,x0),hi=Math.min(b,x1);if(hi<=lo)return;let p=`M${X(lo).toFixed(1)} ${base}`;for(let i=0;i<=60;i++){const x=lo+(hi-lo)*i/60;p+=` L${X(x).toFixed(1)} ${Y(dn(x-(m||0))).toFixed(1)}`;}s+=`<path d="${p} L${X(hi).toFixed(1)} ${base} Z" fill="${c}" fill-opacity=".45"/>`;});

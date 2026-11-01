@@ -186,6 +186,67 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 </div>
 <script>
 window.__LABPRESETS__={"s1-t": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 104, "mu0": 100, "s": 8, "n": 16}, "task": "16店の平均104・s＝8、基準100。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t＝4÷2＝2.0、自由度15。p≒0.064 で5%を超える。正規なら p≒0.046 で棄却してしまうが、s で代わりにしたぶん t 分布の裾が重い。"}, "s1-df": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 104, "mu0": 100, "s": 8, "n": 16}, "task": "16店（自由度15）、両側5%。t の境目は（小数で）？", "predict": {"type": "number", "key": "crit", "label": "境目 t"}, "why": "約2.131。正規の1.96より外側。n を5に減らすと2.776、100に増やすと1.984 に近づく。"}, "s3-free": {"mode": "one", "modes": ["one", "paired", "two"], "task": "解いてから、データの取り方（基準と比べる1標本・同じ対象の前後・別々の2群）に合うモードで確かめる。"}, "s4-free": {"mode": "two", "modes": ["two", "paired", "one"], "task": "自分の売場の数字（2店の平均・標準偏差・日数、施策前後の差）を入れ、p 値と判断を読む。2群ではウェルチと等分散を切り替えて比べる。"}, "s5-free": {"mode": "one", "modes": ["one", "two"], "task": "「1標本」で n を増やし、境目が1.96 に近づく様子を見る（発展1）。「2群」でばらつきと人数を変え、ウェルチの自由度がどう変わるかを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（1標本、対応あり、2群）。"}, "Q-U25-001": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 2, "sd": 5, "n": 25}, "task": "同じ25店の前後の差は平均2万円、差の標準偏差5万円。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t＝2、自由度24で p≒0.057。5%をわずかに超えるので棄却しない。差の区間が0を含むのと同じ判断。"}, "Q-U25-002": {"mode": "two", "set": {"method": "welch", "side": "two", "alpha": 0.05, "x1": 30, "s1": 2, "n1": 10, "x2": 25, "s2": 8, "n2": 20}, "task": "店A（10日・平均30・s＝2）と店B（20日・平均25・s＝8）。ウェルチの t 検定（両側5%）で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t≒2.64、p≒0.015。方法を「等分散を仮定」に変えると t≒1.93・p≒0.064 で棄却しない。"}, "Q-U25-003": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 53, "mu0": 48, "s": 6, "n": 9}, "task": "9店の平均53・s＝6、目標48。t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝2、t＝2.5。自由度8の境目2.306を超え、p≒0.037 で棄却する。"}, "Q-U25-004": {"mode": "two", "set": {"method": "pooled", "side": "two", "alpha": 0.05, "x1": 12, "s1": 2, "n1": 10, "x2": 10, "s2": 2, "n2": 10}, "task": "10店ずつ、平均12と10、どちらも s＝2。等分散を仮定した t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE≒0.8944、t≒2.236。ウェルチに切り替えても同じ値になる（人数とばらつきが同じとき）。"}, "Q-U25-005": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 3, "sd": 2.4, "n": 8}, "task": "同じ8店の前後の差は平均3・標準偏差2.4。対応ありの t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "t≒3.54、p≒0.010 で棄却する。「2群」で 53・s10・8店 と 50・s10・8店 を入れると t＝0.6 で棄却しない。"}, "Q-U25-010": {"mode": "one", "set": {"side": "upper", "alpha": 0.05, "xbar": 104, "mu0": 100, "s": 8, "n": 16}, "task": "例題Aの数で、右片側5%。H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "右側だけの面積で p≒0.032。両側に戻すと p≒0.064 で棄却しない。"}, "Q-U25-011": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 1.2, "sd": 2, "n": 10}, "task": "同じ10人の前後の差は平均1.2・標準偏差2。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t≒1.90、自由度9で p≒0.090。人数を増やすと、同じ平均差でも有意になりやすい。"}, "Q-U25-012": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": 2, "sd": 1.5, "n": 8}, "task": "同じ8店の前後の差は平均2・標準偏差1.5。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t≒3.77、p≒0.007。区間（0.746〜3.254）が0を含まないことと同じ結論。"}, "Q-U25-020": {"mode": "two", "set": {"method": "welch", "side": "two", "alpha": 0.05, "x1": 68, "s1": 3, "n1": 12, "x2": 62, "s2": 9, "n2": 8}, "task": "店A（12日・平均68・s＝3）と店B（8日・平均62・s＝9）。ウェルチの両側 p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "p≒0.11 で棄却しない。等分散に切り替えると p≒0.044 で棄却してしまう。"}, "Q-U25-021": {"mode": "one", "set": {"side": "lower", "alpha": 0.05, "xbar": 57, "mu0": 60, "s": 6, "n": 12}, "task": "12回の平均57秒・s＝6、従来60秒。左片側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t≒−1.73、p≒0.056。境目は t(11) の−1.796 で、正規の−1.645 より外側。"}, "Q-U25-022": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 105, "mu0": 100, "s": 5, "n": 6}, "task": "6店の平均105・s＝5、基準100。両側5%の t の境目は（小数で）？", "predict": {"type": "number", "key": "crit", "label": "境目 t"}, "why": "約2.571。t≒2.45 は1.96 は超えるが、この境目には届かない。"}, "Q-U25-023": {"mode": "two", "set": {"method": "pooled", "side": "two", "alpha": 0.05, "x1": 68, "s1": 3, "n1": 12, "x2": 62, "s2": 9, "n2": 8}, "task": "店A（12日・平均68・s＝3）と店B（8日・平均62・s＝9）を、等分散を仮定して検定。H₀ をどうするか（このあとウェルチに切り替えて比べる）。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "等分散では p≒0.044 で棄却するが、ウェルチでは p≒0.11 で棄却しない。ばらつきの違いを無視すると差を言いすぎる。"}, "Q-U25-030": {"mode": "two", "set": {"method": "welch", "side": "two", "alpha": 0.05, "x1": 1250, "s1": 300, "n1": 40, "x2": 1120, "s2": 200, "n2": 50}, "task": "店A（40日・1250円・s＝300）と店B（50日・1120円・s＝200）。ウェルチの t の値は（小数で）？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "t≒2.35、p≒0.022。自由度≒65 で、境目は1.997。日数が多いと t と正規の差は小さい。"}, "Q-U25-031": {"mode": "paired", "set": {"side": "two", "alpha": 0.05, "dbar": -4, "sd": 6, "n": 20}, "task": "同じ20人の差（新−旧）は平均−4秒・標準偏差6秒。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "t≒−2.98、p≒0.008。差の平均が負でも、両側なら |t| で判断する。"}, "Q-U25-032": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 498.5, "mu0": 500, "s": 3, "n": 25}, "task": "25袋の平均498.5g・s＝3、表示500g。両側5%で H₀ をどうするか。", "predict": {"type": "choice", "key": "decision", "label": "H₀ を", "options": ["棄却する", "棄却しない"]}, "why": "t＝−2.5、p≒0.020。平均を499 にすると t≒−1.67 で棄却しない。"}, "Q-U25-040": {"mode": "one", "set": {"side": "two", "alpha": 0.05, "xbar": 102.1, "mu0": 100, "s": 8, "n": 64}, "task": "64店の平均102.1・s＝8、基準100（t＝2.1、自由度63）。両側の p 値は（小数で）？", "predict": {"type": "number", "key": "p", "label": "p 値"}, "why": "p≒0.040 で棄却する。n を16、平均を104.2 にすると同じ t＝2.1 でも p≒0.053 で棄却しない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -327,7 +388,8 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$,esc=LK.esc;

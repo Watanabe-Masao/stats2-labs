@@ -191,6 +191,67 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 </div>
 <script>
 window.__LABPRESETS__={"s1-rand": {"mode": "rand", "set": {"n": 10}, "task": "n＝10 のまま「10回続けて」を押すと、x̄ は毎回同じか、変わるか。", "predict": {"type": "choice", "key": "varies", "label": "x̄ は", "options": ["毎回同じ", "毎回変わる"]}, "why": "x̄ は選んだ店で決まる統計量なので、取り直すたびに変わり μ のまわりに散らばる。n を100にすると全数調査になり、毎回 μ と一致する。"}, "s2-frame": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "漏れ20%のまま n を10→60に増やして「20回取り直す」を押す。x̄ の平均は μ（2.54%）に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿に載っていない店（廃棄率が高め）は選ばれないので、x̄ は名簿内の平均（2.36%）に集まる。n を増やしても μ には近づかない。"}, "s4-bias": {"mode": "frame", "modes": ["frame", "resp"], "task": "「名簿の漏れ」と「自分から回答」を順に動かし、上の表のどの場面がどちらの偏りに当たるかを考える。"}, "s5-rand": {"mode": "rand", "set": {"n": 10}, "task": "n を 10 → 50 → 90 → 100 と増やして「10回続けて」を押し、x̄ のばらつき（標準偏差）がどう小さくなるかを見る。"}, "s6-free": {"mode": "rand", "modes": ["rand", "frame", "resp"], "task": "自分の設計や考え方を、3つのモードで確かめる（無作為なら μ のまわりに集まるか、偏りがあればどちらにずれるか）。"}, "Q-U03-020": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "アプリを使わない客が名簿から漏れるのと同じ形。漏れ20%のまま n を増やして「20回取り直す」を押すと、x̄ の平均は μ に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿にいない店（廃棄率が高め）は選ばれないので、n を増やしても x̄ は名簿内の平均に集まり、μ には近づかない。"}, "Q-U03-021": {"mode": "resp", "set": {"k": 6}, "task": "廃棄率の低い店ほど返事をしやすい（偏りの強さ6）。「20回続けて」を押すと、返事の平均は μ と比べてどうなるか。", "predict": {"type": "choice", "key": "direction", "label": "返事の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "返事をする店が偏っていると、何回集めてもずれは消えない（口コミの件数を増やしても同じ）。偏りの強さを0にすると μ のまわりに集まる。"}, "Q-U03-024": {"mode": "space", "set": {"ev": "4,5,6"}, "task": "事象「4以上」の確率 P(A) はいくつか（小数で）。", "predict": {"type": "number", "key": "prob", "label": "P(A)"}, "why": "4以上＝{4, 5, 6} の3通り。「偶数」を押すと {2, 4, 6} も3通りで、同じ 1/2 になる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -332,19 +393,20 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$;
-function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
-const g=rng(3);
+const g=LK.rng(3);
 const POP=[];for(let i=0;i<100;i++){const z=(g()+g()+g()-1.5)*1.6;POP.push(Math.round((2.5+z*0.6)*10)/10);}
 const ORDER=[...POP.keys()].sort((a,b)=>POP[b]-POP[a]);
 const MU=POP.reduce((s,x)=>s+x,0)/100;
 const fmt=x=>x.toFixed(2)+"%";
 const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
 const NEAR=0.05;   // μ との差がこれ以下なら「ほぼ μ」
-function pick(idx,n,r=Math.random){const a=idx.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
+const RA=LK.rng(LK.cfg.seed??1);
+function pick(idx,n,r=RA){const a=idx.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,n);}
 function grid(state){ // state: i -> "sel"|"off"|""
 const s=22,W=10*s+4;let h=`<svg viewBox="0 0 ${W} ${W}" width="${W}" role="img" aria-label="100店">`;
 for(let i=0;i<100;i++){const x=2+(i%10)*s+s/2,y=2+Math.floor(i/10)*s+s/2;const st=state[i]||"";
@@ -401,7 +463,7 @@ let t="";if(qHist.length){t+=`<div class="big">返事の平均 ＝ ${fmt(qHist[q
 if(k===0)t+='<div class="mut">偏りの強さ 0：返事のしやすさが廃棄率と無関係なので、ずれはほぼ消える。</div>';}
 else t='<span class="mut">「20回続けて」を押す。偏りの強さを0にして比べる。</span>';
 $("qsum").innerHTML=t;$("qstrip").innerHTML=strip(qHist,MU,true,"回答の平均の履歴");}
-function qDraw(times){const k=+$("qk").value;for(let t=0;t<times;t++){qLast=[...POP.keys()].filter(i=>Math.random()<respProb(POP[i],k));if(!qLast.length)qLast=[0];qHist.push(mean(qLast.map(i=>POP[i])));qN.push(qLast.length);}qRender();}
+function qDraw(times){const k=+$("qk").value;for(let t=0;t<times;t++){qLast=[...POP.keys()].filter(i=>RA()<respProb(POP[i],k));if(!qLast.length)qLast=[0];qHist.push(mean(qLast.map(i=>POP[i])));qN.push(qLast.length);}qRender();}
 LK.register("resp",{name:"自分から回答",
 init(){const reset=()=>{qHist=[];qN=[];qLast=[];qRender();};LK.stepper($("qk"),reset);$("qreset").onclick=reset;$("qdraw").onclick=()=>qDraw(1);$("qx20").onclick=()=>qDraw(20);qRender();},
 apply(s){if(s.k!==undefined)LK.setRange("qk",s.k);qHist=[];qN=[];qLast=[];qRender();},

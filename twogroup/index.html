@@ -211,6 +211,67 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 </div>
 <script>
 window.__LABPRESETS__={"s1-var": {"mode": "var", "set": {"level": 0.95, "n": 10, "s2": 4}, "task": "袋詰め10回の重さの不偏分散 s²＝4。母分散の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "(n−1)s²＝36 を χ²(9) の大きい方の点19.023で割って約1.89。上の端は36÷2.700≒13.33。s²＝4 は真ん中にない。"}, "s1-paired": {"mode": "paired", "set": {"dbar": 3, "sd": 4, "n": 16}, "task": "同じ16店の施策前後の差は平均3万円、差の標準偏差4万円。差の平均の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "SE＝4÷√16＝1、t(15) の点2.131。3−2.131≒0.869、上の端は5.131。0を含まないので、施策の前後で差があると言える。"}, "s1-diff": {"mode": "diff", "set": {"method": "welch", "x1": 30, "s1": 2, "n1": 10, "x2": 25, "s2": 8, "n2": 20}, "task": "店A（10日、平均30・s＝2）と店B（20日、平均25・s＝8）の平均の差。ウェルチの95%信頼区間は0を含むか。", "predict": {"type": "choice", "key": "contains0", "label": "ウェルチの区間は", "options": ["0を含む", "0を含まない"]}, "why": "SE≒1.90、自由度≒23.3 で、区間は約1.08〜8.92。等分散を仮定すると、ばらつきの大きい B に引っぱられて SE≒2.59 になり、区間は0を含む。"}, "s3-free": {"mode": "diff", "modes": ["diff", "paired", "prop2", "var", "ratio", "corr"], "task": "解いてから、問題が推定しているもの（母分散、平均の差、対応ありの差、比率の差、分散の比、相関）に合うモードで確かめる。"}, "s4-free": {"mode": "paired", "modes": ["paired", "diff", "prop2", "ratio"], "task": "自分の売場の数字（施策前後の差、2店の平均、2つのキャンペーンの購入率）を入れ、区間が0（比なら1）を含むかを読む。"}, "s5-free": {"mode": "var", "modes": ["var", "corr", "ratio"], "task": "「母分散」で n を10→100 と変え、上限÷下限の倍率がどう縮むかを見る（発展1）。「相関係数」で r と n を動かし、区間が左右非対称になることを見る（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（母分散、平均の差、対応あり、比率の差、分散の比、相関係数）。"}, "Q-U23-001": {"mode": "var", "set": {"level": 0.95, "n": 16, "s2": 9}, "task": "n＝16、s²＝9。母分散の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "135÷6.262≒21.56。下の端は約4.91。標準偏差なら平方根を取って約2.22〜4.64秒。"}, "Q-U23-002": {"mode": "paired", "set": {"dbar": 2, "sd": 5, "n": 25}, "task": "25店の前後差の平均2万円、差の標準偏差5万円。差の平均の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "2−2.064≒−0.064 で、わずかに0未満。区間は0を含む。店を36にすると SE は約0.83 になり、0を含まなくなる。"}, "Q-U23-003": {"mode": "prop2", "set": {"x1": 60, "n1": 200, "x2": 40, "n2": 200}, "task": "200人中60人と200人中40人。購入率の差の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "0.1−0.0843≒0.016。わずかに0より上。人数が各100人なら区間は0を含む。"}, "Q-U23-004": {"mode": "diff", "set": {"method": "pooled", "x1": 52, "s1": 8, "n1": 16, "x2": 48, "s2": 6, "n2": 16}, "task": "等分散を仮定。52（s＝8、16店）と48（s＝6、16店）の差の95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "t(30) の点約2.042×SE 2.5≒5.11。ウェルチに切り替えても SE は2.5、自由度が約27.8 になるだけ。"}, "Q-U23-005": {"mode": "ratio", "set": {"s1": 18, "n1": 11, "s2": 9, "n2": 13}, "task": "s_A²＝18（11日）、s_B²＝9（13日）。分散の比の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "2×3.621≒7.24。下の端は約0.59。1を含むので、ばらつきの違いは言えない。"}, "Q-U23-010": {"mode": "var", "set": {"level": 0.95, "n": 21, "s2": 150}, "task": "n＝21、s²＝150。母分散の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "3000÷34.170≒87.8。上の端は約312.8で、s²＝150 は下寄り。"}, "Q-U23-011": {"mode": "paired", "set": {"dbar": 2, "sd": 1.5, "n": 8}, "task": "8店の前後差の平均2万円、差の標準偏差1.5万円。差の平均の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "2−1.254≒0.746。差のばらつきが小さいので、8店でも0を含まない。"}, "Q-U23-012": {"mode": "prop2", "set": {"x1": 120, "n1": 300, "x2": 105, "n2": 300}, "task": "300人中120人と300人中105人。満足率の差の95%信頼区間は0を含むか。", "predict": {"type": "choice", "key": "contains0", "label": "差の区間は", "options": ["0を含む", "0を含まない"]}, "why": "区間は約 −0.027〜0.127。差0.05 は偶然のぶれの範囲。各1200人にすると区間は0を含まなくなる。"}, "Q-U23-020": {"mode": "diff", "set": {"method": "welch", "x1": 68, "s1": 3, "n1": 12, "x2": 62, "s2": 9, "n2": 8}, "task": "68（s＝3、12日）と62（s＝9、8日）。ウェルチの95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "SE≒3.30、自由度≒8.05、t の点≒2.30 で、区間は約 −1.60〜13.60。「等分散を仮定」に切り替えると約0.17〜11.83 で0を含まなくなる。"}, "Q-U23-021": {"mode": "corr", "set": {"r": 0.5, "n": 100}, "task": "r＝0.5、n＝100。ρ の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "z の区間を tanh で戻して約0.337。上の端は約0.634。n を400にすると約0.42〜0.57 に狭まる。"}, "Q-U23-022": {"mode": "paired", "set": {"dbar": 1.2, "sd": 2, "n": 10}, "task": "10人の前後差の平均1.2点、差の標準偏差2点。区間は0を含むか。", "predict": {"type": "choice", "key": "contains0", "label": "差の区間は", "options": ["0を含む", "0を含まない"]}, "why": "区間は約 −0.23〜2.63。n を20にすると約0.26〜2.14 で、0を含まなくなる。"}, "Q-U23-023": {"mode": "var", "set": {"level": 0.95, "n": 10, "s2": 4}, "task": "n＝10、s²＝4。母分散の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "36÷2.700≒13.33。下の端は約1.89 で、s²＝4 との距離が左右で大きく違う。"}, "Q-U23-030": {"mode": "prop2", "set": {"x1": 90, "n1": 500, "x2": 60, "n2": 500}, "task": "500人中90人と500人中60人。購入率の差の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "0.06−0.044≒0.016。差は小さいが0は含まない。"}, "Q-U23-031": {"mode": "ratio", "set": {"s1": 900, "n1": 13, "s2": 400, "n2": 11}, "task": "s_A²＝900（13日）、s_B²＝400（11日）。分散の比の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "2.25÷3.621≒0.62。上の端は約7.59 で、1を含む。"}, "Q-U23-032": {"mode": "paired", "set": {"dbar": 2.5, "sd": 6, "n": 12}, "task": "12店の前後差の平均2.5万円、差の標準偏差6万円。95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "2.201×1.732≒3.81。n を48にすると誤差幅は約1.74 で、0を含まなくなる。"}, "Q-U23-040": {"mode": "var", "set": {"level": 0.95, "n": 100, "s2": 4}, "task": "n＝100。母分散の区間の上限÷下限は（小数で）？", "predict": {"type": "number", "key": "ratio", "label": "上限÷下限"}, "why": "128.42÷73.36≒1.75。n を10にすると約7.05倍。平均の区間よりずっと多くのデータが要る。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -352,7 +413,8 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$,esc=LK.esc;

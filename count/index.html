@@ -221,6 +221,67 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 </div>
 <script>
 window.__LABPRESETS__={"s1-list": {"mode": "list", "set": {"n": 5, "r": 2, "role": "なし"}, "unlock": ["role"], "task": "5人からレジと品出しを1人ずつ選ぶと20通り。役割のない当番2人を選ぶだけなら何通りか。", "predict": {"type": "number", "key": "comb", "label": "役割なしの選び方", "unit": "通り"}, "why": "「レジA・品出しB」と「レジB・品出しA」は同じ組 {A, B}。どの組も 2!＝2 回ずつ数えているので 20÷2＝10。役割を「区別する」に切り替えると、帯1本に2通りずつ並ぶ。"}, "s1-exp": {"mode": "list", "set": {"n": 4, "r": 3, "role": "あり"}, "unlock": ["role"], "task": "4人から3人を、役割（1番・2番・3番）を決めて選ぶ。何通りか。", "predict": {"type": "number", "key": "perm", "label": "役割ありの選び方", "unit": "通り"}, "why": "4×3×2＝24。色の帯1本（同じ3人の組）に 3!＝6 通りずつ並ぶので、役割なしなら 24÷6＝4。"}, "s2-pascal": {"mode": "pascal", "set": {"n": 7, "r": 3}, "task": "パスカルの三角形の7段目で ₇C₃ を選ぶ。上の段のどの2つの数の和か。₇C₃ はいくつか。", "predict": {"type": "number", "key": "c", "label": "₇C₃"}, "why": "₇C₃＝₆C₂＋₆C₃＝15＋20＝35。特定の1人を含む選び方（15）と含まない選び方（20）の和。"}, "s3-free": {"mode": "cond", "modes": ["cond", "list", "pascal"], "task": "解いてから、「条件付き」で条件を問題に合わせ、太枠（条件を満たすもの）の数と式を比べる。「パスカル」で数をタップすると、特定の1人を含む・含まないに分かれる。"}, "s4-path": {"mode": "path", "modes": ["path", "list"], "task": "→ を3個、↑ を2個並べる並べ方が、「5歩のうち → にする3歩を選ぶ」ことと同じだと確かめる。くわしくで書き出しを見る。"}, "s5-more": {"mode": "pascal", "modes": ["pascal", "multi", "der"], "task": "「パスカル」で段の合計と二項分布の確率の合計（発展1）、「重複を許す」で ● と ｜ の並べ方（発展2）、「完全順列」で 1/e への近づき方（発展3）を見る。"}, "s6-free": {"task": "自分の式を小さい例で確かめる。「並べて数える」の書き出しや「道順」の書き出しで、式と書き出しの数が一致するか見る。"}, "Q-U09-001": {"mode": "list", "set": {"n": 6, "r": 3, "role": "なし"}, "task": "6人から役割のない委員を3人選ぶ。何通りか。", "predict": {"type": "number", "key": "comb", "label": "選び方", "unit": "通り"}, "why": "会長・副会長・書記なら 6×5×4＝120。同じ3人の組を 3!＝6 回ずつ数えているので 120÷6＝20。"}, "Q-U09-002": {"mode": "list", "set": {"n": 7, "r": 2, "role": "あり"}, "task": "7人から店長代理と副代理を選ぶ。何通りか。", "predict": {"type": "number", "key": "perm", "label": "選び方", "unit": "通り"}, "why": "7×6＝42。役割を「区別しない」に切り替えると研修参加者2人の選び方 42÷2＝21。"}, "Q-U09-003": {"mode": "list", "set": {"n": 4, "r": 2, "role": "あり"}, "task": "4人からリーダーとサブリーダーを選ぶ（兼任なし）。何通りか。", "predict": {"type": "number", "key": "perm", "label": "選び方", "unit": "通り"}, "why": "4×3＝12。帯1本（同じ2人の組）に「B→C」「C→B」の2通りが並ぶ。"}, "Q-U09-004": {"mode": "list", "set": {"n": 4, "r": 2, "role": "なし"}, "task": "4人から役割のない委員を2人選ぶ。何通りか。", "predict": {"type": "number", "key": "comb", "label": "選び方", "unit": "通り"}, "why": "役割ありの12通りを、同じ組の並べ方 2!＝2 で割って6。"}, "Q-U09-005": {"mode": "multi", "set": {"n": 3, "r": 2}, "task": "3種類のパンから、1個目と2個目を順に選ぶ（同じパンを2回選んでもよい）。何通りか。", "predict": {"type": "number", "key": "pow", "label": "選び方", "unit": "通り"}, "why": "1個目3通り×2個目3通り＝3²＝9。順番を区別しないなら ₄C₂＝6（くわしくの書き出し）。"}, "Q-U09-010": {"mode": "list", "set": {"n": 5, "r": 3, "role": "あり"}, "task": "5種類のパンから3種類を選び、上段・中段・下段に1種類ずつ並べる。何通りか。", "predict": {"type": "number", "key": "perm", "label": "並べ方", "unit": "通り"}, "why": "5×4×3＝60。段（役割）を区別しない詰め合わせなら 60÷3!＝10。"}, "Q-U09-011": {"mode": "pascal", "set": {"n": 10, "r": 8}, "task": "₁₀C₈ はいくつか。パスカルの三角形で、対称な ₁₀C₂ と比べる。", "predict": {"type": "number", "key": "c", "label": "₁₀C₈"}, "why": "選ぶ8人を決めることは、選ばない2人を決めることと同じ。₁₀C₈＝₁₀C₂＝10×9÷2＝45。続けて n・r を 7・3、12・10 に動かし、2・3 の答え（35、66）も確かめる。"}, "Q-U09-012": {"mode": "list", "set": {"n": 8, "r": 3, "role": "あり"}, "task": "8人の中の1位・2位・3位の決め方は何通りか。", "predict": {"type": "number", "key": "perm", "label": "決め方", "unit": "通り"}, "why": "8×7×6＝336。順位は役割なので順列。区別しない委員なら 336÷6＝56。"}, "Q-U09-020": {"mode": "cond", "set": {"kind": "include", "n": 6, "r": 3}, "task": "6人（A〜F）から3人の当番を選ぶ。A を必ず含む選び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "A を含む選び方", "unit": "通り"}, "why": "A を先に入れて、残り5人から2人：₅C₂＝10。くわしくの書き出しで、太枠（A を含む組）が10個あることを確かめる。含まないのも ₅C₃＝10 で、合わせて ₆C₃＝20。"}, "Q-U09-021": {"mode": "cond", "set": {"kind": "atleast", "n": 7, "r": 3, "m": 4}, "task": "7人（印の付いた女性4人と男性3人）から3人を選ぶ。女性を少なくとも1人含む選び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "女性を含む選び方", "unit": "通り"}, "why": "全部 ₇C₃＝35 から、男性3人だけの ₃C₃＝1 を引いて34。くわしくの書き出しで、太枠でない組が1つだけあることを確かめる。"}, "Q-U09-022": {"mode": "cond", "set": {"kind": "adjacent", "n": 5}, "task": "A〜E の5人を一列に並べる。A と B が隣り合う並び方は何通りか。", "predict": {"type": "number", "key": "count", "label": "隣り合う並び方", "unit": "通り"}, "why": "A と B をかたまりとみて4つを並べる 4!＝24、かたまりの中の AB・BA の2通りで48。全部の120通りのうち、くわしくの太枠が48個。"}, "Q-U09-023": {"mode": "list", "set": {"n": 9, "r": 2, "role": "なし"}, "task": "委員長を決めたあと、残り9人から役割のない委員2人を選ぶ。何通りか。", "predict": {"type": "number", "key": "comb", "label": "委員の選び方", "unit": "通り"}, "why": "₉C₂＝36。委員長の10通りを掛けて 360。"}, "Q-U09-024": {"mode": "list", "set": {"n": 5, "r": 2, "role": "なし"}, "task": "5人から無作為に2人を選ぶ。選び方は全部で何通りか（確率の分母）。", "predict": {"type": "number", "key": "comb", "label": "全部の選び方", "unit": "通り"}, "why": "₅C₂＝10。そのうち {A, B} は1通りなので確率 1/10。役割ありで数えると分母20、分子2（A→B・B→A）で同じ 1/10。"}, "Q-U09-025": {"mode": "cond", "set": {"kind": "hyper", "n": 10, "r": 3, "m": 2, "k": 1}, "task": "10個のうち2個が不良（印）。3個を戻さずに取り出すとき、不良がちょうど1個の確率は（小数で）？", "predict": {"type": "number", "key": "prob", "label": "確率（小数）"}, "why": "不良1個の選び方 ₂C₁＝2、良品2個 ₈C₂＝28 で 2×28＝56 通り。全部 ₁₀C₃＝120 通りなので 56÷120＝7/15≒0.4667。"}, "Q-U09-030": {"mode": "list", "set": {"n": 10, "r": 2, "role": "なし"}, "task": "10人が全員と1回ずつ握手する。握手は全部で何回か。", "predict": {"type": "number", "key": "comb", "label": "握手の回数", "unit": "回"}, "why": "握手1回＝2人の組（区別なし）。₁₀C₂＝10×9÷2＝45。"}, "Q-U09-031": {"mode": "path", "set": {"a": 4, "b": 3}, "task": "右へ4歩・上へ3歩の最短経路は何通りか。", "predict": {"type": "number", "key": "paths", "label": "道順", "unit": "通り"}, "why": "7歩のうち右の4歩を選ぶ：₇C₄＝35。上の3歩を選ぶ ₇C₃ と同じ。"}, "Q-U09-032": {"mode": "pascal", "set": {"n": 10, "r": 5}, "task": "10店舗から試験を行う5店舗を選ぶ選び方は何通りか。", "predict": {"type": "number", "key": "c", "label": "₁₀C₅"}, "why": "₁₀C₅＝252。パスカルの10段目のまん中（一番大きい数）。どの選び方も同じ確率で選ぶのが無作為化。"}, "Q-U09-040": {"mode": "pascal", "set": {"n": 4, "r": 1, "p": 0.25}, "task": "B(4, 0.25) の確率を k＝0〜4 で全部足すといくつか。", "predict": {"type": "number", "key": "psum", "label": "確率の合計"}, "why": "₄Cₖ×0.25ᵏ×0.75⁴⁻ᵏ を足すと (0.25＋0.75)⁴＝1。くわしくの表で 0.3164, 0.4219, 0.2109, 0.0469, 0.0039 を確かめる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -362,7 +423,8 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$,esc=LK.esc;
@@ -371,7 +433,8 @@ const cc=(n,r)=>`${sub(n)}C${sub(r)}`,pp=(n,r)=>`${sub(n)}P${sub(r)}`;
 function C(n,r){if(r<0||r>n)return 0;r=Math.min(r,n-r);let x=1;for(let i=1;i<=r;i++)x=x*(n-r+i)/i;return Math.round(x);}
 function fact(n){let x=1;for(let i=2;i<=n;i++)x*=i;return x;}
 const fmt=x=>x.toLocaleString("ja-JP");
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const R=LK.rng(LK.cfg.seed??1);
+function shuffle(a){return R.shuffle(a);}
 function perms(arr,r){const out=[],used=arr.map(()=>false),cur=[];(function rec(){if(cur.length===r){out.push(cur.slice());return;}
 for(let i=0;i<arr.length;i++){if(!used[i]){used[i]=true;cur.push(arr[i]);rec();cur.pop();used[i]=false;}}})();return out;}
 function lVals(){const n=+$("ln").value,r=Math.min(+$("lr").value,n),role=$("lrole").value;let perm=1;for(let i=0;i<r;i++)perm*=n-i;const comb=perm/fact(r);return {n,r,role,perm,comb,count:role==="あり"?perm:comb};}

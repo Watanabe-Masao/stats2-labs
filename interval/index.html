@@ -186,6 +186,67 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 </div>
 <script>
 window.__LABPRESETS__={"s1-mean": {"mode": "mean", "set": {"kind": "z", "level": 0.95, "xbar": 50, "s": 10, "n": 100, "d": 1}, "task": "σ＝10 が分かっている。100人の客単価の平均は50百円。母平均の95%信頼区間の下の端は？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "SE＝10÷√100＝1、誤差幅 1.96×1＝1.96。50−1.96＝48.04、上の端は51.96。n を400にすると誤差幅は0.98で半分。"}, "s1-cover": {"mode": "cover", "set": {"kind": "z", "level": 0.95, "n": 25, "sigma": 10}, "task": "同じ作り方で95%信頼区間を1000回作る。μ を含む区間はどれくらいか。", "predict": {"type": "choice", "key": "coverLabel", "label": "μ を含む区間は", "options": ["約95%が含む", "95%より少ない"]}, "why": "1000回のうち約950回が μ を含み、残りは外れる。μ は動かず、動くのは区間。1本の区間が μ を含むかどうかは、確率ではなく「含む」か「含まない」か。"}, "s3-free": {"mode": "mean", "modes": ["mean", "prop", "cover"], "task": "解いてから、問題が求めているもの（平均の区間か、割合の区間か、95%の意味か）に合うモードで確かめる。"}, "s4-free": {"mode": "prop", "modes": ["prop", "mean", "cover"], "task": "自分の売場の数字（アンケートの人数と回答、日別売上の平均と標準偏差）を入れ、区間と、目標の誤差幅に必要な人数を読む。"}, "s5-free": {"mode": "prop", "modes": ["prop", "cover"], "task": "「割合の区間」で n を20、x を2にし、p̂±z×SE の区間が0未満にはみ出すこととウィルソンの区間を比べる（発展1）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（平均の区間、割合の区間、くり返して確かめる）。"}, "Q-U22-001": {"mode": "mean", "set": {"kind": "z", "level": 0.95, "xbar": 100, "s": 12, "n": 36, "d": 1}, "task": "σ＝12、36日の平均100人。母平均の95%信頼区間の下の端は？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "SE＝2、誤差幅3.92。100−3.92＝96.08。n を144にすると SE は1、誤差幅は1.96 で半分。"}, "Q-U22-002": {"mode": "prop", "set": {"level": 0.95, "x": 60, "n": 200, "d": 0.03}, "task": "200人中60人が購入。購入率の95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "1.96×√(0.21÷200)≒0.0635。区間は約0.237〜0.364。n を800にすると誤差幅は約0.032で半分。"}, "Q-U22-003": {"mode": "mean", "set": {"kind": "z", "level": 0.99, "xbar": 50, "s": 10, "n": 100, "d": 1}, "task": "σ＝10、n＝100、x̄＝50。99%信頼区間の下の端は？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "誤差幅は2.576で、95%の1.96より長い。90%にすると1.645で短くなる。"}, "Q-U22-004": {"mode": "mean", "set": {"kind": "t", "level": 0.95, "xbar": 52, "s": 8, "n": 16, "d": 1}, "task": "16店、x̄＝52、s＝8（σ 不明）。95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "t(15) の点約2.131×SE 2＝約4.26。灰色の z で作った区間（±3.92）より長い。"}, "Q-U22-005": {"mode": "mean", "set": {"kind": "z", "level": 0.95, "xbar": 50, "s": 10, "n": 100, "d": 1}, "task": "σ＝10。95%の誤差幅を1以下にする最小の n は？", "predict": {"type": "number", "key": "nFor", "label": "必要な n"}, "why": "(1.96×10÷1)²＝384.16 を切り上げて385。目標の誤差幅を0.5にすると1537。"}, "Q-U22-010": {"mode": "prop", "set": {"level": 0.95, "x": 100, "n": 500, "d": 0.03}, "task": "500人中100人。認知率の95%信頼区間の上の端は（小数で）？", "predict": {"type": "number", "key": "hi", "label": "区間の上の端"}, "why": "0.2＋1.96×√(0.16÷500)≒0.235。下の端は約0.165。"}, "Q-U22-011": {"mode": "cover", "set": {"kind": "z", "level": 0.95, "n": 25, "sigma": 10}, "task": "同じ作り方で95%信頼区間を1000回作る。μ を含む区間はどれくらいか。", "predict": {"type": "choice", "key": "coverLabel", "label": "μ を含む区間は", "options": ["約95%が含む", "95%より少ない"]}, "why": "約95%が含み、残りは外れる。外れた区間も、作った時点ではどれが外れかは分からない。"}, "Q-U22-012": {"mode": "mean", "set": {"kind": "t", "level": 0.95, "xbar": 23, "s": 3, "n": 9, "d": 1}, "task": "9店、x̄＝23、s＝3（σ 不明）。95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "23−2.306×1＝20.694。灰色の z で作った区間は1.96しか引かないので狭い。"}, "Q-U22-020": {"mode": "prop", "set": {"level": 0.95, "x": 50, "n": 100, "d": 0.03}, "task": "誤差幅0.03以下。p が分からず p＝0.5 とするときの人数は？", "predict": {"type": "number", "key": "nWorst", "label": "必要な人数"}, "why": "1.96²×0.25÷0.0009≒1067.1 → 1068人。誤差幅を0.02にすると2401人。"}, "Q-U22-021": {"mode": "mean", "set": {"kind": "z", "level": 0.99, "xbar": 50, "s": 10, "n": 100, "d": 1}, "task": "σ＝10、n＝100。99%信頼区間の誤差幅は？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "2.576×1＝2.576。n を173にすると誤差幅は約1.96 に戻る。"}, "Q-U22-022": {"mode": "cover", "set": {"kind": "zs", "level": 0.95, "n": 5, "sigma": 10}, "task": "n＝5 で「s を使って z」の区間を1000回作る。μ を含む区間はどれくらいか。", "predict": {"type": "choice", "key": "coverLabel", "label": "μ を含む区間は", "options": ["約95%が含む", "95%より少ない"]}, "why": "含む割合は9割を下回る。作り方を「s を使って t」に変えると約95%に戻る。n を100にすると z でもほぼ95%。"}, "Q-U22-023": {"mode": "cover", "set": {"kind": "t", "level": 0.95, "n": 10, "sigma": 10}, "task": "n＝10、「s を使って t」で95%信頼区間を1000回作る。μ を含む区間はどれくらいか。", "predict": {"type": "choice", "key": "coverLabel", "label": "μ を含む区間は", "options": ["約95%が含む", "95%より少ない"]}, "why": "t の点を使えば、σ が分からなくても約95%が含む。1本ずつの区間は長さも位置も違う。"}, "Q-U22-030": {"mode": "prop", "set": {"level": 0.95, "x": 840, "n": 1200, "d": 0.03}, "task": "1200人中840人が満足。満足率の95%信頼区間の下の端は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "区間の下の端"}, "why": "0.7−0.0259≒0.674。前年の0.68 は区間の中。"}, "Q-U22-031": {"mode": "mean", "set": {"kind": "t", "level": 0.95, "xbar": 1200, "s": 150, "n": 25, "d": 1}, "task": "25日、x̄＝1200円、s＝150円（σ 不明）。95%信頼区間の誤差幅は（小数で）？", "predict": {"type": "number", "key": "margin", "label": "誤差幅"}, "why": "t(24) の点約2.064×30≒61.9円。z なら 1.96×30＝58.8円で、少し狭すぎる。"}, "Q-U22-032": {"mode": "prop", "set": {"level": 0.95, "x": 20, "n": 100, "d": 0.02}, "task": "p̂＝0.2 を使って、誤差幅0.02以下にする人数は？", "predict": {"type": "number", "key": "nFor", "label": "必要な人数"}, "why": "1.96²×0.16÷0.0004≒1536.6 → 1537人。p＝0.5 とすると2401人。"}, "Q-U22-040": {"mode": "prop", "set": {"level": 0.95, "x": 2, "n": 20, "d": 0.03}, "task": "20人中2人。ウィルソンの区間の下の端は（小数で）？", "predict": {"type": "number", "key": "wLo", "label": "ウィルソンの下の端"}, "why": "約0.028で0より上に収まる。p̂±1.96SE の区間は −0.031 と0未満にはみ出す。n を200、x を20にすると2つの区間はほぼ同じになる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+var MLRandom = (function(exports) {
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+/** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
+function normalizeSeed(seed) {
+if (!Number.isFinite(seed)) throw new RangeError(`種は有限の数：${seed}`);
+return Math.trunc(seed) >>> 0;
+}
+function createRandom(seed) {
+const start = normalizeSeed(seed);
+let a = start;
+const next = () => {
+a = a + 1831565813 >>> 0;
+let t = a;
+t = Math.imul(t ^ t >>> 15, t | 1);
+t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+return ((t ^ t >>> 14) >>> 0) / 4294967296;
+};
+return {
+seed: start,
+next,
+int(lo, hi) {
+if (!Number.isInteger(lo) || !Number.isInteger(hi) || hi < lo) throw new RangeError(`int(${lo}, ${hi})：整数で lo ≤ hi`);
+return lo + Math.floor(next() * (hi - lo + 1));
+},
+chance(p) {
+if (!(p >= 0 && p <= 1)) throw new RangeError(`確率は 0〜1：${p}`);
+return next() < p;
+},
+fork() {
+return createRandom(Math.floor(next() * 4294967296));
+}
+};
+}
+/** 標準正規分布の数（Box–Muller。u＝0 は引き直す。1回に2つ引く） */
+function normal(r) {
+let u = 0;
+while (u === 0) u = r.next();
+const v = r.next();
+return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+/** 並べ替えた新しい配列（Fisher–Yates。元の配列は変えない） */
+function shuffle(r, xs) {
+const a = xs.slice();
+for (let i = a.length - 1; i > 0; i--) {
+const j = r.int(0, i);
+[a[i], a[j]] = [a[j], a[i]];
+}
+return a;
+}
+/** 戻さずに k 個を引く（並べ替えの先頭 k 個。k は 0〜長さ） */
+function sampleWithout(r, xs, k) {
+if (!Number.isInteger(k) || k < 0 || k > xs.length) throw new RangeError(`引く数は 0〜${xs.length} の整数：${k}`);
+return shuffle(r, xs).slice(0, k);
+}
+exports.createRandom = createRandom;
+exports.normal = normal;
+exports.normalizeSeed = normalizeSeed;
+exports.sampleWithout = sampleWithout;
+exports.shuffle = shuffle;
+return exports;
+})({});
 const LK=(()=>{
 const cfg=window.__LABCFG__||{};
 const STEPS=Array.isArray(cfg.steps)&&cfg.steps.length?cfg.steps:null;let si=0;const hist=[];
@@ -327,7 +388,8 @@ if(STEPS&&STEPS[0].set&&modes[m].apply)modes[m].apply(STEPS[0].set);
 show(m);if(TOUR){tourStart();return;}fixPicks();taskCard();if(cfg.predict)lock(true);
 if(!cfg.predict){const t=$("lk-task");if(t&&EMBED)t.after($("lk-bar"));bar();}else $("lk-bar").hidden=true;
 ["input","change","click"].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest(".mode"))moved=true;setTimeout(live,0);}));}
-return {cfg,$,esc,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
+const rng=seed=>{const R=MLRandom.createRandom(seed);const f=()=>R.next();f.seed=R.seed;f.int=(lo,hi)=>R.int(lo,hi);f.normal=()=>MLRandom.normal(R);f.shuffle=a=>MLRandom.shuffle(R,a);f.sample=(a,k)=>MLRandom.sampleWithout(R,a,k);return f;};
+return {cfg,$,esc,rng,get step(){return si;},register,show,start,stepper,setRange,formula,fmtNum,embed:EMBED,focus:FOCUS,get last(){return last;},get locked(){return locked;},value:k=>modes[cur].value(k),get mode(){return cur;},
 tour:TOUR?{go:tGo,frame:tFrame,play:tPlay,free:tFree,back:tBack,get state(){return {i:T.i,f:T.f,free:T.free,playing:!!T.timer};}}:null};
 })();
 const $=LK.$,esc=LK.esc;
@@ -344,8 +406,8 @@ const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
 function inv(cdf,p,lo,hi){for(let i=0;i<200;i++){const m=(lo+hi)/2;if(cdf(m)<p)lo=m;else hi=m;}return (lo+hi)/2;}
 const ZQ={"0.9":1.645,"0.95":1.96,"0.99":2.576};   // 2級の数表の値
 const tq=(p,df)=>inv(t=>tcdf(t,df),p,0,1e3);
-function rng(s){let seed=s;return ()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646;};}
-function gauss(r){const u=r()||1e-12,v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function rng(s){return LK.rng(s);}
+function gauss(r){return r.normal();}
 function bar(lo,hi,c,mark,label,cmp){const H=96,L=16,R=W-16,span=(hi-lo)||1,a=Math.min(lo,cmp?cmp[0]:lo)-span*0.35,b=Math.max(hi,cmp?cmp[1]:hi)+span*0.35,X=x=>L+(x-a)/(b-a)*(R-L),y=40;
 let s=`<svg viewBox="0 0 ${W} ${H}" width="${W}" role="img" aria-label="${esc(label)}">`;
 if(cmp)s+=`<line x1="${X(cmp[0])}" y1="${y+20}" x2="${X(cmp[1])}" y2="${y+20}" stroke="var(--mut)" stroke-width="4" stroke-linecap="round" stroke-opacity=".6"/><text x="${X(cmp[1])+4}" y="${y+24}" font-size="10" fill="var(--mut)">${esc(cmp[2])}</text>`;
