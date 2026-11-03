@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 1,
- "schema_revision": 24,
+ "schema_revision": 25,
  "course": {
   "id": "stats2",
   "title": "統計検定2級",
@@ -6135,6 +6135,14 @@
     "mean": 1,
     "linear": 3
    },
+   "gist": "当たる確率が毎回同じ挑戦を n 回して、当たった回数を数える。何回当たるかの起こりやすさを並べたのが二項分布。",
+   "question": "同じ条件で n 回くり返すと、成功は何回くらいになる？",
+   "chart": {
+    "kind": "binom",
+    "n": 10,
+    "p": 0.3,
+    "note": "いちばん起こりやすいのは 3 回。平均 np＝3 回の近くに山ができる。"
+   },
    "labs": [
     {
      "id": "LAB-binom",
@@ -6180,6 +6188,11 @@
      "title": "公式2級範囲表",
      "locator": "確率モデルの導入（確率変数・確率分布）",
      "url": "https://www.toukei-kentei.jp/hubfs/files/grade_range/grade2_hani_20181214.pdf"
+    },
+    {
+     "title": "NIST統計ハンドブック",
+     "locator": "1.3.6.6.18 Binomial Distribution",
+     "url": "https://www.itl.nist.gov/div898/handbook/"
     }
    ]
   },
