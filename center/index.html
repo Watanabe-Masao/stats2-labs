@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -152,7 +152,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">平均・中央値・最頻値を同じ図に置く。いちばん大きい値を動かすと、どれが大きく動くか。</p>
 <div class="row ctl"><label>データ <select id="mdata" data-key="data"></select></label></div>
 <input type="range" id="mtop" min="0" max="60" step="1" value="17" data-name="最大の値">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="mplot"></div>
 <div class="card res key" id="msum"></div>
 <div id="mform"></div>
@@ -163,7 +163,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="wxa" min="50" max="5000" step="50" value="3000" data-name="Aの平均">
 <input type="range" id="wnb" min="1" max="200" step="1" value="80" data-name="Bの人数">
 <input type="range" id="wxb" min="50" max="5000" step="50" value="2000" data-name="Bの平均">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="wplot"></div>
 <div class="card res key" id="wsum"></div>
 <div id="wform"></div>
@@ -173,7 +173,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="f1" min="0" max="20" step="1" value="2" data-name="0〜10">
 <input type="range" id="f2" min="0" max="20" step="1" value="5" data-name="10〜20">
 <input type="range" id="f3" min="0" max="20" step="1" value="3" data-name="20〜30">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="fplot"></div>
 <div class="card res key" id="fsum"></div>
 <div class="card res det"><table id="ftab"></table></div>
@@ -182,12 +182,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">分布の裾の向きを変えると、平均・中央値・最頻値の並び方がどう変わるか（200人分の分布）。</p>
 <input type="range" id="ssk" min="-10" max="10" step="1" value="6" data-name="裾の向き">
 <div class="mut" style="margin-top:-4px">−：左に裾が長い　0：左右対称　＋：右に裾が長い</div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="splot"></div>
 <div class="card res key" id="ssum"></div>
 </div>
 <script>
-window.__LABPRESETS__={"s1-mm": {"mode": "mm", "set": {"data": "buy10"}, "task": "10人の購入額 1, 1, 2, 2, 2, 3, 3, 4, 5, 17（千円）の平均は何千円か。図で、平均が中央値より右にある理由も見る。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "千円"}, "why": "合計40÷10人＝4千円。17千円の1人が平均を右に引っ張るので、10人のうち7人が平均より少ない。中央値は5番目と6番目の平均で2.5千円。"}, "s1-move": {"mode": "mm", "set": {"data": "buy10", "top": 40}, "task": "いちばん大きい17千円が40千円だったら、平均は何千円になるか。予想したら −／＋ で最大の値を動かし、中央値が動くかを見る。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "千円"}, "why": "合計は 40−17＋40＝63 で、平均は6.3千円。中央値は2.5千円のまま。平均は合計を使うので端の値の大きさに引っ張られ、中央値は順番の真ん中なので引っ張られない。"}, "s4-shape": {"mode": "shape", "modes": ["shape", "mm"], "task": "裾の向きを −10〜10 に動かし、平均・中央値・最頻値の並びがどう変わるかを見る。次に「平均・中央値・最頻値」で9人の年収を選び、最大の値を動かす。"}, "s5-mm": {"mode": "mm", "set": {"data": "buy10"}, "task": "最大の値を動かして、平均・中央値・10%トリム平均（くわしくの式）がどれだけ動くかを比べる。"}, "s6-free": {"task": "自分の店の数字で、代表値の選び方を4つのモードで確かめる（3つの代表値、重み付き平均、度数表の平均、分布の形）。"}, "Q-U06-001": {"mode": "wmean", "set": {"nA": 20, "xA": 3000, "nB": 80, "xB": 2000}, "task": "A店は客20人で平均3,000円、B店は客80人で平均2,000円。2店を合わせた客1人あたりの平均は何円か。", "predict": {"type": "number", "key": "wmean", "label": "全体の平均", "unit": "円"}, "why": "棒の幅が客数。客の多いB店（2,000円）に引き寄せられて2,200円になる。2つの平均を足して2で割った2,500円（点線）は、客数が同じときしか正しくない。"}, "Q-U06-002": {"mode": "mm", "set": {"data": "skew5"}, "task": "1, 2, 2, 3, 22 の平均はいくつか。予測したら、平均と中央値の位置を図で比べる。", "predict": {"type": "number", "key": "mean", "label": "平均"}, "why": "合計30÷5＝6。5つのうち4つが6より小さい。中央値（2）は22の大きさに関係なく真ん中の値。"}, "Q-U06-003": {"mode": "mm", "set": {"data": "five"}, "task": "3, 5, 5, 7, 10 の中央値はいくつか。", "predict": {"type": "number", "key": "median", "label": "中央値"}, "why": "5個（奇数）なので3番目の値。平均6は10に少し引っ張られて中央値より右にある。"}, "Q-U06-004": {"mode": "mm", "set": {"data": "q06"}, "task": "2, 2, 3, 4, 9 の平均はいくつか。予測したら、9を −／＋ で動かして平均と中央値の動きを比べる。", "predict": {"type": "number", "key": "mean", "label": "平均"}, "why": "合計20÷5＝4。9を大きくすると平均だけが上がり、中央値は3のまま。"}, "Q-U06-005": {"mode": "mm", "set": {"data": "six"}, "task": "6日間の来店数 12, 15, 15, 18, 20, 40 の中央値は何人か。", "predict": {"type": "number", "key": "median", "label": "中央値", "unit": "人"}, "why": "6個（偶数）なので3番目（15）と4番目（18）の平均。40を動かしても中央値は16.5のまま。"}, "Q-U06-010": {"mode": "wmean", "set": {"nA": 10, "xA": 100, "nB": 30, "xB": 200}, "task": "100円の商品が10個、200円の商品が30個売れた。1個あたりの平均単価は何円か。", "predict": {"type": "number", "key": "wmean", "label": "平均単価", "unit": "円"}, "why": "個数で重みを付けると、たくさん売れた200円の側に寄る。単純平均の150円は、10個と30個を同じ重さで扱っている。"}, "Q-U06-012": {"mode": "mm", "set": {"data": "income"}, "task": "9人の年収 300〜1500万円で、平均と中央値はどちらが大きいか。", "predict": {"type": "choice", "key": "bigger", "label": "大きいのは", "options": ["平均", "中央値", "同じ"]}, "why": "1500万円の1人が平均を右に引っ張る（約572万円）。中央値は5番目の450万円。"}, "Q-U06-020": {"mode": "freq", "set": {"f1": 2, "f2": 5, "f3": 3}, "task": "階級 0〜10 が2人、10〜20 が5人、20〜30 が3人。平均の近似値はいくつか。", "predict": {"type": "number", "key": "amean", "label": "近似平均"}, "why": "階級値×度数の合計160÷10人。度数を変えると、人数の多い階級の側に近似平均が寄る（これも重み付き平均）。"}, "Q-U06-021": {"mode": "wmean", "set": {"nA": 200, "xA": 1000, "nB": 50, "xB": 2000}, "task": "A店は客200人で平均1,000円、B店は客50人で平均2,000円。客1人あたりの平均は何円か。", "predict": {"type": "number", "key": "wmean", "label": "全体の平均", "unit": "円"}, "why": "客の多いA店の1,000円に引き寄せられる。B店の客数を200人に増やすと、単純平均の1,500円と一致する。"}, "Q-U06-022": {"mode": "shape", "set": {"skew": 6}, "task": "山が1つで右に裾が長い分布。平均・中央値・最頻値はどの順に並ぶか。", "predict": {"type": "choice", "key": "order", "label": "並び", "options": ["最頻値＜中央値＜平均", "平均＜中央値＜最頻値", "ほぼ等しい"]}, "why": "平均は長い裾の側に引っ張られる。裾の向きを−にすると並びが逆になり、0（左右対称）では3つが重なる。"}, "Q-U06-040": {"mode": "mm", "set": {"data": "buy10"}, "task": "10人の購入額の両端を1人ずつ除いた10%トリム平均はいくつか。", "predict": {"type": "number", "key": "trim", "label": "10%トリム平均", "unit": "千円"}, "why": "最大の17を大きくしても、トリム平均は除かれる側なので変わらない（くわしくの式で確かめる）。平均は動き、中央値は動かない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-mm": {"mode": "mm", "set": {"data": "buy10"}, "task": "10人の購入額 1, 1, 2, 2, 2, 3, 3, 4, 5, 17（千円）の平均は何千円か。図で、平均が中央値より右にある理由も見る。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "千円"}, "why": "合計40÷10人＝4千円。17千円の1人が平均を右に引っ張るので、10人のうち7人が平均より少ない。中央値は5番目と6番目の平均で2.5千円。"}, "s1-move": {"mode": "mm", "set": {"data": "buy10", "top": 40}, "task": "いちばん大きい17千円が40千円だったら、平均は何千円になるか。予測したら −／＋ で最大の値を動かし、中央値が動くかを見る。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "千円"}, "why": "合計は 40−17＋40＝63 で、平均は6.3千円。中央値は2.5千円のまま。平均は合計を使うので端の値の大きさに引っ張られ、中央値は順番の真ん中なので引っ張られない。"}, "s4-shape": {"mode": "shape", "modes": ["shape", "mm"], "task": "裾の向きを −10〜10 に動かし、平均・中央値・最頻値の並びがどう変わるかを見る。次に「平均・中央値・最頻値」で9人の年収を選び、最大の値を動かす。"}, "s5-mm": {"mode": "mm", "set": {"data": "buy10"}, "task": "最大の値を動かして、平均・中央値・10%トリム平均（くわしくの式）がどれだけ動くかを比べる。"}, "s6-free": {"task": "自分の店の数字で、代表値の選び方を4つのモードで確かめる（3つの代表値、重み付き平均、度数表の平均、分布の形）。"}, "Q-U06-001": {"mode": "wmean", "set": {"nA": 20, "xA": 3000, "nB": 80, "xB": 2000}, "task": "A店は客20人で平均3,000円、B店は客80人で平均2,000円。2店を合わせた客1人あたりの平均は何円か。", "predict": {"type": "number", "key": "wmean", "label": "全体の平均", "unit": "円"}, "why": "棒の幅が客数。客の多いB店（2,000円）に引き寄せられて2,200円になる。2つの平均を足して2で割った2,500円（点線）は、客数が同じときしか正しくない。"}, "Q-U06-002": {"mode": "mm", "set": {"data": "skew5"}, "task": "1, 2, 2, 3, 22 の平均はいくつか。予測したら、平均と中央値の位置を図で比べる。", "predict": {"type": "number", "key": "mean", "label": "平均"}, "why": "合計30÷5＝6。5つのうち4つが6より小さい。中央値（2）は22の大きさに関係なく真ん中の値。"}, "Q-U06-003": {"mode": "mm", "set": {"data": "five"}, "task": "3, 5, 5, 7, 10 の中央値はいくつか。", "predict": {"type": "number", "key": "median", "label": "中央値"}, "why": "5個（奇数）なので3番目の値。平均6は10に少し引っ張られて中央値より右にある。"}, "Q-U06-004": {"mode": "mm", "set": {"data": "q06"}, "task": "2, 2, 3, 4, 9 の平均はいくつか。予測したら、9を −／＋ で動かして平均と中央値の動きを比べる。", "predict": {"type": "number", "key": "mean", "label": "平均"}, "why": "合計20÷5＝4。9を大きくすると平均だけが上がり、中央値は3のまま。"}, "Q-U06-005": {"mode": "mm", "set": {"data": "six"}, "task": "6日間の来店数 12, 15, 15, 18, 20, 40 の中央値は何人か。", "predict": {"type": "number", "key": "median", "label": "中央値", "unit": "人"}, "why": "6個（偶数）なので3番目（15）と4番目（18）の平均。40を動かしても中央値は16.5のまま。"}, "Q-U06-010": {"mode": "wmean", "set": {"nA": 10, "xA": 100, "nB": 30, "xB": 200}, "task": "100円の商品が10個、200円の商品が30個売れた。1個あたりの平均単価は何円か。", "predict": {"type": "number", "key": "wmean", "label": "平均単価", "unit": "円"}, "why": "個数で重みを付けると、たくさん売れた200円の側に寄る。単純平均の150円は、10個と30個を同じ重さで扱っている。"}, "Q-U06-012": {"mode": "mm", "set": {"data": "income"}, "task": "9人の年収 300〜1500万円で、平均と中央値はどちらが大きいか。", "predict": {"type": "choice", "key": "bigger", "label": "大きいのは", "options": ["平均", "中央値", "同じ"]}, "why": "1500万円の1人が平均を右に引っ張る（約572万円）。中央値は5番目の450万円。"}, "Q-U06-020": {"mode": "freq", "set": {"f1": 2, "f2": 5, "f3": 3}, "task": "階級 0〜10 が2人、10〜20 が5人、20〜30 が3人。平均の近似値はいくつか。", "predict": {"type": "number", "key": "amean", "label": "近似平均"}, "why": "階級値×度数の合計160÷10人。度数を変えると、人数の多い階級の側に近似平均が寄る（これも重み付き平均）。"}, "Q-U06-021": {"mode": "wmean", "set": {"nA": 200, "xA": 1000, "nB": 50, "xB": 2000}, "task": "A店は客200人で平均1,000円、B店は客50人で平均2,000円。客1人あたりの平均は何円か。", "predict": {"type": "number", "key": "wmean", "label": "全体の平均", "unit": "円"}, "why": "客の多いA店の1,000円に引き寄せられる。B店の客数を200人に増やすと、単純平均の1,500円と一致する。"}, "Q-U06-022": {"mode": "shape", "set": {"skew": 6}, "task": "山が1つで右に裾が長い分布。平均・中央値・最頻値はどの順に並ぶか。", "predict": {"type": "choice", "key": "order", "label": "並び", "options": ["最頻値＜中央値＜平均", "平均＜中央値＜最頻値", "ほぼ等しい"]}, "why": "平均は長い裾の側に引っ張られる。裾の向きを−にすると並びが逆になり、0（左右対称）では3つが重なる。"}, "Q-U06-040": {"mode": "mm", "set": {"data": "buy10"}, "task": "10人の購入額の両端を1人ずつ除いた10%トリム平均はいくつか。", "predict": {"type": "number", "key": "trim", "label": "10%トリム平均", "unit": "千円"}, "why": "最大の17を大きくしても、トリム平均は除かれる側なので変わらない（くわしくの式で確かめる）。平均は動き、中央値は動かない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 var MLRandom = (function(exports) {
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 /** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
@@ -298,10 +298,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -315,22 +315,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}

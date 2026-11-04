@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -156,7 +156,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="sm" min="0" max="1000" step="0.5" value="50" data-name="基準 μ₀">
 <input type="range" id="ss" min="0.5" max="200" step="0.5" value="8" data-name="標準偏差 s">
 <input type="range" id="sn" min="2" max="200" step="1" value="16" data-name="個数 n">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="splot"></div>
 <div class="card res key" id="ssum"></div>
 </div>
@@ -165,7 +165,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="tdf" min="1" max="200" step="1" value="15" data-name="自由度">
 <div class="row ctl"><label>基準 <select id="tside" data-key="side"><option value="two">両側</option><option value="one">片側（上側）</option></select></label><label><select id="talpha" data-key="alpha"><option value="0.1">10%</option><option value="0.05" selected>5%</option><option value="0.01">1%</option></select></label></div>
 <input type="range" id="tobs" min="0" max="6" step="0.01" value="1" data-name="t の値">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="tplot"></div>
 <div class="card res key" id="tsum"></div>
 <div class="res det" id="ttab"></div>
@@ -175,7 +175,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="cn" min="2" max="100" step="1" value="10" data-name="個数 n">
 <input type="range" id="cs" min="0.5" max="500" step="0.5" value="12" data-name="不偏分散 s²">
 <input type="range" id="cv" min="0.5" max="500" step="0.5" value="8" data-name="基準の σ²">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="cplot"></div>
 <div class="card res key" id="csum"></div>
 </div>
@@ -185,12 +185,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="fn1" min="2" max="100" step="1" value="11" data-name="n₁">
 <input type="range" id="fs2" min="0.5" max="2000" step="0.5" value="9" data-name="s₂²">
 <input type="range" id="fn2" min="2" max="100" step="1" value="13" data-name="n₂">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="fplot"></div>
 <div class="card res key" id="fsum"></div>
 </div>
 <script>
-window.__LABPRESETS__={"s1-t": {"mode": "tstat", "set": {"xbar": 52, "mu0": 50, "s": 8, "n": 16}, "task": "16店の客単価の平均52百円、標準偏差 s＝8百円、従来の平均50百円。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝8÷√16＝2、t＝(52−50)÷2＝1。差は標準誤差のちょうど1つ分で、t(15) の点2.131より小さい。分母に s＝8 をそのまま入れると0.25になってしまう。"}, "s1-df": {"mode": "t", "set": {"df": 4, "side": "two", "alpha": 0.05, "t": 1}, "task": "5店（自由度4）のデータで t を使う。両側5%の t の点は？ 正規の1.96と比べて予想する。", "predict": {"type": "number", "key": "tcrit", "label": "t(4) の0.975点"}, "why": "t(4) の0.975点は約2.776で、1.96よりかなり大きい。自由度を15にすると2.131、120にすると1.980と、1.96に近づく。"}, "s3-free": {"mode": "tstat", "modes": ["tstat", "t", "chi", "f"], "task": "解いてから、問題が調べていること（平均か、分散か、分散の比か）に合うモードで確かめる。"}, "s4-free": {"mode": "tstat", "modes": ["tstat", "chi", "f"], "task": "自分の売場の数字（平均・標準偏差・日数）を入れ、平均なら t、ばらつきなら χ²、2つのばらつきの比較なら F で読む。"}, "s5-free": {"mode": "f", "modes": ["f", "t", "chi"], "task": "「F 分布」で n₁＝2（分子の自由度1）にし、上側5%点を「t 分布の点」の両側5%の点の2乗と比べる（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（t 値、t 分布、カイ二乗分布、F 分布）。"}, "Q-U20-001": {"mode": "tstat", "set": {"xbar": 12, "mu0": 10, "s": 5, "n": 25}, "task": "25日の平均12万円、s＝5万円、基準10万円。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝5÷5＝1、t＝2。t(24) の点2.064にわずかに届かない。1.96なら超えていたので、z と t の違いで判断が変わる例。"}, "Q-U20-002": {"mode": "chi", "set": {"n": 10, "s2": 12, "sigma2": 8}, "task": "10個、s²＝12、基準の σ²＝8。Q＝(n−1)s²÷σ² は？", "predict": {"type": "number", "key": "q", "label": "Q"}, "why": "9×12÷8＝13.5。上側5%点16.919より小さい。Q 以上になる確率は約0.14で、10回に1回以上は起こる大きさ。"}, "Q-U20-003": {"mode": "tstat", "set": {"xbar": 104, "mu0": 100, "s": 12, "n": 36}, "task": "36日の平均104万円、s＝12万円。平均の標準誤差 SE は何万円か。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "万円"}, "why": "12÷√36＝2万円。t＝2 で、t(35) の点2.030にわずかに届かない。n を49にすると SE は約1.71、t は約2.33 で超える。"}, "Q-U20-004": {"mode": "f", "set": {"s1": 18, "n1": 11, "s2": 9, "n2": 13}, "task": "店A 11日 s₁²＝18、店B 13日 s₂²＝9。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "18÷9＝2。F(10, 12) の上側5%点2.753より小さい。自由度を逆にした F(12, 10) の点は2.913で別の値。"}, "Q-U20-005": {"mode": "t", "set": {"df": 9, "side": "two", "alpha": 0.05, "t": 2.1}, "task": "自由度9、両側5%の t の点は？", "predict": {"type": "number", "key": "tcrit", "label": "t(9) の0.975点"}, "why": "約2.262で、1.96より0.3ほど大きい。t＝2.1 はその内側。自由度を30にすると点は2.042で、2.1 は外側になる。"}, "Q-U20-010": {"mode": "tstat", "set": {"xbar": 23, "mu0": 20, "s": 3, "n": 9}, "task": "9店の平均23人、s＝3人、基準20人。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝1、t＝3。t(8) の点2.306を超える。分母に s をそのまま入れると1になり、判断を誤る。"}, "Q-U20-011": {"mode": "chi", "set": {"n": 10, "s2": 8, "sigma2": 8}, "task": "自由度9のカイ二乗分布。下側2.5%点は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "χ²(9) の0.025点"}, "why": "約2.700。上側2.5%点は19.023。平均9から見ると、下は6.3、上は約10離れている。"}, "Q-U20-012": {"mode": "tstat", "set": {"xbar": 104, "mu0": 100, "s": 10, "n": 25}, "task": "25日の平均104、s＝10、基準100。両側5%の t の点（自由度24）は？", "predict": {"type": "number", "key": "tcrit", "label": "t(24) の0.975点"}, "why": "約2.064で、t＝2 はわずかに内側。σ＝10 が分かっていれば点は1.96で、2 は外側になる。"}, "Q-U20-020": {"mode": "f", "set": {"s1": 16, "n1": 10, "s2": 4, "n2": 8}, "task": "新レジ10日 s₁²＝16、旧レジ8日 s₂²＝4。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "16÷4＝4。F(9, 7) の上側5%点3.677を超える。F 以上になる確率は約0.04。"}, "Q-U20-021": {"mode": "t", "set": {"df": 20, "side": "one", "alpha": 0.05, "t": 1.9}, "task": "自由度20、片側（上側）5%の t の点は？", "predict": {"type": "number", "key": "tcrit", "label": "t(20) の0.95点"}, "why": "約1.725。両側に切り替えると2.086。t＝1.9 は片側なら外側、両側なら内側。"}, "Q-U20-022": {"mode": "chi", "set": {"n": 21, "s2": 150, "sigma2": 100}, "task": "21日、s²＝150、去年の σ²＝100。Q＝(n−1)s²÷σ² は？", "predict": {"type": "number", "key": "q", "label": "Q"}, "why": "20×1.5＝30。上側5%点31.410に届かない。分散が1.5倍でも、20日ほどでは偶然の範囲。"}, "Q-U20-023": {"mode": "t", "set": {"df": 100, "side": "two", "alpha": 0.05, "t": 1}, "task": "自由度100、両側5%の t の点は？", "predict": {"type": "number", "key": "tcrit", "label": "t(100) の0.975点"}, "why": "約1.984で、1.96とほとんど同じ。自由度を4にすると2.776で、差は大きい。"}, "Q-U20-030": {"mode": "tstat", "set": {"xbar": 3, "mu0": 0, "s": 4.5, "n": 9}, "task": "9店の前後差の平均3万円、差の s＝4.5万円、基準0。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝1.5、t＝2。t(8) の点2.306に届かない。店数を16にすると SE は約1.13、t は約2.67 で超える。"}, "Q-U20-031": {"mode": "chi", "set": {"n": 16, "s2": 9, "sigma2": 4}, "task": "16個、s²＝9、規格の σ²＝4。Q＝(n−1)s²÷σ² は？", "predict": {"type": "number", "key": "q", "label": "Q"}, "why": "15×9÷4＝33.75。上側5%点24.996を大きく超える。s と σ を2乗せずに入れると 15×3÷2＝22.5 になり、判断が変わってしまう。"}, "Q-U20-032": {"mode": "f", "set": {"s1": 900, "n1": 13, "s2": 400, "n2": 11}, "task": "店A 13日 s₁²＝900、店B 11日 s₂²＝400。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "900÷400＝2.25。F(12, 10) の上側5%点2.913に届かない。F 以上になる確率は約0.10。"}, "Q-U20-040": {"mode": "f", "set": {"s1": 20, "n1": 2, "s2": 4, "n2": 16}, "task": "分子の自由度1・分母の自由度15の F 分布。上側5%点は（小数で）？", "predict": {"type": "number", "key": "fcrit", "label": "F(1, 15) の上側5%点"}, "why": "約4.543。「t 分布の点」で自由度15・両側5%の点2.131を2乗した値と一致する。自由度を変えても t² と F(1, k) の点は一致し続ける。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-t": {"mode": "tstat", "set": {"xbar": 52, "mu0": 50, "s": 8, "n": 16}, "task": "16店の客単価の平均52百円、標準偏差 s＝8百円、従来の平均50百円。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝8÷√16＝2、t＝(52−50)÷2＝1。差は標準誤差のちょうど1つ分で、t(15) の点2.131より小さい。分母に s＝8 をそのまま入れると0.25になってしまう。"}, "s1-df": {"mode": "t", "set": {"df": 4, "side": "two", "alpha": 0.05, "t": 1}, "task": "5店（自由度4）のデータで t を使う。両側5%の t の点は？ 正規の1.96と比べて予測する。", "predict": {"type": "number", "key": "tcrit", "label": "t(4) の0.975点"}, "why": "t(4) の0.975点は約2.776で、1.96よりかなり大きい。自由度を15にすると2.131、120にすると1.980と、1.96に近づく。"}, "s3-free": {"mode": "tstat", "modes": ["tstat", "t", "chi", "f"], "task": "解いてから、問題が調べていること（平均か、分散か、分散の比か）に合うモードで確かめる。"}, "s4-free": {"mode": "tstat", "modes": ["tstat", "chi", "f"], "task": "自分の売場の数字（平均・標準偏差・日数）を入れ、平均なら t、ばらつきなら χ²、2つのばらつきの比較なら F で読む。"}, "s5-free": {"mode": "f", "modes": ["f", "t", "chi"], "task": "「F 分布」で n₁＝2（分子の自由度1）にし、上側5%点を「t 分布の点」の両側5%の点の2乗と比べる（発展2）。"}, "s6-free": {"task": "自分の課題の数字で、モードを切り替えて確かめる（t 値、t 分布、カイ二乗分布、F 分布）。"}, "Q-U20-001": {"mode": "tstat", "set": {"xbar": 12, "mu0": 10, "s": 5, "n": 25}, "task": "25日の平均12万円、s＝5万円、基準10万円。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝5÷5＝1、t＝2。t(24) の点2.064にわずかに届かない。1.96なら超えていたので、z と t の違いで判断が変わる例。"}, "Q-U20-002": {"mode": "chi", "set": {"n": 10, "s2": 12, "sigma2": 8}, "task": "10個、s²＝12、基準の σ²＝8。Q＝(n−1)s²÷σ² は？", "predict": {"type": "number", "key": "q", "label": "Q"}, "why": "9×12÷8＝13.5。上側5%点16.919より小さい。Q 以上になる確率は約0.14で、10回に1回以上は起こる大きさ。"}, "Q-U20-003": {"mode": "tstat", "set": {"xbar": 104, "mu0": 100, "s": 12, "n": 36}, "task": "36日の平均104万円、s＝12万円。平均の標準誤差 SE は何万円か。", "predict": {"type": "number", "key": "se", "label": "SE", "unit": "万円"}, "why": "12÷√36＝2万円。t＝2 で、t(35) の点2.030にわずかに届かない。n を49にすると SE は約1.71、t は約2.33 で超える。"}, "Q-U20-004": {"mode": "f", "set": {"s1": 18, "n1": 11, "s2": 9, "n2": 13}, "task": "店A 11日 s₁²＝18、店B 13日 s₂²＝9。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "18÷9＝2。F(10, 12) の上側5%点2.753より小さい。自由度を逆にした F(12, 10) の点は2.913で別の値。"}, "Q-U20-005": {"mode": "t", "set": {"df": 9, "side": "two", "alpha": 0.05, "t": 2.1}, "task": "自由度9、両側5%の t の点は？", "predict": {"type": "number", "key": "tcrit", "label": "t(9) の0.975点"}, "why": "約2.262で、1.96より0.3ほど大きい。t＝2.1 はその内側。自由度を30にすると点は2.042で、2.1 は外側になる。"}, "Q-U20-010": {"mode": "tstat", "set": {"xbar": 23, "mu0": 20, "s": 3, "n": 9}, "task": "9店の平均23人、s＝3人、基準20人。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝1、t＝3。t(8) の点2.306を超える。分母に s をそのまま入れると1になり、判断を誤る。"}, "Q-U20-011": {"mode": "chi", "set": {"n": 10, "s2": 8, "sigma2": 8}, "task": "自由度9のカイ二乗分布。下側2.5%点は（小数で）？", "predict": {"type": "number", "key": "lo", "label": "χ²(9) の0.025点"}, "why": "約2.700。上側2.5%点は19.023。平均9から見ると、下は6.3、上は約10離れている。"}, "Q-U20-012": {"mode": "tstat", "set": {"xbar": 104, "mu0": 100, "s": 10, "n": 25}, "task": "25日の平均104、s＝10、基準100。両側5%の t の点（自由度24）は？", "predict": {"type": "number", "key": "tcrit", "label": "t(24) の0.975点"}, "why": "約2.064で、t＝2 はわずかに内側。σ＝10 が分かっていれば点は1.96で、2 は外側になる。"}, "Q-U20-020": {"mode": "f", "set": {"s1": 16, "n1": 10, "s2": 4, "n2": 8}, "task": "新レジ10日 s₁²＝16、旧レジ8日 s₂²＝4。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "16÷4＝4。F(9, 7) の上側5%点3.677を超える。F 以上になる確率は約0.04。"}, "Q-U20-021": {"mode": "t", "set": {"df": 20, "side": "one", "alpha": 0.05, "t": 1.9}, "task": "自由度20、片側（上側）5%の t の点は？", "predict": {"type": "number", "key": "tcrit", "label": "t(20) の0.95点"}, "why": "約1.725。両側に切り替えると2.086。t＝1.9 は片側なら外側、両側なら内側。"}, "Q-U20-022": {"mode": "chi", "set": {"n": 21, "s2": 150, "sigma2": 100}, "task": "21日、s²＝150、去年の σ²＝100。Q＝(n−1)s²÷σ² は？", "predict": {"type": "number", "key": "q", "label": "Q"}, "why": "20×1.5＝30。上側5%点31.410に届かない。分散が1.5倍でも、20日ほどでは偶然の範囲。"}, "Q-U20-023": {"mode": "t", "set": {"df": 100, "side": "two", "alpha": 0.05, "t": 1}, "task": "自由度100、両側5%の t の点は？", "predict": {"type": "number", "key": "tcrit", "label": "t(100) の0.975点"}, "why": "約1.984で、1.96とほとんど同じ。自由度を4にすると2.776で、差は大きい。"}, "Q-U20-030": {"mode": "tstat", "set": {"xbar": 3, "mu0": 0, "s": 4.5, "n": 9}, "task": "9店の前後差の平均3万円、差の s＝4.5万円、基準0。t の値は？", "predict": {"type": "number", "key": "t", "label": "t"}, "why": "SE＝1.5、t＝2。t(8) の点2.306に届かない。店数を16にすると SE は約1.13、t は約2.67 で超える。"}, "Q-U20-031": {"mode": "chi", "set": {"n": 16, "s2": 9, "sigma2": 4}, "task": "16個、s²＝9、規格の σ²＝4。Q＝(n−1)s²÷σ² は？", "predict": {"type": "number", "key": "q", "label": "Q"}, "why": "15×9÷4＝33.75。上側5%点24.996を大きく超える。s と σ を2乗せずに入れると 15×3÷2＝22.5 になり、判断が変わってしまう。"}, "Q-U20-032": {"mode": "f", "set": {"s1": 900, "n1": 13, "s2": 400, "n2": 11}, "task": "店A 13日 s₁²＝900、店B 11日 s₂²＝400。F の値は？", "predict": {"type": "number", "key": "F", "label": "F"}, "why": "900÷400＝2.25。F(12, 10) の上側5%点2.913に届かない。F 以上になる確率は約0.10。"}, "Q-U20-040": {"mode": "f", "set": {"s1": 20, "n1": 2, "s2": 4, "n2": 16}, "task": "分子の自由度1・分母の自由度15の F 分布。上側5%点は（小数で）？", "predict": {"type": "number", "key": "fcrit", "label": "F(1, 15) の上側5%点"}, "why": "約4.543。「t 分布の点」で自由度15・両側5%の点2.131を2乗した値と一致する。自由度を変えても t² と F(1, k) の点は一致し続ける。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 var MLRandom = (function(exports) {
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 /** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
@@ -301,10 +301,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -318,22 +318,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
@@ -434,7 +434,7 @@ function sVals(){const xb=+$("sx").value,mu=+$("sm").value,s=+$("ss").value,n=+$
 return {xbar:xb,mu0:mu,s,n,se,t,df,tcrit:tc,zcrit:1.959964,p:2*(1-tcdf(Math.abs(t),df)),judge:Math.abs(t)>tc?"基準を超える":"基準以内",wrong:(xb-mu)/s};}
 function sRender(){const S=sVals(),lim=Math.max(4.5,Math.abs(S.t)+1);
 $("splot").innerHTML=plot([{fn:x=>tpdf(x,S.df),col:"var(--acc)"},{fn:npdf,col:"var(--mut)",w:1.2,dash:"4 3"}],-lim,lim,{shade:[[-99,-S.tcrit],[S.tcrit,99]],ticks:[-4,-2,0,2,4].filter(x=>Math.abs(x)<=lim),lines:[{x:S.t,label:`t＝${f(S.t,3)}`,col:"var(--fg)",dash:"2 2"},{x:S.tcrit,label:`${f(S.tcrit,3)}`}],label:"t 分布"})+`<div class="legend mut"><span><i class="sw" style="background:var(--acc)"></i>t(${S.df})</span><span><i class="sw" style="background:var(--mut)"></i>標準正規</span><span><i class="sw" style="background:var(--acc2);opacity:.5"></i>両側5%の外側</span></div>`;
-$("ssum").innerHTML=`<div>SE＝s÷√n＝${f(S.s,2)}÷√${S.n}＝<b>${f(S.se)}</b></div><div>t＝(${f(S.xbar,2)}−${f(S.mu0,2)})÷${f(S.se)}＝<b>${f(S.t,3)}</b>　自由度 ${S.df}</div><div>両側5%の点 t(${S.df}) の上側2.5%点＝<b>${f(S.tcrit,3)}</b>（正規なら1.96）→ |t| は <b>${S.judge}</b>（両側の p≒${f(S.p,3)}）</div><div class="mut">分母に s をそのまま入れると ${f(S.wrong,3)} になってしまう。分母は平均のぶれ s÷√n。</div>`;}
+$("ssum").innerHTML=`<div>SE＝s÷√n＝${f(S.s,2)}÷√${S.n}＝<b>${f(S.se)}</b></div><div>t＝(${f(S.xbar,2)}−${f(S.mu0,2)})÷${f(S.se)}＝<b>${f(S.t,3)}</b>　自由度 ${S.df}</div><div>両側5%の点 t(${S.df}) の上側2.5%点＝<b>${f(S.tcrit,3)}</b>（正規なら1.96）→ |t| は <b>${S.judge}</b>（両側の p≒${f(S.p,3)}）</div><div class="mut">分母に s をそのまま入れると ${f(S.wrong,3)} になってしまう。分母は平均のばらつき s÷√n。</div>`;}
 LK.register("tstat",{name:"t 値を計算",
 init(){["sx","sm","ss","sn"].forEach(id=>LK.stepper($(id),sRender));sRender();},
 apply(s){if(s.xbar!==undefined)LK.setRange("sx",s.xbar);if(s.mu0!==undefined)LK.setRange("sm",s.mu0);if(s.s!==undefined)LK.setRange("ss",s.s);if(s.n!==undefined)LK.setRange("sn",s.n);sRender();},

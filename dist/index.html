@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -155,7 +155,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">データを階級に分けて数える。階級の幅を変えると、表とヒストグラムの見え方が変わる。</p>
 <div class="row ctl"><label>データ <select id="hdata" data-key="data"></select></label>
 <label>階級の幅 <select id="hw" data-key="w"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option></select></label></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="hplot"></div>
 <div class="card res det"><table id="htab"></table></div>
 <div class="card res key" id="hsum"></div>
@@ -164,7 +164,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">小さい順に並べて4等分する。箱が真ん中50%、柵（Q₁−1.5×IQR、Q₃＋1.5×IQR）の外が外れ値候補。最大の値を動かすと、平均と中央値はどう動くか。</p>
 <div class="row ctl"><label>データ <select id="bdata" data-key="data"></select></label></div>
 <input type="range" id="bmax" min="0" max="100" step="1" value="55" data-name="最大値">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="bplot"></div>
 <div class="card res key" id="bsum"></div>
 <div id="bform"></div>
@@ -172,14 +172,14 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <div id="m-dens" class="mode">
 <p class="mut" style="margin:0">階級の幅が違うとき、棒の高さを「度数」にするか「度数密度（度数÷幅）」にするか。面積（高さ×幅）が度数を表すのはどちらか。</p>
 <div class="row ctl seg" id="dview"><button type="button" data-v="count">高さ＝度数</button><button type="button" data-v="dens" class="on">高さ＝度数密度</button></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="dplot"></div>
 <div class="card res key" id="dsum"></div>
 <div id="dform"></div>
 </div>
 <div id="m-cmp" class="mode">
-<p class="mut" style="margin:0">5店舗の10日分の日販（万円）を箱ひげ図で並べる。箱の長さ（IQR）が散らばり、ひげの伸び方が裾の向き。</p>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<p class="mut" style="margin:0">5店舗の10日分の日販（万円）を箱ひげ図で並べる。箱の長さ（IQR）がばらつき、ひげの伸び方が裾の向き。</p>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="cplot"></div>
 <div class="card res det"><table id="ctab"></table></div>
 <div class="card res key" id="csum"></div>
@@ -187,12 +187,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <div id="m-shape" class="mode">
 <p class="mut" style="margin:0">X店とY店の12日分の売上（万円）。箱ひげ図はまったく同じ。中身（1つ1つの値）を見ると何が違うか。</p>
 <div class="row ctl"><label><input type="checkbox" id="sdots" checked> 中身（1つ1つの値）を見る</label></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="splot"></div>
 <div class="card res key" id="ssum"></div>
 </div>
 <script>
-window.__LABPRESETS__={"s1-box": {"mode": "box", "set": {"data": "sales"}, "task": "最大の55万円をもっと大きく（たとえば80万円に）すると、平均と中央値のどちらが大きく動くか。", "predict": {"type": "choice", "key": "moves", "label": "大きく動くのは", "options": ["平均", "中央値", "同じくらい"]}, "why": "平均は全部の値を足すので1つの値に引っ張られる。中央値は真ん中の順位の値なので、端の値が変わっても動かない。"}, "s2-box": {"mode": "box", "set": {"data": "nine"}, "task": "9個のデータで、最大の30をQ₃（11）の近くまで下げていく。いくつより小さくなると外れ値候補でなくなるか。"}, "s4-cmp": {"mode": "cmp", "modes": ["cmp", "shape"], "task": "5店舗の箱ひげ図で、散らばりの大きい店と裾の向きを読む。次に「同じ箱でも」で、箱ひげ図から分からないことを確かめる。"}, "s5-hist": {"mode": "hist", "set": {"data": "sales"}, "task": "階級の幅を5・10・20と変え、いちばん度数が多い階級と、山の見え方がどう変わるかを見る。"}, "s6-free": {"task": "自分の集めたデータの扱い方を、5つのモードで確かめる（表の作り方、四分位数と外れ値、幅の違う階級、比べ方、箱ひげ図の限界）。"}, "Q-U05-002": {"mode": "box", "set": {"data": "nine"}, "task": "9個のデータ（3〜30）の上の柵はいくつか。", "predict": {"type": "number", "key": "hi", "label": "上の柵（Q₃＋1.5×IQR）"}, "why": "柵は真ん中の半分（Q₁〜Q₃）だけで決まる。30は柵の外なので外れ値候補。最大値を動かしても柵は動かない。"}, "Q-U05-003": {"mode": "hist", "set": {"data": "sales", "w": 10}, "task": "20日の売上で、30万円未満の日の割合（累積相対度数）はいくらか。", "predict": {"type": "number", "key": "below:30", "label": "30万円未満の割合"}, "why": "10〜20 の4日と 20〜30 の9日で13日。13÷20＝0.65。表の累積の列はこの「足していった割合」。"}, "Q-U05-004": {"mode": "box", "set": {"data": "visits"}, "task": "8日の来店客数で、上の柵（Q₃＋1.5×IQR）はいくつか。", "predict": {"type": "number", "key": "hi", "label": "上の柵"}, "why": "120人は柵の外。平均（61.5人）は120人に引っ張られて中央値（53.5人）よりかなり大きい。"}, "Q-U05-010": {"mode": "dens", "set": {"classes": "0-10:4,10-30:6"}, "task": "「10以上30未満」（度数6）の棒の高さ（度数密度）はいくつか。", "predict": {"type": "number", "key": "dens:1", "label": "10〜30 の高さ"}, "why": "度数密度＝度数÷幅＝6÷20。「高さ＝度数」に切り替えると、幅20の棒の面積が度数の20倍になってしまう。"}, "Q-U05-020": {"mode": "cmp", "task": "C店のひげが長く伸びているのは、上（売上の多い側）と下（売上の少ない側）のどちらか。", "predict": {"type": "choice", "key": "tail", "label": "ひげが長いのは", "options": ["上（売上の多い側）", "下（売上の少ない側）"]}, "why": "C店はQ₃からひげの端までが、Q₁からひげの端までより長い。売上の多い日が他店より大きく伸びる。中央値は5店ともほぼ同じなので、中央値だけ比べると見落とす。"}, "Q-U05-021": {"mode": "shape", "set": {"dots": false}, "task": "5つの数がまったく同じX店とY店。2店の売上は「同じ分布」と言えるか。", "predict": {"type": "choice", "key": "sameDist", "label": "同じ分布と", "options": ["言える", "言えない"]}, "why": "「中身を見る」で1つ1つの値を出すと、Y店は真ん中に1日もなく2つのかたまりに分かれている。箱ひげ図からは山の数が分からない。"}, "Q-U05-023": {"mode": "box", "set": {"data": "sales"}, "task": "20日の売上の平均はいくつか（中央値は26.5）。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "万円"}, "why": "最大値を42（外れ値でない値）まで下げると、平均は26.95まで下がる。外れた1日が平均を押し上げている。"}, "Q-U05-024": {"mode": "hist", "set": {"data": "sales", "w": 5}, "unlock": ["w"], "task": "階級の幅を5万円にすると、いちばん度数が多い階級はどこか。", "predict": {"type": "choice", "key": "modeClass", "label": "いちばん多い階級", "options": ["20〜25", "25〜30", "30〜35"]}, "why": "幅10では「20〜30」の9日がまとまって見えたが、幅5では25〜30に5日、20〜25に4日と分かれる。幅を10・20にも切り替えて比べる。"}, "Q-U05-040": {"mode": "hist", "set": {"data": "sales", "w": 10}, "unlock": ["w"], "task": "10万円の幅で20日の売上を分けると、階級はいくつになるか。", "predict": {"type": "number", "key": "nbins", "label": "階級の数", "unit": "個"}, "why": "スタージェスの目安（約5個）と合う。幅5なら10個、幅20なら3個になる。切り替えて形の見え方を比べる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-box": {"mode": "box", "set": {"data": "sales"}, "task": "最大の55万円をもっと大きく（たとえば80万円に）すると、平均と中央値のどちらが大きく動くか。", "predict": {"type": "choice", "key": "moves", "label": "大きく動くのは", "options": ["平均", "中央値", "同じくらい"]}, "why": "平均は全部の値を足すので1つの値に引っ張られる。中央値は真ん中の順位の値なので、端の値が変わっても動かない。"}, "s2-box": {"mode": "box", "set": {"data": "nine"}, "task": "9個のデータで、最大の30をQ₃（11）の近くまで下げていく。いくつより小さくなると外れ値候補でなくなるか。"}, "s4-cmp": {"mode": "cmp", "modes": ["cmp", "shape"], "task": "5店舗の箱ひげ図で、ばらつきの大きい店と裾の向きを読む。次に「同じ箱でも」で、箱ひげ図から分からないことを確かめる。"}, "s5-hist": {"mode": "hist", "set": {"data": "sales"}, "task": "階級の幅を5・10・20と変え、いちばん度数が多い階級と、山の見え方がどう変わるかを見る。"}, "s6-free": {"task": "自分の集めたデータの扱い方を、5つのモードで確かめる（表の作り方、四分位数と外れ値、幅の違う階級、比べ方、箱ひげ図の限界）。"}, "Q-U05-002": {"mode": "box", "set": {"data": "nine"}, "task": "9個のデータ（3〜30）の上の柵はいくつか。", "predict": {"type": "number", "key": "hi", "label": "上の柵（Q₃＋1.5×IQR）"}, "why": "柵は真ん中の半分（Q₁〜Q₃）だけで決まる。30は柵の外なので外れ値候補。最大値を動かしても柵は動かない。"}, "Q-U05-003": {"mode": "hist", "set": {"data": "sales", "w": 10}, "task": "20日の売上で、30万円未満の日の割合（累積相対度数）はいくらか。", "predict": {"type": "number", "key": "below:30", "label": "30万円未満の割合"}, "why": "10〜20 の4日と 20〜30 の9日で13日。13÷20＝0.65。表の累積の列はこの「足していった割合」。"}, "Q-U05-004": {"mode": "box", "set": {"data": "visits"}, "task": "8日の来店客数で、上の柵（Q₃＋1.5×IQR）はいくつか。", "predict": {"type": "number", "key": "hi", "label": "上の柵"}, "why": "120人は柵の外。平均（61.5人）は120人に引っ張られて中央値（53.5人）よりかなり大きい。"}, "Q-U05-010": {"mode": "dens", "set": {"classes": "0-10:4,10-30:6"}, "task": "「10以上30未満」（度数6）の棒の高さ（度数密度）はいくつか。", "predict": {"type": "number", "key": "dens:1", "label": "10〜30 の高さ"}, "why": "度数密度＝度数÷幅＝6÷20。「高さ＝度数」に切り替えると、幅20の棒の面積が度数の20倍になってしまう。"}, "Q-U05-020": {"mode": "cmp", "task": "C店のひげが長く伸びているのは、上（売上の多い側）と下（売上の少ない側）のどちらか。", "predict": {"type": "choice", "key": "tail", "label": "ひげが長いのは", "options": ["上（売上の多い側）", "下（売上の少ない側）"]}, "why": "C店はQ₃からひげの端までが、Q₁からひげの端までより長い。売上の多い日が他店より大きく伸びる。中央値は5店ともほぼ同じなので、中央値だけ比べると見落とす。"}, "Q-U05-021": {"mode": "shape", "set": {"dots": false}, "task": "5つの数がまったく同じX店とY店。2店の売上は「同じ分布」と言えるか。", "predict": {"type": "choice", "key": "sameDist", "label": "同じ分布と", "options": ["言える", "言えない"]}, "why": "「中身を見る」で1つ1つの値を出すと、Y店は真ん中に1日もなく2つのかたまりに分かれている。箱ひげ図からは山の数が分からない。"}, "Q-U05-023": {"mode": "box", "set": {"data": "sales"}, "task": "20日の売上の平均はいくつか（中央値は26.5）。", "predict": {"type": "number", "key": "mean", "label": "平均", "unit": "万円"}, "why": "最大値を42（外れ値でない値）まで下げると、平均は26.95まで下がる。外れた1日が平均を押し上げている。"}, "Q-U05-024": {"mode": "hist", "set": {"data": "sales", "w": 5}, "unlock": ["w"], "task": "階級の幅を5万円にすると、いちばん度数が多い階級はどこか。", "predict": {"type": "choice", "key": "modeClass", "label": "いちばん多い階級", "options": ["20〜25", "25〜30", "30〜35"]}, "why": "幅10では「20〜30」の9日がまとまって見えたが、幅5では25〜30に5日、20〜25に4日と分かれる。幅を10・20にも切り替えて比べる。"}, "Q-U05-040": {"mode": "hist", "set": {"data": "sales", "w": 10}, "unlock": ["w"], "task": "10万円の幅で20日の売上を分けると、階級はいくつになるか。", "predict": {"type": "number", "key": "nbins", "label": "階級の数", "unit": "個"}, "why": "スタージェスの目安（約5個）と合う。幅5なら10個、幅20なら3個になる。切り替えて形の見え方を比べる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 var MLRandom = (function(exports) {
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 /** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
@@ -303,10 +303,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -320,22 +320,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
@@ -482,7 +482,7 @@ value(key){const c=dClasses[+key.split(":")[1]],v=c[2]/(c[1]-c[0]);return {v,tex
 function cRender(){const rows=Object.entries(STORES).map(([k,v])=>({label:k+"店",F:five(v),color:k==="C"?"var(--acc2)":"var(--acc)"}));
 $("cplot").innerHTML=boxSvg(rows,20,100,10);
 $("ctab").innerHTML="<tr><th>店</th><th>中央値</th><th>IQR</th></tr>"+rows.map(r=>`<tr><td>${r.label}</td><td>${f(r.F.q2)}</td><td>${f(r.F.iqr)}</td></tr>`).join("");
-const w=cWidest();$("csum").innerHTML=`<div>箱がいちばん長い（散らばりが大きい）のは <b>${w}</b>。上のひげも長く、売上の多い日の側に裾が伸びている。</div><div class="mut">中央値は5店ともほぼ同じ。中央値だけを比べると違いが見えない。</div>`;}
+const w=cWidest();$("csum").innerHTML=`<div>箱がいちばん長い（ばらつきが大きい）のは <b>${w}</b>。上のひげも長く、売上の多い日の側に裾が伸びている。</div><div class="mut">中央値は5店ともほぼ同じ。中央値だけを比べると違いが見えない。</div>`;}
 function cWidest(){let best=null,bi=-1;Object.entries(STORES).forEach(([k,v])=>{const i=five(v).iqr;if(i>bi){bi=i;best=k+"店";}});return best;}
 LK.register("cmp",{name:"店舗を比べる",init(){cRender();},render:cRender,
 value(key){if(key==="tail"){const F=five(STORES.C),r=(F.whi-F.q3)>(F.q1-F.wlo)?"上（売上の多い側）":"下（売上の少ない側）";return {v:r,text:r};}

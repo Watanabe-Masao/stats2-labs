@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -166,7 +166,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 <input type="range" id="ln" min="2" max="10" step="1" value="5" data-name="人数 n">
 <input type="range" id="lr" min="1" max="4" step="1" value="2" data-name="選ぶ数 r">
 <div class="row ctl"><label>役割（順番） <select id="lrole" data-key="role"><option value="あり">区別する</option><option value="なし">区別しない</option></select></label></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="lsum"></div>
 <div class="res det" id="llist"></div>
 </div>
@@ -176,7 +176,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 <input type="range" id="pr" min="0" max="12" step="1" value="2" data-name="r">
 <input type="range" id="pp" min="0" max="1" step="0.05" value="0.5" data-name="確率 p">
 <div class="legend mut"><span>■ 選んだ数</span><span>太枠 足し合わせる2つ</span><span>┅ 対称な数</span></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="ptri"></div>
 <div class="card res key" id="pinfo"></div>
 <div class="res det" id="pbin"></div>
@@ -185,7 +185,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 <p class="mut" style="margin:0">n 種類から r 個を選ぶ。同じ種類を何度選んでもよい。順番を区別すれば nʳ、区別しなければ ● と仕切り ｜ の並べ方。</p>
 <input type="range" id="mn" min="2" max="10" step="1" value="3" data-name="種類 n">
 <input type="range" id="mr" min="1" max="6" step="1" value="2" data-name="個数 r">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="msum"></div>
 <div class="res det" id="mlist"></div>
 </div>
@@ -193,7 +193,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 <p class="mut" style="margin:0">格子の左下 S から右上 G への最短の道。→ と ↑ の並べ方を数える。</p>
 <input type="range" id="pa" min="1" max="6" step="1" value="3" data-name="右へ">
 <input type="range" id="pb" min="1" max="5" step="1" value="2" data-name="上へ">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="psvg"></div>
 <div class="row ctl res key"><button type="button" class="sub" id="pnew">別の道を表示</button></div>
 <div class="card res key" id="psum"></div>
@@ -202,7 +202,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 <div id="m-der" class="mode">
 <p class="mut" style="margin:0">n 人がプレゼントを持ち寄って無作為に配り直す。全員が自分以外の物を受け取る確率は？</p>
 <input type="range" id="dn" min="2" max="10" step="1" value="4" data-name="人数 n">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="dsum"></div>
 <div class="row ctl res key"><button type="button" class="act" id="dsim">1000回配り直す</button><button type="button" class="sub" id="dreset">リセット</button></div>
 <div class="card res key" id="dexp"></div>
@@ -215,7 +215,7 @@ table.t td,table.t th{border-bottom:1px solid var(--line);padding:3px 8px;text-a
 <input type="range" id="cr" min="1" max="5" step="1" value="3" data-name="選ぶ r">
 <input type="range" id="cm" min="1" max="9" step="1" value="4" data-name="印の数 m">
 <input type="range" id="ck" min="0" max="5" step="1" value="1" data-name="ちょうど k">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="csum2"></div>
 <div class="res det" id="clist"></div>
 </div>
@@ -331,10 +331,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -348,22 +348,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
@@ -510,7 +510,7 @@ value(){const A=aVals();return {v:A.paths,text:fmt(A.paths)};}});
 const D=[1,0];for(let n=2;n<=10;n++)D[n]=(n-1)*(D[n-1]+D[n-2]);
 let simT=0,simOK=0;
 function dVals(){const n=+$("dn").value;return {n,d:D[n],all:fact(n),p:D[n]/fact(n)};}
-function dReset(){simT=0;simOK=0;$("dexp").innerHTML='<span class="mut">ボタンを押すと、実際に配り直した結果の割合を表示する（押すたびに少し揺れる）。</span>';}
+function dReset(){simT=0;simOK=0;$("dexp").innerHTML='<span class="mut">ボタンを押すと、実際に配り直した結果の割合を表示する（押すたびに少しばらつく）。</span>';}
 function dRender(){const X=dVals();
 const terms=[];for(let k=0;k<=Math.min(X.n,4);k++)terms.push((k%2?"−":(k?"＋":""))+`1/${k}!`);
 $("dsum").innerHTML=`<div>全員が他人の物：<b>${fmt(X.d)}</b>通り／全 ${fmt(X.all)} 通り</div><div>確率＝<b>${X.p.toFixed(4)}</b>　1/e＝${(1/Math.E).toFixed(4)}</div><div class="mut">包除原理：確率＝${terms.join(" ")}${X.n>4?" …":""}。n が大きくなると 1/e に近づく。</div>`;

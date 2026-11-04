@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>散らばりラボ</title>
+<title>ばらつきラボ</title>
 <style>
 :root{--bg:#f6f7f7;--surface:#ffffff;--surface-2:#eef1f0;--raised:#ffffff;--ink:#161a1a;--ink-2:#48504f;--ink-3:#68706f;--line:#e0e4e3;--line-strong:#cbd1d0;--accent:#0f7f73;--accent-ink:#ffffff;--accent-soft:rgba(15, 127, 115, .08);--scrim:rgba(0, 0, 0, .28);--flash:rgba(15, 127, 115, .16);--good:#2f7d3f;--bad:#c53b3b;--accent-line:rgba(15, 127, 115, .35);--focus:#b58000;--mark:rgba(255, 196, 0, .45);--data-1:#2a78d6;--data-hi:#b86e00;--data-2:#6250d6;--data-3:#c2416f;--data-1-soft:#9dbfe8;--data-bg:#eaf1fb;--data-hi-bg:#fbf1e3;--figure-bg:#ffffff;--k-pre:#6d7574;--k-der:#2a78d6;--k-gen:#2a78d6;--k-conv:#b86e00;--k-con:#c2416f;--k-int:#2a78d6;--k-app:#8b9392;--font:system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;--font-mono:ui-monospace, Menlo, monospace;--fs-display:20px;--fs-title:19px;--fs-head:15px;--fs-body:14.5px;--fs-small:12.5px;--fs-label:12.5px;--fs-tag:11.5px;--sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:22px;--r-s:4px;--r-m:6px;--r-l:10px;--r-pill:999px;--tap:44px;--dur-press:90ms;--dur:200ms;--dur-flash:700ms;--dur-sheet:320ms;--ease-sheet:cubic-bezier(0.32, 0.72, 0, 1);--ease:cubic-bezier(0.2, 0.8, 0.2, 1);--press-scale:0.97;--dur-spring:480ms;--ease-spring:linear(0, 0.0241, 0.0838, 0.1642, 0.2544, 0.347, 0.437, 0.5213, 0.598, 0.6663, 0.726, 0.7774, 0.8211, 0.8577, 0.8881, 0.913, 0.9332, 0.9495, 0.9624, 0.9725, 0.9804, 0.9864, 0.991, 0.9944, 0.9968, 0.9986, 0.9998, 1.0006, 1.0011, 1.0014, 1.0015, 1.0015, 1);--ease-bounce:linear(0, 0.0273, 0.097, 0.1929, 0.3023, 0.4158, 0.5262, 0.6286, 0.7203, 0.7995, 0.8658, 0.9196, 0.9618, 0.9936, 1.0164, 1.0317, 1.0408, 1.0452, 1.0459, 1.044, 1.0405, 1.0358, 1.0307, 1.0255, 1.0205, 1.0159, 1.0118, 1.0084, 1.0055, 1.0031, 1.0013, 1, 1);--shadow-raised:0 -8px 28px rgba(0, 0, 0, .14);color-scheme:light}
 @media (prefers-color-scheme:dark){:root{--bg:#0f1111;--surface:#161919;--surface-2:#1c2020;--raised:#222727;--ink:#e6e9e8;--ink-2:#a6adab;--ink-3:#7e8684;--line:#252a2a;--line-strong:#333a39;--accent:#4fbfae;--accent-ink:#06201c;--accent-soft:rgba(79, 191, 174, .12);--scrim:rgba(0, 0, 0, .55);--flash:rgba(79, 191, 174, .20);--good:#7bc98a;--bad:#e66767;--accent-line:rgba(79, 191, 174, .40);--focus:#e0b04a;--mark:rgba(255, 196, 0, .35);--data-1:#3987e5;--data-hi:#c98500;--data-2:#9085e9;--data-3:#d55181;--data-1-soft:#2b4566;--data-bg:#172231;--data-hi-bg:#2e2412;--figure-bg:#ffffff;--k-pre:#7a8280;--k-der:#3987e5;--k-gen:#3987e5;--k-conv:#c98500;--k-con:#d55181;--k-int:#3987e5;--k-app:#a6adab;--shadow-raised:0 -8px 28px rgba(0, 0, 0, .5);color-scheme:dark}}
@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -145,34 +145,34 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .legend span{margin-right:10px;font-size:12px;white-space:nowrap}
 .sw{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
 </style></head><body>
-<h1>🧪 散らばりラボ</h1>
+<h1>🧪 ばらつきラボ</h1>
 <div id="lk-task"></div>
 <div class="tabs" id="tabs"></div>
 <div id="m-dev" class="mode">
-<p class="mut" style="margin:0">平均からのずれ（偏差）を線で見る。偏差の合計はいつも0なので、2乗して足す（偏差平方和）。全部の値を b 倍して a を足すと、散らばりの数はどう変わるか。</p>
+<p class="mut" style="margin:0">平均からのずれ（偏差）を線で見る。偏差の合計はいつも0なので、2乗して足す（偏差平方和）。全部の値を b 倍して a を足すと、ばらつきの数はどう変わるか。</p>
 <div class="row ctl"><label>データ <select id="ddata" data-key="data"></select></label></div>
 <input type="range" id="db" min="0.5" max="3" step="0.1" value="1" data-name="b 倍">
 <input type="range" id="da" min="-20" max="40" step="1" value="0" data-name="a を足す">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="dplot"></div>
 <div class="card res key" id="dsum"></div>
 <div class="card res det"><table id="dtab"></table></div>
 <div id="dform"></div>
 </div>
 <div id="m-cv" class="mode">
-<p class="mut" style="margin:0">平均の大きさが違う2つの散らばりを比べる。標準偏差は平均が大きいほど大きくなりやすいので、平均で割った変動係数（CV）で比べる。</p>
+<p class="mut" style="margin:0">平均の大きさが違う2つのばらつきを比べる。標準偏差は平均が大きいほど大きくなりやすいので、平均で割った変動係数（CV）で比べる。</p>
 <input type="range" id="cmp" min="1" max="3000" step="1" value="100" data-name="Pの平均">
 <input type="range" id="csp" min="0" max="1000" step="1" value="10" data-name="Pの標準偏差">
 <input type="range" id="cmq" min="1" max="3000" step="1" value="20" data-name="Qの平均">
 <input type="range" id="csq" min="0" max="1000" step="1" value="4" data-name="Qの標準偏差">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="cplot"></div>
 <div class="card res key" id="csum"></div>
 </div>
 <div id="m-unb" class="mode">
 <p class="mut" style="margin:0">母集団 2, 4, 6, 8, 10（母分散 8）から大きさ n の標本を取る。取り方は全部で 5ⁿ 通り（同じ値を何度でも取れる）。全部の標本で n で割る分散と n−1 で割る分散を計算し、平均を比べる。</p>
 <input type="range" id="un" min="2" max="6" step="1" value="2" data-name="標本の大きさ n">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="uplot"></div>
 <div class="card res key" id="usum"></div>
 </div>
@@ -182,13 +182,13 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="g2" min="0" max="20" step="1" value="1" data-name="2店目">
 <input type="range" id="g3" min="0" max="20" step="1" value="2" data-name="3店目">
 <input type="range" id="g4" min="0" max="20" step="1" value="6" data-name="4店目">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="gplot"></div>
 <div class="card res key" id="gsum"></div>
 <div id="gform"></div>
 </div>
 <script>
-window.__LABPRESETS__={"s1-dev": {"mode": "dev", "set": {"data": "B"}, "task": "売場Bの5日間 4, 7, 10, 13, 16 個の不偏分散（n−1 で割る）はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −6, −3, 0, 3, 6 を2乗して足すと90。n−1＝4 で割って22.5。n で割ると18。標準偏差は √22.5≒4.74個。"}, "s1-scale": {"mode": "dev", "set": {"data": "B", "b": 2}, "task": "売場Bの5日間の販売数を全部2倍にすると、不偏分散（もとは22.5）はいくつになるか。予想したら、a（足す数）も動かしてみる。", "predict": {"type": "number", "key": "s2", "label": "2倍したあとの不偏分散"}, "why": "偏差がどれも2倍になり、2乗するので分散は4倍の90。標準偏差は2倍。a を足しても全部が同じだけずれるので、偏差も分散も変わらない。"}, "s4-cv": {"mode": "cv", "modes": ["cv", "gini"], "task": "平均と標準偏差を動かして、標準偏差が大きくても CV が小さくなる組み合わせを作る。次に「ジニ係数」で、売上が1店に集まるほど係数がどうなるかを見る。"}, "s5-unb": {"mode": "unb", "task": "n を2から6まで動かし、n で割る分散の平均が母分散8のどれだけになるか（(n−1)/n 倍）を確かめる。"}, "s6-free": {"task": "自分の店の数字で、散らばりの数の選び方を4つのモードで確かめる（偏差と分散、変動係数、n か n−1 か、ジニ係数）。"}, "Q-U07-001": {"mode": "dev", "set": {"data": "A"}, "task": "売場Aの5日間 8, 9, 10, 11, 12 個の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −2〜2 を2乗して足すと10、4で割って2.5。売場B（22.5）の9分の1で、標準偏差は3分の1。"}, "Q-U07-002": {"mode": "cv", "set": {"mP": 100, "sP": 10, "mQ": 20, "sQ": 4}, "task": "商品Pは平均100個・標準偏差10個、商品Qは平均20個・標準偏差4個。相対的にばらつきが大きいのはどちらか。", "predict": {"type": "choice", "key": "bigger", "label": "CVが大きいのは", "options": ["P", "Q", "同じ"]}, "why": "標準偏差は P の10個の方が大きいが、平均で割ると P は0.10、Q は0.20。Q の平均を100にすると、CV は0.04まで下がる。"}, "Q-U07-003": {"mode": "dev", "set": {"data": "t3"}, "task": "2, 4, 6 の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −2, 0, 2 を2乗して足すと8、n−1＝2 で割って4。標準偏差は2。"}, "Q-U07-004": {"mode": "dev", "set": {"data": "t4"}, "task": "1, 3, 5, 7 の n で割る分散はいくつか。予測したら b を2にして、分散が何倍になるかも見る。", "predict": {"type": "number", "key": "v", "label": "n で割る分散"}, "why": "偏差平方和20を4で割って5。b＝2 にすると偏差平方和は80になり、分散は4倍の20。"}, "Q-U07-005": {"mode": "dev", "set": {"data": "ry"}, "task": "Y（0, 0, 5, 10, 10）の偏差平方和はいくつか。予測したら X に切り替えて比べる。", "predict": {"type": "number", "key": "ss", "label": "偏差平方和"}, "why": "どの点も平均5から離れているので、偏差平方和は X（50）の2倍。範囲（10）は同じでもばらつきは違う。"}, "Q-U07-010": {"mode": "dev", "set": {"data": "B"}, "task": "4, 7, 10, 13, 16 の偏差平方和はいくつか（くわしくの式に「近道」の計算が出る）。", "predict": {"type": "number", "key": "ss", "label": "偏差平方和"}, "why": "偏差の2乗を足しても、Σx²−(Σx)²÷n で計算しても90。平均が割り切れないデータでは近道の方が計算しやすい。"}, "Q-U07-011": {"mode": "dev", "set": {"data": "temp", "b": 1.8, "a": 32}, "task": "18, 20, 22℃ を華氏（1.8倍して32を足す）にしたとき、標準偏差（√不偏分散）は何°Fか。", "predict": {"type": "number", "key": "s", "label": "標準偏差", "unit": "°F"}, "why": "32を足してもばらつきは変わらない。1.8倍したので標準偏差も1.8倍（2→3.6）、分散は1.8²倍（4→12.96）。"}, "Q-U07-012": {"mode": "dev", "set": {"data": "visit"}, "task": "無作為に選んだ5日の来店数 20, 22, 24, 26, 28 人の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差平方和40を n−1＝4 で割って10。母分散の推定に使うので n−1 で割る（n で割ると8）。"}, "Q-U07-020": {"mode": "cv", "set": {"mP": 3000, "sP": 600, "mQ": 300, "sQ": 90}, "task": "P＝メロン（平均3,000円・標準偏差600円）、Q＝みかん（平均300円・標準偏差90円）。みかんの CV はいくつか。", "predict": {"type": "number", "key": "cvQ", "label": "みかんの CV"}, "why": "90÷300＝0.3。メロンの0.2より大きい。標準偏差の大小と CV の大小は逆になることがある。"}, "Q-U07-021": {"mode": "dev", "set": {"data": "B", "b": 2, "a": 3}, "task": "売場Bの販売数（不偏分散22.5）を全部2倍して3を足すと、不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "2倍で4倍の90。3を足しても変わらない。a だけを動かして、分散が変わらないことも確かめる。"}, "Q-U07-022": {"mode": "gini", "set": {"sales": "1,1,2,6"}, "task": "4店の売上 1, 1, 2, 6 のジニ係数はいくつか。", "predict": {"type": "number", "key": "gini", "label": "ジニ係数"}, "why": "曲線の下の面積は0.3。対角線の下（0.5）との差0.2を2倍して0.4。4店を同じ売上にすると0になる。"}, "Q-U07-023": {"mode": "unb", "set": {"n": 2}, "task": "母集団 2, 4, 6, 8, 10（母分散8）から大きさ2の標本を取る全25通りで、n で割る分散の平均は母分散より大きいか小さいか。", "predict": {"type": "choice", "key": "bias", "label": "母分散と比べて", "options": ["小さい", "等しい", "大きい"]}, "why": "n で割る分散の平均は4（母分散の半分）、n−1 で割るとちょうど8。n を大きくすると差は縮むが、(n−1)/n 倍は残る。"}, "Q-U07-030": {"mode": "dev", "set": {"data": "fundB"}, "task": "投資信託Bの年リターン −4, 4, 12% の標準偏差（√不偏分散）は何%か。", "predict": {"type": "number", "key": "s", "label": "標準偏差", "unit": "%"}, "why": "偏差 −8, 0, 8 を2乗して足すと128、2で割って64、平方根8%。A（2, 4, 6%）の4倍。"}, "Q-U07-031": {"mode": "cv", "set": {"mP": 2, "sP": 3, "mQ": 20, "sQ": 3}, "task": "P＝都市X（平均2℃・標準偏差3℃）、Q＝都市Y（平均20℃・標準偏差3℃）。X の CV はいくつか。計算してから、意味がある数かを考える。", "predict": {"type": "number", "key": "cvP", "label": "X の CV"}, "why": "計算では1.5になるが、平均の2℃は0℃の決め方しだいで変わる。平均を0に近づけると CV はいくらでも大きくなる。摂氏の気温では標準偏差（どちらも3℃）で比べる。"}, "Q-U07-040": {"mode": "unb", "set": {"n": 3}, "task": "大きさ3の標本の全125通りで、n で割る分散の平均はいくつか。", "predict": {"type": "number", "key": "av", "label": "n で割る分散の平均"}, "why": "(n−1)/n＝2/3 倍で約5.33。n を6まで動かすと、2/3→5/6 と母分散8に近づく。"}, "Q-U08-012": {"mode": "dev", "set": {"data": "t3", "b": 0.5, "a": -2}, "task": "2, 4, 6 を0.5倍して2を引く（z得点に直す）と、標準偏差（√不偏分散）はいくつになるか。", "predict": {"type": "number", "key": "s", "label": "標準偏差"}, "why": "0.5倍で標準偏差は2→1、2を引いても変わらない。平均も4→0。これが「標準化すると平均0・標準偏差1」の理由。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-dev": {"mode": "dev", "set": {"data": "B"}, "task": "売場Bの5日間 4, 7, 10, 13, 16 個の不偏分散（n−1 で割る）はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −6, −3, 0, 3, 6 を2乗して足すと90。n−1＝4 で割って22.5。n で割ると18。標準偏差は √22.5≒4.74個。"}, "s1-scale": {"mode": "dev", "set": {"data": "B", "b": 2}, "task": "売場Bの5日間の販売数を全部2倍にすると、不偏分散（もとは22.5）はいくつになるか。予測したら、a（足す数）も動かしてみる。", "predict": {"type": "number", "key": "s2", "label": "2倍したあとの不偏分散"}, "why": "偏差がどれも2倍になり、2乗するので分散は4倍の90。標準偏差は2倍。a を足しても全部が同じだけずれるので、偏差も分散も変わらない。"}, "s4-cv": {"mode": "cv", "modes": ["cv", "gini"], "task": "平均と標準偏差を動かして、標準偏差が大きくても CV が小さくなる組み合わせを作る。次に「ジニ係数」で、売上が1店に集まるほど係数がどうなるかを見る。"}, "s5-unb": {"mode": "unb", "task": "n を2から6まで動かし、n で割る分散の平均が母分散8のどれだけになるか（(n−1)/n 倍）を確かめる。"}, "s6-free": {"task": "自分の店の数字で、ばらつきの数の選び方を4つのモードで確かめる（偏差と分散、変動係数、n か n−1 か、ジニ係数）。"}, "Q-U07-001": {"mode": "dev", "set": {"data": "A"}, "task": "売場Aの5日間 8, 9, 10, 11, 12 個の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −2〜2 を2乗して足すと10、4で割って2.5。売場B（22.5）の9分の1で、標準偏差は3分の1。"}, "Q-U07-002": {"mode": "cv", "set": {"mP": 100, "sP": 10, "mQ": 20, "sQ": 4}, "task": "商品Pは平均100個・標準偏差10個、商品Qは平均20個・標準偏差4個。相対的にばらつきが大きいのはどちらか。", "predict": {"type": "choice", "key": "bigger", "label": "CVが大きいのは", "options": ["P", "Q", "同じ"]}, "why": "標準偏差は P の10個の方が大きいが、平均で割ると P は0.10、Q は0.20。Q の平均を100にすると、CV は0.04まで下がる。"}, "Q-U07-003": {"mode": "dev", "set": {"data": "t3"}, "task": "2, 4, 6 の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差 −2, 0, 2 を2乗して足すと8、n−1＝2 で割って4。標準偏差は2。"}, "Q-U07-004": {"mode": "dev", "set": {"data": "t4"}, "task": "1, 3, 5, 7 の n で割る分散はいくつか。予測したら b を2にして、分散が何倍になるかも見る。", "predict": {"type": "number", "key": "v", "label": "n で割る分散"}, "why": "偏差平方和20を4で割って5。b＝2 にすると偏差平方和は80になり、分散は4倍の20。"}, "Q-U07-005": {"mode": "dev", "set": {"data": "ry"}, "task": "Y（0, 0, 5, 10, 10）の偏差平方和はいくつか。予測したら X に切り替えて比べる。", "predict": {"type": "number", "key": "ss", "label": "偏差平方和"}, "why": "どの点も平均5から離れているので、偏差平方和は X（50）の2倍。範囲（10）は同じでもばらつきは違う。"}, "Q-U07-010": {"mode": "dev", "set": {"data": "B"}, "task": "4, 7, 10, 13, 16 の偏差平方和はいくつか（くわしくの式に「近道」の計算が出る）。", "predict": {"type": "number", "key": "ss", "label": "偏差平方和"}, "why": "偏差の2乗を足しても、Σx²−(Σx)²÷n で計算しても90。平均が割り切れないデータでは近道の方が計算しやすい。"}, "Q-U07-011": {"mode": "dev", "set": {"data": "temp", "b": 1.8, "a": 32}, "task": "18, 20, 22℃ を華氏（1.8倍して32を足す）にしたとき、標準偏差（√不偏分散）は何°Fか。", "predict": {"type": "number", "key": "s", "label": "標準偏差", "unit": "°F"}, "why": "32を足してもばらつきは変わらない。1.8倍したので標準偏差も1.8倍（2→3.6）、分散は1.8²倍（4→12.96）。"}, "Q-U07-012": {"mode": "dev", "set": {"data": "visit"}, "task": "無作為に選んだ5日の来店数 20, 22, 24, 26, 28 人の不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "偏差平方和40を n−1＝4 で割って10。母分散の推定に使うので n−1 で割る（n で割ると8）。"}, "Q-U07-020": {"mode": "cv", "set": {"mP": 3000, "sP": 600, "mQ": 300, "sQ": 90}, "task": "P＝メロン（平均3,000円・標準偏差600円）、Q＝みかん（平均300円・標準偏差90円）。みかんの CV はいくつか。", "predict": {"type": "number", "key": "cvQ", "label": "みかんの CV"}, "why": "90÷300＝0.3。メロンの0.2より大きい。標準偏差の大小と CV の大小は逆になることがある。"}, "Q-U07-021": {"mode": "dev", "set": {"data": "B", "b": 2, "a": 3}, "task": "売場Bの販売数（不偏分散22.5）を全部2倍して3を足すと、不偏分散はいくつか。", "predict": {"type": "number", "key": "s2", "label": "不偏分散"}, "why": "2倍で4倍の90。3を足しても変わらない。a だけを動かして、分散が変わらないことも確かめる。"}, "Q-U07-022": {"mode": "gini", "set": {"sales": "1,1,2,6"}, "task": "4店の売上 1, 1, 2, 6 のジニ係数はいくつか。", "predict": {"type": "number", "key": "gini", "label": "ジニ係数"}, "why": "曲線の下の面積は0.3。対角線の下（0.5）との差0.2を2倍して0.4。4店を同じ売上にすると0になる。"}, "Q-U07-023": {"mode": "unb", "set": {"n": 2}, "task": "母集団 2, 4, 6, 8, 10（母分散8）から大きさ2の標本を取る全25通りで、n で割る分散の平均は母分散より大きいか小さいか。", "predict": {"type": "choice", "key": "bias", "label": "母分散と比べて", "options": ["小さい", "等しい", "大きい"]}, "why": "n で割る分散の平均は4（母分散の半分）、n−1 で割るとちょうど8。n を大きくすると差は縮むが、(n−1)/n 倍は残る。"}, "Q-U07-030": {"mode": "dev", "set": {"data": "fundB"}, "task": "投資信託Bの年リターン −4, 4, 12% の標準偏差（√不偏分散）は何%か。", "predict": {"type": "number", "key": "s", "label": "標準偏差", "unit": "%"}, "why": "偏差 −8, 0, 8 を2乗して足すと128、2で割って64、平方根8%。A（2, 4, 6%）の4倍。"}, "Q-U07-031": {"mode": "cv", "set": {"mP": 2, "sP": 3, "mQ": 20, "sQ": 3}, "task": "P＝都市X（平均2℃・標準偏差3℃）、Q＝都市Y（平均20℃・標準偏差3℃）。X の CV はいくつか。計算してから、意味がある数かを考える。", "predict": {"type": "number", "key": "cvP", "label": "X の CV"}, "why": "計算では1.5になるが、平均の2℃は0℃の決め方しだいで変わる。平均を0に近づけると CV はいくらでも大きくなる。摂氏の気温では標準偏差（どちらも3℃）で比べる。"}, "Q-U07-040": {"mode": "unb", "set": {"n": 3}, "task": "大きさ3の標本の全125通りで、n で割る分散の平均はいくつか。", "predict": {"type": "number", "key": "av", "label": "n で割る分散の平均"}, "why": "(n−1)/n＝2/3 倍で約5.33。n を6まで動かすと、2/3→5/6 と母分散8に近づく。"}, "Q-U08-012": {"mode": "dev", "set": {"data": "t3", "b": 0.5, "a": -2}, "task": "2, 4, 6 を0.5倍して2を引く（z得点に直す）と、標準偏差（√不偏分散）はいくつになるか。", "predict": {"type": "number", "key": "s", "label": "標準偏差"}, "why": "0.5倍で標準偏差は2→1、2を引いても変わらない。平均も4→0。これが「標準化すると平均0・標準偏差1」の理由。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 var MLRandom = (function(exports) {
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 /** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
@@ -299,10 +299,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -316,22 +316,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
@@ -417,7 +417,7 @@ let s=`<svg viewBox="0 0 ${W} ${H+20}" width="${W}" role="img" aria-label="偏�
 s+=`<line x1="${X(R.m)}" y1="6" x2="${X(R.m)}" y2="${H}" stroke="var(--acc2)" stroke-width="2"/><text x="${Math.min(W-30,Math.max(30,X(R.m)))}" y="${H+14}" font-size="11" text-anchor="middle" fill="var(--acc2)" font-weight="700">平均 ${f(r2(R.m))}</text>`;
 x.forEach((v,i)=>{const y=18+i*18;s+=`<line x1="${X(R.m)}" y1="${y}" x2="${X(v)}" y2="${y}" stroke="var(--acc)" stroke-width="2" stroke-dasharray="4 3"/><circle cx="${X(v)}" cy="${y}" r="5" fill="var(--fg)"/><text x="${X(v)+(v>=R.m?9:-9)}" y="${y+4}" font-size="10" text-anchor="${v>=R.m?"start":"end"}" fill="var(--mut)">${f(r2(v))}</text>`;});
 $("dplot").innerHTML=s+`</svg><div class="mut">点線の長さ＝偏差（値−平均）。左右の点線を足すと0になる。</div>`;
-const u=R.D.unit,tr=(R.b!==1||R.a!==0)?`<div class="mut">変換 ${f(R.b)}x${R.a>=0?"＋":"−"}${Math.abs(R.a)}：平均は ${f(R.b)}倍して${R.a>=0?"足し":"引き"}、分散は ${f(r2(R.b*R.b))}倍、標準偏差は ${f(R.b)}倍。a は散らばりを変えない。</div>`:"";
+const u=R.D.unit,tr=(R.b!==1||R.a!==0)?`<div class="mut">変換 ${f(R.b)}x${R.a>=0?"＋":"−"}${Math.abs(R.a)}：平均は ${f(R.b)}倍して${R.a>=0?"足し":"引き"}、分散は ${f(r2(R.b*R.b))}倍、標準偏差は ${f(R.b)}倍。a はばらつきを変えない。</div>`:"";
 $("dsum").innerHTML=`<div>偏差平方和 <b>${f(r2(R.ss))}</b>　分散（n）<b>${f(r2(R.v))}</b>　不偏分散（n−1）<b>${f(r2(R.s2))}</b></div><div>標準偏差 s＝√${f(r2(R.s2))}≒<b>${f(r2(R.s))}</b>${u}${R.m>0?`　CV≒<b>${f(r2(R.cv))}</b>`:""}</div>${tr}`;
 $("dtab").innerHTML="<tr><th>xᵢ</th><th>xᵢ−x̄</th><th>(xᵢ−x̄)²</th></tr>"+x.map(v=>`<tr><td>${f(r2(v))}</td><td>${f(r2(v-R.m))}</td><td>${f(r2((v-R.m)**2))}</td></tr>`).join("")+`<tr><td><b>合計</b></td><td>0</td><td><b>${f(r2(R.ss))}</b></td></tr>`;
 $("dform").innerHTML=LK.formula([`平均＝${f(r2(R.sx))}÷${n}＝${f(r2(R.m))}`,`分散（n）＝${f(r2(R.ss))}÷${n}＝${f(r2(R.v))}、不偏分散＝${f(r2(R.ss))}÷${n-1}＝${f(r2(R.s2))}`,`近道：Σx²−(Σx)²÷n＝${f(r2(R.sx2))}−${f(r2(R.sx))}²÷${n}＝${f(r2(R.ss))}`]);}

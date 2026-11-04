@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -156,7 +156,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="tw" min="0.05" max="0.95" step="0.05" value="0.2" data-name="層1の割合">
 <input type="range" id="tb" min="0" max="300" step="5" value="200" data-name="層1の平均">
 <input type="range" id="ts" min="0" max="300" step="5" value="50" data-name="層2の平均">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="tplot"></div>
 <div class="card res key" id="tsum"></div>
 </div>
@@ -166,7 +166,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="dp" min="0" max="3" step="0.5" value="0" data-name="並び順の差">
 <input type="range" id="ds" min="0" max="3" step="0.5" value="1" data-name="店ごとの差">
 <div class="row ctl"><label>格子に描く方法 <select id="dshow" data-key="show"><option value="srs">単純無作為</option><option value="strat">層化（地域ごとに1店）</option><option value="clus">集落（1地域を全部）</option><option value="sys">系統（10店おき）</option></select></label><button type="button" class="act" id="ddraw">もう1回選ぶ</button></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="dplot"></div>
 <div class="card res key" id="dsum"></div>
 <div class="res det" id="dtab"></div>
@@ -177,7 +177,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="b1" min="0.05" max="1" step="0.05" value="0.6" data-name="賛成者の回答率">
 <input type="range" id="b0" min="0.05" max="1" step="0.05" value="0.3" data-name="反対者の回答率">
 <input type="range" id="bn" min="100" max="10000" step="100" value="400" data-name="回答数 n">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="bplot"></div>
 <div class="card res key" id="bsum"></div>
 </div>
@@ -188,7 +188,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="a2" min="1" max="100" step="1" value="5" data-name="層2の標準偏差">
 <input type="range" id="am" min="0" max="100" step="5" value="40" data-name="層の平均の差">
 <input type="range" id="an" min="20" max="400" step="10" value="100" data-name="全体の n">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="aplot"></div>
 <div class="card res key" id="asum"></div>
 </div>
@@ -200,12 +200,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="mb" min="1" max="50" step="1" value="3" data-name="選ぶ店">
 <input type="range" id="mC" min="10" max="500" step="10" value="200" data-name="1店の客">
 <input type="range" id="mc" min="1" max="500" step="1" value="20" data-name="選ぶ客">
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="res key" id="mplot"></div>
 <div class="card res key" id="msum"></div>
 </div>
 <script>
-window.__LABPRESETS__={"s1-strat": {"mode": "strat", "set": {"w": 0.2, "m1": 200, "m2": 50}, "task": "全100店のうち大規模店20店・小規模店80店。各層10店ずつ調べると平均売上は大規模200万円・小規模50万円。全店の平均売上の推定は（万円）？", "predict": {"type": "number", "key": "weighted", "label": "全店の平均", "unit": "万円"}, "why": "0.2×200＋0.8×50＝80。調べた20店をそのまま平均すると125 で、数の少ない大規模店を重く見すぎる。"}, "s1-design": {"mode": "design", "set": {"d": 1, "p": 0, "s": 1, "show": "strat"}, "task": "地域によって売上がかなり違う（地域の差1）。4つの方法で10店を選ぶとき、推定値のばらつきがいちばん小さいのは？", "predict": {"type": "choice", "key": "best", "label": "いちばん小さい", "options": ["単純無作為", "層化", "集落", "系統"]}, "why": "地域ごとに1店ずつ選ぶと、地域の違いが推定値のばらつきに入らない。1地域だけ全部調べる集落は、どの地域を引くかで大きくぶれる。"}, "s3-rule": {"mode": "design", "steps": [{"label": "地域の差0", "task": "地域による違いがないとき、集落抽出（1地域を全部）の標準誤差は単純無作為の何倍か（小数で）？", "set": {"d": 0, "p": 0, "s": 1, "show": "clus"}, "predict": {"type": "number", "key": "rClus", "label": "集落÷単純無作為", "unit": "倍"}, "why": "地域の中にいろいろな店が混ざっていれば、1地域でも全体の縮図になる。"}, {"label": "地域の差1", "task": "地域の差を1にする。集落の標準誤差は単純無作為の何倍か？", "set": {"d": 1}, "predict": {"type": "number", "key": "rClus", "label": "集落÷単純無作為", "unit": "倍"}, "why": "地域の中の店が似てくると、1地域を全部調べても情報は1店分に近くなる。"}, {"label": "地域の差2", "task": "地域の差を2にする。集落の標準誤差は単純無作為の何倍か？", "set": {"d": 2}, "predict": {"type": "number", "key": "rClus", "label": "集落÷単純無作為", "unit": "倍"}, "why": "差がさらに大きくなっても、倍率の上がり方はゆるやか。単純無作為も地域の差でばらつくから。"}, {"label": "地域の差2・層化", "task": "同じ地域の差2で、層化（地域ごとに1店）の標準誤差は単純無作為の何倍か？", "set": {"show": "strat"}, "predict": {"type": "number", "key": "rStrat", "label": "層化÷単純無作為", "unit": "倍"}, "why": "層化は地域の違いをばらつきから取り除く。集落と正反対に、地域の差が大きいほど得をする。"}], "law": {"title": "式で説明する", "lines": ["集落抽出の推定値のばらつき ＝ 集落ごとの平均がどれだけ違うか（集落の間のばらつき）", "層化抽出の推定値のばらつき ＝ 層の中のばらつきだけ（層の間の違いは入らない）", "集落の中が似ている（＝集落の間が違う）ほど集落は損、層化は得"], "text": "同じ「地域で分ける」でも、全部の地域から少しずつ取る（層化）か、いくつかの地域を丸ごと取る（集落）かで、地域の違いが誤差に入るかどうかが逆になる。", "limit": "集落抽出は、調べる場所が少なくて安く済む。同じ費用でより多くの店を調べられるなら、ばらつきが大きくても集落を選ぶことがある。費用と精度のどちらを取るかは統計の外の判断。"}}, "s3-free": {"mode": "design", "modes": ["strat", "design", "bias", "alloc", "multi"], "task": "解いてから、問題が聞いていること（重み・抽出法の比べ方・偏り・配分・多段の確率）に合うモードで確かめる。"}, "s4-free": {"mode": "strat", "modes": ["strat", "design", "bias", "alloc", "multi"], "task": "自分の店のアンケートや売場調査の数字（層の大きさ・平均・回答率など）を入れて、推定の仕方と誤差を確かめる。"}, "s5-free": {"mode": "bias", "modes": ["bias", "alloc", "design"], "task": "「消えない偏り」で n を10倍ずつ増やし、区間の幅と偏りの動きを比べる（発展1）。「配分の仕方」で層の標準偏差を変える（発展2）。"}, "s6-free": {"task": "自分の調査の設計を、5つのモードで確かめる（重み・抽出法・偏り・配分・多段の確率）。"}, "Q-U31-001": {"mode": "strat", "set": {"w": 0.3, "m1": 100, "m2": 40}, "task": "層1（割合0.3）の平均100、層2（割合0.7）の平均40。全体の平均の推定は？", "predict": {"type": "number", "key": "weighted", "label": "全体の平均"}, "why": "帯の面積を全体の幅でならした高さが58。2つの層の割合が同じ0.5 のときだけ、そのまま平均と一致する。"}, "Q-U31-002": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.3, "n": 400}, "task": "本当の賛成率0.5、賛成者の回答率0.6・反対者の回答率0.3。集まった答えの賛成率は（小数で）？", "predict": {"type": "number", "key": "est", "label": "集まった賛成率"}, "why": "賛成の人のほうが2倍答えやすいので、集まった答えは賛成に寄る。n を1万にすると区間は細くなるが、本当の0.5 からは離れたまま。"}, "Q-U31-003": {"mode": "multi", "set": {"A": 10, "a": 2, "B": 15, "b": 3, "C": 200, "c": 20}, "task": "地域10から2、店15から3、客200から20 を選ぶ。1人が代表する人数（重み）は？", "predict": {"type": "number", "key": "weight", "label": "重み", "unit": "人"}, "why": "確率0.2×0.2×0.1＝0.004 の逆数。どの客も確率が同じなので、集計はそのまま平均してよい。"}, "Q-U31-004": {"mode": "design", "set": {"d": 2, "p": 0, "s": 1, "show": "clus"}, "task": "地域の差2（地域ごとの違いが大きい）。4つの方法のうち、推定値のばらつきがいちばん小さいのは？", "predict": {"type": "choice", "key": "best", "label": "いちばん小さい", "options": ["単純無作為", "層化", "集落", "系統"]}, "why": "層化の標準誤差は単純無作為の約0.3倍、集落は約3.2倍。同じ「地域で分ける」でも結果は正反対になる。"}, "Q-U31-005": {"mode": "design", "set": {"d": 0, "p": 2, "s": 1, "show": "sys"}, "task": "地域の差0、並び順の差2（名簿が地域ごとに売上順）。系統抽出の標準誤差は単純無作為の何倍か（小数で）？", "predict": {"type": "number", "key": "rSys", "label": "系統÷単純無作為", "unit": "倍"}, "why": "系統抽出で選べる標本は「1位の10店」「2位の10店」…の10通りしかない。並び順の差がそのまま推定値のばらつきになる。"}, "Q-U31-010": {"mode": "alloc", "set": {"w1": 0.2, "s1": 30, "s2": 5, "dm": 40, "n": 100}, "task": "層1（割合0.2・標準偏差30）、層2（割合0.8・標準偏差5）、全体100人。ネイマン配分で層1に配る人数は？", "predict": {"type": "number", "key": "n1n", "label": "層1の人数", "unit": "人"}, "why": "比例配分なら20人。層1は人数こそ少ないが、ばらつきが6倍あるので、多めに調べたほうが全体の推定が安定する。"}, "Q-U31-011": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.3, "n": 10000}, "task": "1万人の回答。95%区間は本当の賛成率0.5 を含むか。", "predict": {"type": "choice", "key": "covers", "label": "区間は0.5 を", "options": ["含む", "含まない"]}, "why": "区間は0.657〜0.676 と細い。n を100人に戻すと区間は広がるが、真ん中は0.667 のまま。"}, "Q-U31-012": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.4, "n": 400}, "task": "本当の賛成率0.5、賛成者の回答率0.6・反対者0.4、400人。偏り（集まった値−本当の値）は（小数で）？", "predict": {"type": "number", "key": "bias", "label": "偏り"}, "why": "回答率の差が0.6 と0.4 でも、集まった答えは0.1 ずれる。区間の幅（約±0.048）より大きい。"}, "Q-U31-020": {"mode": "strat", "set": {"w": 0.2, "m1": 80, "m2": 50}, "task": "A店（全体の0.2）の満足80%、B店（0.8）の満足50%。2店全体の満足の割合の推定は（%）？", "predict": {"type": "number", "key": "weighted", "label": "全体の満足", "unit": "%"}, "why": "帯の幅が客数の割合。そのまま平均（65%）とのずれは、小さな店を重く見すぎた分。"}, "Q-U31-021": {"mode": "alloc", "set": {"w1": 0.2, "s1": 30, "s2": 5, "dm": 40, "n": 100}, "task": "同じ2つの層、100人。ネイマン配分の標準誤差は（小数で）？", "predict": {"type": "number", "key": "seN", "label": "ネイマン配分の標準誤差"}, "why": "単純無作為の約2.14、比例配分の約1.41 より小さい。層の平均の差を0 にすると、単純無作為と比例配分の差は小さくなる。"}, "Q-U31-022": {"mode": "bias", "set": {"p": 0.4, "r1": 0.5, "r0": 0.5, "n": 400}, "task": "本当の賛成率0.4、賛成者も反対者も回答率0.5。偏り（集まった値−本当の値）は（小数で）？", "predict": {"type": "number", "key": "bias", "label": "偏り"}, "why": "回答率が同じなら偏りは0。反対者の回答率だけを0.3 に下げると、偏りが出る。"}, "Q-U31-023": {"mode": "design", "set": {"d": 2, "p": 0, "s": 1, "show": "strat"}, "task": "地域の差2。層化の標準誤差は単純無作為の何倍か（小数で）？", "predict": {"type": "number", "key": "rStrat", "label": "層化÷単純無作為", "unit": "倍"}, "why": "層の間の違いが大きいほど層化は得をする。集落（約3.2倍）とは正反対。"}, "Q-U31-030": {"mode": "strat", "set": {"w": 0.25, "m1": 120, "m2": 60}, "task": "大型店（全体の0.25）の客単価120、小型店（0.75）の客単価60。全体の推定は（百円）？", "predict": {"type": "number", "key": "weighted", "label": "全体の客単価", "unit": "百円"}, "why": "帯の面積の合計を全体の幅でならすと75。そのまま平均の90 とは15 ずれる。"}, "Q-U31-031": {"mode": "bias", "set": {"p": 0.3, "r1": 0.2, "r0": 0.5, "n": 400}, "task": "本当の「不満」の割合0.3、不満のある人の回答率0.2・ない人の回答率0.5。集まった「不満」の割合は（小数で）？", "predict": {"type": "number", "key": "est", "label": "集まった不満の割合"}, "why": "不満のある人ほど答えないので、集まった答えは半分以下に。区間（約0.11〜0.18）も本当の0.3 を含まない。"}, "Q-U31-032": {"mode": "multi", "set": {"A": 12, "a": 3, "B": 8, "b": 2, "C": 100, "c": 10}, "task": "地域12から3、店8から2、客100から10 を選ぶ。1人が代表する人数（重み）は？", "predict": {"type": "number", "key": "weight", "label": "重み", "unit": "人"}, "why": "0.25×0.25×0.1 の逆数。1店の客を300 にすると重みは480 に変わる。"}, "Q-U31-040": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.3, "n": 400}, "task": "400人のとき、総合誤差 √(偏り²＋標準誤差²) は（小数で）？", "predict": {"type": "number", "key": "rmse", "label": "総合誤差"}, "why": "偏り0.167 がほとんどを占める。n を1万にしても0.1667 までしか下がらない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-strat": {"mode": "strat", "set": {"w": 0.2, "m1": 200, "m2": 50}, "task": "全100店のうち大規模店20店・小規模店80店。各層10店ずつ調べると平均売上は大規模200万円・小規模50万円。全店の平均売上の推定は（万円）？", "predict": {"type": "number", "key": "weighted", "label": "全店の平均", "unit": "万円"}, "why": "0.2×200＋0.8×50＝80。調べた20店をそのまま平均すると125 で、数の少ない大規模店を重く見すぎる。"}, "s1-design": {"mode": "design", "set": {"d": 1, "p": 0, "s": 1, "show": "strat"}, "task": "地域によって売上がかなり違う（地域の差1）。4つの方法で10店を選ぶとき、推定値のばらつきがいちばん小さいのは？", "predict": {"type": "choice", "key": "best", "label": "いちばん小さい", "options": ["単純無作為", "層化", "集落", "系統"]}, "why": "地域ごとに1店ずつ選ぶと、地域の違いが推定値のばらつきに入らない。1地域だけ全部調べる集落は、どの地域を引くかで大きくばらつく。"}, "s3-rule": {"mode": "design", "steps": [{"label": "地域の差0", "task": "地域による違いがないとき、集落抽出（1地域を全部）の標準誤差は単純無作為の何倍か（小数で）？", "set": {"d": 0, "p": 0, "s": 1, "show": "clus"}, "predict": {"type": "number", "key": "rClus", "label": "集落÷単純無作為", "unit": "倍"}, "why": "地域の中にいろいろな店が混ざっていれば、1地域でも全体の縮図になる。"}, {"label": "地域の差1", "task": "地域の差を1にする。集落の標準誤差は単純無作為の何倍か？", "set": {"d": 1}, "predict": {"type": "number", "key": "rClus", "label": "集落÷単純無作為", "unit": "倍"}, "why": "地域の中の店が似てくると、1地域を全部調べても情報は1店分に近くなる。"}, {"label": "地域の差2", "task": "地域の差を2にする。集落の標準誤差は単純無作為の何倍か？", "set": {"d": 2}, "predict": {"type": "number", "key": "rClus", "label": "集落÷単純無作為", "unit": "倍"}, "why": "差がさらに大きくなっても、倍率の上がり方はゆるやか。単純無作為も地域の差でばらつくから。"}, {"label": "地域の差2・層化", "task": "同じ地域の差2で、層化（地域ごとに1店）の標準誤差は単純無作為の何倍か？", "set": {"show": "strat"}, "predict": {"type": "number", "key": "rStrat", "label": "層化÷単純無作為", "unit": "倍"}, "why": "層化は地域の違いをばらつきから取り除く。集落と正反対に、地域の差が大きいほど得をする。"}], "law": {"title": "式で説明する", "lines": ["集落抽出の推定値のばらつき ＝ 集落ごとの平均がどれだけ違うか（集落の間のばらつき）", "層化抽出の推定値のばらつき ＝ 層の中のばらつきだけ（層の間の違いは入らない）", "集落の中が似ている（＝集落の間が違う）ほど集落は損、層化は得"], "text": "同じ「地域で分ける」でも、全部の地域から少しずつ取る（層化）か、いくつかの地域を丸ごと取る（集落）かで、地域の違いが誤差に入るかどうかが逆になる。", "limit": "集落抽出は、調べる場所が少なくて安く済む。同じ費用でより多くの店を調べられるなら、ばらつきが大きくても集落を選ぶことがある。費用と精度のどちらを取るかは統計の外の判断。"}}, "s3-free": {"mode": "design", "modes": ["strat", "design", "bias", "alloc", "multi"], "task": "解いてから、問題が聞いていること（重み・抽出法の比べ方・偏り・配分・多段の確率）に合うモードで確かめる。"}, "s4-free": {"mode": "strat", "modes": ["strat", "design", "bias", "alloc", "multi"], "task": "自分の店のアンケートや売場調査の数字（層の大きさ・平均・回答率など）を入れて、推定の仕方と誤差を確かめる。"}, "s5-free": {"mode": "bias", "modes": ["bias", "alloc", "design"], "task": "「消えない偏り」で n を10倍ずつ増やし、区間の幅と偏りの動きを比べる（発展1）。「配分の仕方」で層の標準偏差を変える（発展2）。"}, "s6-free": {"task": "自分の調査の設計を、5つのモードで確かめる（重み・抽出法・偏り・配分・多段の確率）。"}, "Q-U31-001": {"mode": "strat", "set": {"w": 0.3, "m1": 100, "m2": 40}, "task": "層1（割合0.3）の平均100、層2（割合0.7）の平均40。全体の平均の推定は？", "predict": {"type": "number", "key": "weighted", "label": "全体の平均"}, "why": "帯の面積を全体の幅でならした高さが58。2つの層の割合が同じ0.5 のときだけ、そのまま平均と一致する。"}, "Q-U31-002": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.3, "n": 400}, "task": "本当の賛成率0.5、賛成者の回答率0.6・反対者の回答率0.3。集まった答えの賛成率は（小数で）？", "predict": {"type": "number", "key": "est", "label": "集まった賛成率"}, "why": "賛成の人のほうが2倍答えやすいので、集まった答えは賛成に寄る。n を1万にすると区間は細くなるが、本当の0.5 からは離れたまま。"}, "Q-U31-003": {"mode": "multi", "set": {"A": 10, "a": 2, "B": 15, "b": 3, "C": 200, "c": 20}, "task": "地域10から2、店15から3、客200から20 を選ぶ。1人が代表する人数（重み）は？", "predict": {"type": "number", "key": "weight", "label": "重み", "unit": "人"}, "why": "確率0.2×0.2×0.1＝0.004 の逆数。どの客も確率が同じなので、集計はそのまま平均してよい。"}, "Q-U31-004": {"mode": "design", "set": {"d": 2, "p": 0, "s": 1, "show": "clus"}, "task": "地域の差2（地域ごとの違いが大きい）。4つの方法のうち、推定値のばらつきがいちばん小さいのは？", "predict": {"type": "choice", "key": "best", "label": "いちばん小さい", "options": ["単純無作為", "層化", "集落", "系統"]}, "why": "層化の標準誤差は単純無作為の約0.3倍、集落は約3.2倍。同じ「地域で分ける」でも結果は正反対になる。"}, "Q-U31-005": {"mode": "design", "set": {"d": 0, "p": 2, "s": 1, "show": "sys"}, "task": "地域の差0、並び順の差2（名簿が地域ごとに売上順）。系統抽出の標準誤差は単純無作為の何倍か（小数で）？", "predict": {"type": "number", "key": "rSys", "label": "系統÷単純無作為", "unit": "倍"}, "why": "系統抽出で選べる標本は「1位の10店」「2位の10店」…の10通りしかない。並び順の差がそのまま推定値のばらつきになる。"}, "Q-U31-010": {"mode": "alloc", "set": {"w1": 0.2, "s1": 30, "s2": 5, "dm": 40, "n": 100}, "task": "層1（割合0.2・標準偏差30）、層2（割合0.8・標準偏差5）、全体100人。ネイマン配分で層1に配る人数は？", "predict": {"type": "number", "key": "n1n", "label": "層1の人数", "unit": "人"}, "why": "比例配分なら20人。層1は人数こそ少ないが、ばらつきが6倍あるので、多めに調べたほうが全体の推定が安定する。"}, "Q-U31-011": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.3, "n": 10000}, "task": "1万人の回答。95%区間は本当の賛成率0.5 を含むか。", "predict": {"type": "choice", "key": "covers", "label": "区間は0.5 を", "options": ["含む", "含まない"]}, "why": "区間は0.657〜0.676 と細い。n を100人に戻すと区間は広がるが、真ん中は0.667 のまま。"}, "Q-U31-012": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.4, "n": 400}, "task": "本当の賛成率0.5、賛成者の回答率0.6・反対者0.4、400人。偏り（集まった値−本当の値）は（小数で）？", "predict": {"type": "number", "key": "bias", "label": "偏り"}, "why": "回答率の差が0.6 と0.4 でも、集まった答えは0.1 ずれる。区間の幅（約±0.048）より大きい。"}, "Q-U31-020": {"mode": "strat", "set": {"w": 0.2, "m1": 80, "m2": 50}, "task": "A店（全体の0.2）の満足80%、B店（0.8）の満足50%。2店全体の満足の割合の推定は（%）？", "predict": {"type": "number", "key": "weighted", "label": "全体の満足", "unit": "%"}, "why": "帯の幅が客数の割合。そのまま平均（65%）とのずれは、小さな店を重く見すぎた分。"}, "Q-U31-021": {"mode": "alloc", "set": {"w1": 0.2, "s1": 30, "s2": 5, "dm": 40, "n": 100}, "task": "同じ2つの層、100人。ネイマン配分の標準誤差は（小数で）？", "predict": {"type": "number", "key": "seN", "label": "ネイマン配分の標準誤差"}, "why": "単純無作為の約2.14、比例配分の約1.41 より小さい。層の平均の差を0 にすると、単純無作為と比例配分の差は小さくなる。"}, "Q-U31-022": {"mode": "bias", "set": {"p": 0.4, "r1": 0.5, "r0": 0.5, "n": 400}, "task": "本当の賛成率0.4、賛成者も反対者も回答率0.5。偏り（集まった値−本当の値）は（小数で）？", "predict": {"type": "number", "key": "bias", "label": "偏り"}, "why": "回答率が同じなら偏りは0。反対者の回答率だけを0.3 に下げると、偏りが出る。"}, "Q-U31-023": {"mode": "design", "set": {"d": 2, "p": 0, "s": 1, "show": "strat"}, "task": "地域の差2。層化の標準誤差は単純無作為の何倍か（小数で）？", "predict": {"type": "number", "key": "rStrat", "label": "層化÷単純無作為", "unit": "倍"}, "why": "層の間の違いが大きいほど層化は得をする。集落（約3.2倍）とは正反対。"}, "Q-U31-030": {"mode": "strat", "set": {"w": 0.25, "m1": 120, "m2": 60}, "task": "大型店（全体の0.25）の客単価120、小型店（0.75）の客単価60。全体の推定は（百円）？", "predict": {"type": "number", "key": "weighted", "label": "全体の客単価", "unit": "百円"}, "why": "帯の面積の合計を全体の幅でならすと75。そのまま平均の90 とは15 ずれる。"}, "Q-U31-031": {"mode": "bias", "set": {"p": 0.3, "r1": 0.2, "r0": 0.5, "n": 400}, "task": "本当の「不満」の割合0.3、不満のある人の回答率0.2・ない人の回答率0.5。集まった「不満」の割合は（小数で）？", "predict": {"type": "number", "key": "est", "label": "集まった不満の割合"}, "why": "不満のある人ほど答えないので、集まった答えは半分以下に。区間（約0.11〜0.18）も本当の0.3 を含まない。"}, "Q-U31-032": {"mode": "multi", "set": {"A": 12, "a": 3, "B": 8, "b": 2, "C": 100, "c": 10}, "task": "地域12から3、店8から2、客100から10 を選ぶ。1人が代表する人数（重み）は？", "predict": {"type": "number", "key": "weight", "label": "重み", "unit": "人"}, "why": "0.25×0.25×0.1 の逆数。1店の客を300 にすると重みは480 に変わる。"}, "Q-U31-040": {"mode": "bias", "set": {"p": 0.5, "r1": 0.6, "r0": 0.3, "n": 400}, "task": "400人のとき、総合誤差 √(偏り²＋標準誤差²) は（小数で）？", "predict": {"type": "number", "key": "rmse", "label": "総合誤差"}, "why": "偏り0.167 がほとんどを占める。n を1万にしても0.1667 までしか下がらない。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 var MLRandom = (function(exports) {
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 /** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
@@ -316,10 +316,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -333,22 +333,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}

@@ -44,7 +44,7 @@ svg{max-width:100%;height:auto;display:block}
 .lk-choices button.on{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
 .lk-skip{background:none;border:none;color:var(--mut);text-decoration:underline;font-size:13px;cursor:pointer;min-height:44px}
 .lk-verdict{margin-top:6px;padding-top:6px;border-top:1px dashed var(--taskline)}
-/* 予想する前は結果を隠す */
+/* 予測する前は結果を隠す */
 .lk-locked .res{display:none}
 .lk-locked .ctl{pointer-events:none;opacity:.5}
 .lk-wait{display:none}
@@ -87,7 +87,7 @@ body.lk-embed{padding:8px 12px 10px}
 .lk-embed .lk-done .lk-verdict{border-top:0;margin-top:0;padding-top:0}
 .lk-embed.lk-pred:not(.lk-more) .mode .res.key{display:block}
 body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
-/* 法則を見つける：条件ごとの予想と結果の記録、最後の式 */
+/* 法則を見つける：条件ごとの予測と結果の記録、最後の式 */
 .lk-hist{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 6px}
 .lk-hist th,.lk-hist td{border-bottom:1px solid var(--line);padding:3px 6px;text-align:left}
 .lk-law{margin-top:8px;padding:8px 10px;border-left:4px solid var(--accent);background:var(--card)}
@@ -133,7 +133,7 @@ body.lk-embed.lk-locked.lk-pred .mode .res.key{display:none}
 /* 手触り（#42。knowledge-net と同じ決まり）：動きは何が変わったかを伝えるためだけ。1つの操作に動きは1つ
 - 押した瞬間に少し沈む（--dur-press・--press-scale）。つまみは押している間だけ少し大きくなる
 - タブを替えると、新しい中身だけがすっと出る（--dur）
-- 予想の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
+- 予測の結果が出た所を一度だけ淡く光らせる（labkit.js の flash。--flash・--dur-flash）
 - 動きを減らす設定では全部止める */
 button{transition:transform var(--dur-press) var(--ease),background var(--dur),border-color var(--dur),color var(--dur)}
 button:active:not(:disabled){transform:scale(var(--press-scale))}
@@ -156,7 +156,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">全100店（母集団）の廃棄率。μ（本当の平均）は普通は分からない。無作為に n 店を選んで x̄ を計算する。</p>
 <input type="range" id="rn" min="2" max="100" step="1" value="10" data-name="n" data-unit="店">
 <div class="row ctl"><button class="act" id="rdraw">選んで計算する</button><button class="act" id="rx10">10回続けて</button><button class="sub" id="rreset">やり直す</button></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="rsum"></div>
 <div class="res key" id="rstrip"></div>
 <div class="row ctl"><label><input type="checkbox" id="rmu"> μ（本当の平均）を見る</label></div>
@@ -167,7 +167,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <input type="range" id="fm" min="0" max="40" step="5" value="20" data-name="漏れ" data-unit="%">
 <input type="range" id="fn" min="2" max="60" step="1" value="10" data-name="n" data-unit="店">
 <div class="row ctl"><button class="act" id="fdraw">20回取り直す</button><button class="sub" id="freset">やり直す</button></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="fsum"></div>
 <div class="res key" id="fstrip"></div>
 <div class="grid det" id="fgrid"></div>
@@ -176,7 +176,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">全100店にアンケートを送り、返事が来た店だけで平均を出す。廃棄率が低い店ほど返事をしやすいとする（偏りの強さ0なら、返事のしやすさは廃棄率と無関係）。</p>
 <input type="range" id="qk" min="0" max="10" step="1" value="6" data-name="偏り">
 <div class="row ctl"><button class="act" id="qdraw">アンケートを送る</button><button class="act" id="qx20">20回続けて</button><button class="sub" id="qreset">やり直す</button></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="qsum"></div>
 <div class="res key" id="qstrip"></div>
 <div class="grid det" id="qgrid"></div>
@@ -185,12 +185,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 <p class="mut" style="margin:0">サイコロを1回振る試行。起こりうる結果の全部が<b>標本空間</b>、その一部が<b>事象</b>。目をタップして事象を作る。</p>
 <div class="row ctl" id="dice"></div>
 <div class="row ctl"><button class="sub" data-ev="2,4,6">偶数</button><button class="sub" data-ev="4,5,6">4以上</button><button class="sub" data-ev="">空にする</button></div>
-<div class="lk-wait card mut">予想を決めると、ここに結果が出る。</div>
+<div class="lk-wait card mut">予測を決めると、ここに結果が出る。</div>
 <div class="card res key" id="ssum"></div>
 <p class="mut det">注意：統計の「標本」（調べた一部のデータ）と「標本空間」は、名前が似ているだけで別の言葉。</p>
 </div>
 <script>
-window.__LABPRESETS__={"s1-rand": {"mode": "rand", "set": {"n": 10}, "task": "n＝10 のまま「10回続けて」を押すと、x̄ は毎回同じか、変わるか。", "predict": {"type": "choice", "key": "varies", "label": "x̄ は", "options": ["毎回同じ", "毎回変わる"]}, "why": "x̄ は選んだ店で決まる統計量なので、取り直すたびに変わり μ のまわりに散らばる。n を100にすると全数調査になり、毎回 μ と一致する。"}, "s2-frame": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "漏れ20%のまま n を10→60に増やして「20回取り直す」を押す。x̄ の平均は μ（2.54%）に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿に載っていない店（廃棄率が高め）は選ばれないので、x̄ は名簿内の平均（2.36%）に集まる。n を増やしても μ には近づかない。"}, "s4-bias": {"mode": "frame", "modes": ["frame", "resp"], "task": "「名簿の漏れ」と「自分から回答」を順に動かし、上の表のどの場面がどちらの偏りに当たるかを考える。"}, "s5-rand": {"mode": "rand", "set": {"n": 10}, "task": "n を 10 → 50 → 90 → 100 と増やして「10回続けて」を押し、x̄ のばらつき（標準偏差）がどう小さくなるかを見る。"}, "s6-free": {"mode": "rand", "modes": ["rand", "frame", "resp"], "task": "自分の設計や考え方を、3つのモードで確かめる（無作為なら μ のまわりに集まるか、偏りがあればどちらにずれるか）。"}, "Q-U03-020": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "アプリを使わない客が名簿から漏れるのと同じ形。漏れ20%のまま n を増やして「20回取り直す」を押すと、x̄ の平均は μ に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿にいない店（廃棄率が高め）は選ばれないので、n を増やしても x̄ は名簿内の平均に集まり、μ には近づかない。"}, "Q-U03-021": {"mode": "resp", "set": {"k": 6}, "task": "廃棄率の低い店ほど返事をしやすい（偏りの強さ6）。「20回続けて」を押すと、返事の平均は μ と比べてどうなるか。", "predict": {"type": "choice", "key": "direction", "label": "返事の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "返事をする店が偏っていると、何回集めてもずれは消えない（口コミの件数を増やしても同じ）。偏りの強さを0にすると μ のまわりに集まる。"}, "Q-U03-024": {"mode": "space", "set": {"ev": "4,5,6"}, "task": "事象「4以上」の確率 P(A) はいくつか（小数で）。", "predict": {"type": "number", "key": "prob", "label": "P(A)"}, "why": "4以上＝{4, 5, 6} の3通り。「偶数」を押すと {2, 4, 6} も3通りで、同じ 1/2 になる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
+window.__LABPRESETS__={"s1-rand": {"mode": "rand", "set": {"n": 10}, "task": "n＝10 のまま「10回続けて」を押すと、x̄ は毎回同じか、変わるか。", "predict": {"type": "choice", "key": "varies", "label": "x̄ は", "options": ["毎回同じ", "毎回変わる"]}, "why": "x̄ は選んだ店で決まる統計量なので、取り直すたびに変わり μ のまわりにばらつく。n を100にすると全数調査になり、毎回 μ と一致する。"}, "s2-frame": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "漏れ20%のまま n を10→60に増やして「20回取り直す」を押す。x̄ の平均は μ（2.54%）に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿に載っていない店（廃棄率が高め）は選ばれないので、x̄ は名簿内の平均（2.36%）に集まる。n を増やしても μ には近づかない。"}, "s4-bias": {"mode": "frame", "modes": ["frame", "resp"], "task": "「名簿の漏れ」と「自分から回答」を順に動かし、上の表のどの場面がどちらの偏りに当たるかを考える。"}, "s5-rand": {"mode": "rand", "set": {"n": 10}, "task": "n を 10 → 50 → 90 → 100 と増やして「10回続けて」を押し、x̄ のばらつき（標準偏差）がどう小さくなるかを見る。"}, "s6-free": {"mode": "rand", "modes": ["rand", "frame", "resp"], "task": "自分の設計や考え方を、3つのモードで確かめる（無作為なら μ のまわりに集まるか、偏りがあればどちらにずれるか）。"}, "Q-U03-020": {"mode": "frame", "set": {"m": 20, "n": 10}, "task": "アプリを使わない客が名簿から漏れるのと同じ形。漏れ20%のまま n を増やして「20回取り直す」を押すと、x̄ の平均は μ に近づくか。", "predict": {"type": "choice", "key": "approach", "label": "x̄ の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "名簿にいない店（廃棄率が高め）は選ばれないので、n を増やしても x̄ は名簿内の平均に集まり、μ には近づかない。"}, "Q-U03-021": {"mode": "resp", "set": {"k": 6}, "task": "廃棄率の低い店ほど返事をしやすい（偏りの強さ6）。「20回続けて」を押すと、返事の平均は μ と比べてどうなるか。", "predict": {"type": "choice", "key": "direction", "label": "返事の平均は", "options": ["μより低い", "ほぼμ", "μより高い"]}, "why": "返事をする店が偏っていると、何回集めてもずれは消えない（口コミの件数を増やしても同じ）。偏りの強さを0にすると μ のまわりに集まる。"}, "Q-U03-024": {"mode": "space", "set": {"ev": "4,5,6"}, "task": "事象「4以上」の確率 P(A) はいくつか（小数で）。", "predict": {"type": "number", "key": "prob", "label": "P(A)"}, "why": "4以上＝{4, 5, 6} の3通り。「偶数」を押すと {2, 4, 6} も3通りで、同じ 1/2 になる。"}};window.__LABCFG__=(function(){try{var p=new URLSearchParams(location.search).get("p");return (p&&window.__LABPRESETS__[p])||{};}catch(e){return {};}})();
 var MLRandom = (function(exports) {
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 /** 種を 32 ビットの整数にそろえる（小数・負の数・大きな数でも同じ規則で）。 */
@@ -301,10 +301,10 @@ b.innerHTML=h;b.hidden=!h;const m=$("lk-more");
 if(m)m.onclick=()=>{const on=!document.body.classList.contains("lk-more");document.body.classList.toggle("lk-more",on);m.setAttribute("aria-expanded",on);m.textContent=on?"たたむ ▴":"くわしく（表・式）▾";};}
 function taskCard(){const box=$("lk-task");if(!cfg.task){box.remove();return;}
 const p=cfg.predict;const head=STEPS?`🔍 法則を見つける ${si+1}／${STEPS.length}`:"🎯 課題";let h=`<div class="lk-task"><div class="lk-tt">${head}</div>${STEPS&&hist.length?histTable():""}<div class="lk-q">${esc(cfg.task)}</div>`;
-if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予想を決める。決めるまで結果は隠れている。</div>`;
-if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予想")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
-else h+=`<div class="mut">${esc(p.label||"予想")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
-h+=`<div class="row"><button class="act" id="lk-go" disabled>予想を決めて確かめる</button><button class="lk-skip" id="lk-skip">予想せずに見る</button></div></div>`;}
+if(p){h+=`<div id="lk-ask"><div class="mut lk-note">先に予測を決める。決めるまで結果は隠れている。</div>`;
+if(p.type==="number")h+=`<div class="row"><label>${esc(p.label||"予測")} <input type="number" id="lk-in" inputmode="decimal" step="any">${esc(p.unit||"")}</label></div>`;
+else h+=`<div class="mut">${esc(p.label||"予測")}</div><div class="lk-choices" id="lk-ch">${p.options.map(o=>`<button type="button" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+h+=`<div class="row"><button class="act" id="lk-go" disabled>予測を決めて確認</button><button class="lk-skip" id="lk-skip">予測せずに表示</button></div></div>`;}
 h+=`<div id="lk-verdict"></div></div>`;box.innerHTML=h;
 if(!p)return;
 let guess=null;const go=$("lk-go");
@@ -318,22 +318,22 @@ el.innerHTML=`動かすと変わる → ${esc(p.label||"結果")}：<b>${esc(r.t
 function reveal(guess){const p=cfg.predict;lock(false);revealed=true;if(modes[cur].render)modes[cur].render();
 const r=modes[cur].value(p.key);last=r;let h="";
 if(STEPS)hist.push({label:STEPS[si].label||`${si+1}`,guess:guess===null?"—":(p.type==="number"?fmtNum(guess)+(p.unit||""):String(guess)),result:r.text+(p.type==="number"?(p.unit||""):"")});
-const both=`予想 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
+const both=`予測 <b>${esc(p.type==="number"?fmtNum(guess)+(p.unit||""):guess)}</b> ／ ラボ <b>${esc(r.text)}</b>`;
 if(guess===null)h=`<div>ラボの結果：<b>${esc(r.text)}</b></div>`;
 else if(p.type==="number"){const tol=p.tol??Math.max(Math.abs(r.v)*0.01,0.005);const d=guess-r.v,hit=Math.abs(d)<=tol;
-h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
+h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
 `<div><span class="ng">✕ ずれ ${d>0?"+":""}${esc(fmtNum(d))}${esc(p.unit||"")}</span>　${both}</div><div class="mut">外れた所が学びどころ。</div>`;}
-else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予想どおり</span>　${both}</div>`:
-`<div><span class="ng">✕ 予想と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
+else{const hit=guess===r.text;h=hit?`<div><span class="ok">◎ 予測どおり</span>　${both}</div>`:
+`<div><span class="ng">✕ 予測と違った</span>　${both}</div><div class="mut">なぜかを1文で書く。</div>`;}
 if(cfg.why)h+=`<div class="lk-why">${esc(cfg.why)}</div>`;
 h+=`<div class="lk-live" id="lk-live" hidden></div>`;
-if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予想する ▶</button></div>`;
+if(STEPS){if(si<STEPS.length-1)h+=`<div class="row"><button type="button" class="act" id="lk-next">次の条件で予測する ▶</button></div>`;
 else if(cfg.law)h+=`<div class="lk-lawask"><div class="mut">ここまでの結果から、決まりを1文で書いてみる。書けたら式で確かめる。</div><div class="row"><button type="button" class="act" id="lk-law">式で説明する ▼</button></div></div><div id="lk-lawbox"></div>`;}
 $("lk-verdict").innerHTML=`<div class="lk-verdict">${h}</div>`;flash($("lk-verdict").firstElementChild);haptic();
 const nx=$("lk-next");if(nx)nx.onclick=nextStep;const lw=$("lk-law");if(lw)lw.onclick=showLaw;
 const ask=$("lk-ask");if(ask)ask.remove();document.querySelector(".lk-task").classList.add("lk-done");
 live();bar();if(EMBED)window.scrollTo(0,0);}
-function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予想</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
+function histTable(){const p=cfg.predict||{};return `<table class="lk-hist"><tr><th>条件</th><th>予測</th><th>結果</th></tr>${hist.map(r=>`<tr><td>${esc(r.label)}</td><td>${esc(r.guess)}</td><td><b>${esc(r.result)}</b></td></tr>`).join("")}</table>`;}
 function nextStep(){si++;const s=STEPS[si];cfg.task=s.task;cfg.predict=s.predict;cfg.why=s.why;revealed=false;moved=false;
 if(s.set&&modes[cur].apply)modes[cur].apply(s.set);if(modes[cur].render)modes[cur].render();
 taskCard();lock(true);bar();$("lk-bar").hidden=true;if(EMBED)window.scrollTo(0,0);}
