@@ -15661,6 +15661,69 @@
    "icon": "https://watanabe-masao.github.io/stats2-labs/icons/TERM-ols.svg",
    "definition": "回帰式の係数を、残差（観測値−予測値）の2乗の和がいちばん小さくなるように決める方法。単回帰では、傾き b＝Σ(x−x̄)(y−ȳ)÷Σ(x−x̄)²、切片 a＝ȳ−b x̄ になる。",
    "principle": "残差は正にも負にもなるので、そのまま足すと打ち消し合う。2乗して足すと、どの点のずれも正で効き、大きなずれほど強く効く。説明変数の値が全部同じでなければ、2乗の和は係数の2次式で谷の底がちょうど1組に決まり、その係数で、直線は平均の点 (x̄, ȳ) を通る。",
+   "formulas": [
+    {
+     "id": "F-ols-intercept",
+     "label": "単回帰の切片",
+     "symbols": [
+      {
+       "symbol": "a",
+       "meaning": "単回帰の切片（x＝0 のときの見込みの値。直線を (x̄, ȳ) に通す位置合わせ）",
+       "key": "a",
+       "kind": "value"
+      },
+      {
+       "symbol": "ȳ",
+       "meaning": "目的変数 y の平均",
+       "key": "ybar",
+       "kind": "value",
+       "concept": "stats2:TERM-mean"
+      },
+      {
+       "symbol": "b",
+       "meaning": "単回帰の傾き",
+       "key": "b",
+       "kind": "value",
+       "concept": "stats2:TERM-regcoef"
+      },
+      {
+       "symbol": "x̄",
+       "meaning": "説明変数 x の平均",
+       "key": "xbar",
+       "kind": "value",
+       "concept": "stats2:TERM-mean"
+      }
+     ],
+     "tree": {
+      "op": "eq",
+      "args": [
+       {
+        "sym": "a"
+       },
+       {
+        "op": "sub",
+        "args": [
+         {
+          "sym": "ybar"
+         },
+         {
+          "op": "mul",
+          "args": [
+           {
+            "sym": "b"
+           },
+           {
+            "sym": "xbar"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     "tex": "a=ȳ-bx̄"
+    }
+   ],
    "conditions": {
     "math": [
      "説明変数の値が全部同じではない（重回帰では、切片の列と説明変数の値の列が1次独立）"
@@ -15729,12 +15792,64 @@
    "icon": "https://watanabe-masao.github.io/stats2-labs/icons/TERM-regcoef.svg",
    "definition": "回帰式で、説明変数に掛かる係数。単回帰の傾き b は、x が1大きいところでは y が平均して b 大きいと見込むことを表す。単位は y の単位÷x の単位。",
    "principle": "単回帰の傾きは b＝Σ(x−x̄)(y−ȳ)÷Σ(x−x̄)² で、y の値が全部同じでなければ、相関係数 r に標準偏差の比 s_y÷s_x を掛けたものに等しい。r と s_x が同じなら、y が大きく散らばるデータほど |b| は大きい。傾きはデータの中での x と y の見込みの関係で、x を動かしたら y が動くかは、データの取り方（実験か観察か）と見立てで決まる。重回帰の係数は、その説明変数から、ほかの説明変数と直線的に一緒に動く分を除いたあとの傾きで、同じ x の単回帰の傾きとは違う値になりうる（「ほかの変数を固定したときの効き目」と読むのは、式の形が正しいという見立てを置いたとき）。",
+   "formulas": [
+    {
+     "id": "F-ols-slope",
+     "label": "単回帰の傾き",
+     "symbols": [
+      {
+       "symbol": "b",
+       "meaning": "単回帰の傾き（説明変数 x の回帰係数）",
+       "key": "b",
+       "kind": "value"
+      },
+      {
+       "symbol": "S_xy",
+       "meaning": "x と y の偏差の積の和 Σ(xᵢ−x̄)(yᵢ−ȳ)",
+       "key": "Sxy",
+       "kind": "value"
+      },
+      {
+       "symbol": "S_xx",
+       "meaning": "x の偏差の2乗の和 Σ(xᵢ−x̄)²",
+       "range": "0より大きい（x が全部同じではない）",
+       "key": "Sxx",
+       "kind": "value",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
+      }
+     ],
+     "tree": {
+      "op": "eq",
+      "args": [
+       {
+        "sym": "b"
+       },
+       {
+        "op": "div",
+        "args": [
+         {
+          "sym": "Sxy"
+         },
+         {
+          "sym": "Sxx"
+         }
+        ]
+       }
+      ]
+     },
+     "tex": "b=\\dfrac{S_{xy}}{S_{xx}}"
+    }
+   ],
    "conditions": {
     "math": [
      "最小二乗法で係数が1組に決まっている（最小二乗法の要件）"
     ],
     "data": [
-     "単位を変えると傾きも変わる（x を回から十回にすると10倍）。2つの傾きを比べるときは単位をそろえる"
+     "単位を変えると傾きも変わる（x を回から十回にすると10倍）。2つの傾きを比べるときは単位をそろえる",
+     "傾きが言うのは、観測した x の範囲の中の見込み。範囲の外に延ばすのは外挿で、データからは保証されない"
     ]
    },
    "example": "店P の5週 (1,1)(2,5)(3,3)(4,7)(5,9) では、偏差の積の和18、x の偏差平方和10 で、b＝1.8（百人／回）。相関係数は0.9、標準偏差の比は √40÷√10＝2 で、0.9×2＝1.8 と同じ。例題Aの5週（r も0.9）の傾き0.9 の2倍。",
@@ -15754,6 +15869,10 @@
     },
     {
      "text": "単位を変えると傾きも変わる（x を回から十回にすると10倍）。2つの傾きを比べるときは単位をそろえる",
+     "scope": "data"
+    },
+    {
+     "text": "傾きが言うのは、観測した x の範囲の中の見込み。範囲の外に延ばすのは外挿で、データからは保証されない",
      "scope": "data"
     }
    ],
@@ -15873,6 +15992,76 @@
    "icon": "https://watanabe-masao.github.io/stats2-labs/icons/TERM-r2.svg",
    "definition": "回帰式を当てはめたデータで、1から「残差の2乗の和÷目的変数の偏差の2乗の和」を引いた値 R²＝1−SSE÷SST。切片を含む式を最小二乗法で当てはめたときは、y のばらつきのうち回帰式で説明できた分の割合と読める。",
    "principle": "切片を含む式を最小二乗法で当てはめると、偏差の2乗の和 SST が、予測値の偏差の2乗の和 SSR＝Σ(ŷ−ȳ)² と残差の2乗の和 SSE にちょうど分かれる。だから R²＝SSR÷SST で、0〜1 に収まる。単回帰では相関係数の2乗に等しい。説明変数を足すと SSE は増えないので、R² は下がらない。",
+   "formulas": [
+    {
+     "id": "F-r2-def",
+     "label": "決定係数",
+     "symbols": [
+      {
+       "symbol": "R²",
+       "meaning": "決定係数",
+       "range": "1以下（切片を含む最小二乗では0以上1以下）",
+       "key": "R2",
+       "kind": "value",
+       "concept": "stats2:TERM-r2",
+       "domain": {
+        "max": 1
+       }
+      },
+      {
+       "symbol": "SSE",
+       "meaning": "残差の2乗の和 Σeᵢ²",
+       "range": "0以上",
+       "key": "SSE",
+       "kind": "value",
+       "concept": "stats2:TERM-resid",
+       "domain": {
+        "min": 0
+       }
+      },
+      {
+       "symbol": "SST",
+       "meaning": "目的変数の偏差の2乗の和 Σ(yᵢ−ȳ)²",
+       "range": "0より大きい（y が全部同じではない）",
+       "key": "SST",
+       "kind": "value",
+       "concept": "stats2:TERM-dev",
+       "domain": {
+        "min": 0,
+        "minOpen": true
+       }
+      }
+     ],
+     "tree": {
+      "op": "eq",
+      "args": [
+       {
+        "sym": "R2"
+       },
+       {
+        "op": "sub",
+        "args": [
+         {
+          "num": 1
+         },
+         {
+          "op": "div",
+          "args": [
+           {
+            "sym": "SSE"
+           },
+           {
+            "sym": "SST"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     "tex": "R²=1-\\dfrac{SSE}{SST}"
+    }
+   ],
    "conditions": {
     "math": [
      "目的変数の値が全部同じではない（SST＞0）",
