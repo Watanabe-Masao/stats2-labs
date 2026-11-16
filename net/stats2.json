@@ -5124,7 +5124,12 @@
     "stats2:Q-U23-031",
     "stats2:Q-U25-004",
     "stats2:Q-U25-020",
-    "stats2:Q-U25-023"
+    "stats2:Q-U25-023",
+    "stats2:Q-U26-004",
+    "stats2:Q-U26-005",
+    "stats2:Q-U26-020",
+    "stats2:Q-U26-021",
+    "stats2:Q-U26-031"
    ],
    "en": "unbiased variance",
    "short": "偏差の2乗の和を n−1 で割った分散で、その期待値が母分散に一致する",
@@ -8060,7 +8065,9 @@
     "stats2:Q-U19-021",
     "stats2:Q-U19-030",
     "stats2:Q-U21-012",
-    "stats2:Q-U22-040"
+    "stats2:Q-U22-040",
+    "stats2:Q-U26-012",
+    "stats2:Q-U26-022"
    ],
    "en": "binomial distribution",
    "short": "同じ条件で成功・失敗をくり返したとき、成功回数がどのような確率で現れるかを表す分布",
@@ -11110,7 +11117,15 @@
     "stats2:Q-U25-023",
     "stats2:Q-U25-030",
     "stats2:Q-U25-031",
-    "stats2:Q-U25-032"
+    "stats2:Q-U25-032",
+    "stats2:Q-U26-001",
+    "stats2:Q-U26-002",
+    "stats2:Q-U26-003",
+    "stats2:Q-U26-010",
+    "stats2:Q-U26-011",
+    "stats2:Q-U26-023",
+    "stats2:Q-U26-030",
+    "stats2:Q-U26-032"
    ],
    "en": "standard error",
    "short": "推定量の標本分布の標準偏差で、推定値がくり返しでどれだけばらつくかの大きさ",
@@ -11647,7 +11662,12 @@
     "stats2:Q-U23-001",
     "stats2:Q-U23-010",
     "stats2:Q-U23-023",
-    "stats2:Q-U23-040"
+    "stats2:Q-U23-040",
+    "stats2:Q-U26-004",
+    "stats2:Q-U26-021",
+    "stats2:Q-U26-023",
+    "stats2:Q-U26-031",
+    "stats2:Q-U26-040"
    ],
    "en": "chi-squared distribution",
    "short": "独立な標準正規分布の確率変数を2乗して足した値が従う分布",
@@ -11734,7 +11754,10 @@
     "stats2:Q-U20-032",
     "stats2:Q-U20-040",
     "stats2:Q-U23-005",
-    "stats2:Q-U23-031"
+    "stats2:Q-U23-031",
+    "stats2:Q-U26-005",
+    "stats2:Q-U26-020",
+    "stats2:Q-U26-023"
    ],
    "en": "F distribution",
    "short": "独立な2つのカイ二乗分布の確率変数を、それぞれ自由度で割った比が従う分布",
@@ -12385,7 +12408,11 @@
     "stats2:Q-U24-012",
     "stats2:Q-U24-030",
     "stats2:Q-U25-011",
-    "stats2:Q-U25-012"
+    "stats2:Q-U25-012",
+    "stats2:Q-U26-005",
+    "stats2:Q-U26-010",
+    "stats2:Q-U26-023",
+    "stats2:Q-U26-030"
    ],
    "en": "confidence interval",
    "short": "標本から作る、母数を推定するための区間で、作り方ごとに母数を含む確率の下限（信頼係数）が決まる",
@@ -12951,7 +12978,19 @@
     "stats2:Q-U25-030",
     "stats2:Q-U25-031",
     "stats2:Q-U25-032",
-    "stats2:Q-U25-040"
+    "stats2:Q-U25-040",
+    "stats2:Q-U26-001",
+    "stats2:Q-U26-002",
+    "stats2:Q-U26-003",
+    "stats2:Q-U26-010",
+    "stats2:Q-U26-011",
+    "stats2:Q-U26-012",
+    "stats2:Q-U26-020",
+    "stats2:Q-U26-021",
+    "stats2:Q-U26-022",
+    "stats2:Q-U26-030",
+    "stats2:Q-U26-031",
+    "stats2:Q-U26-032"
    ],
    "en": "p-value",
    "short": "帰無仮説が正しいとしたとき、観測した値か、それより極端な値が出る確率",
@@ -13121,7 +13160,23 @@
     "stats2:Q-U25-030",
     "stats2:Q-U25-031",
     "stats2:Q-U25-032",
-    "stats2:Q-U25-040"
+    "stats2:Q-U25-040",
+    "stats2:Q-U26-001",
+    "stats2:Q-U26-002",
+    "stats2:Q-U26-003",
+    "stats2:Q-U26-004",
+    "stats2:Q-U26-005",
+    "stats2:Q-U26-010",
+    "stats2:Q-U26-011",
+    "stats2:Q-U26-012",
+    "stats2:Q-U26-020",
+    "stats2:Q-U26-021",
+    "stats2:Q-U26-022",
+    "stats2:Q-U26-023",
+    "stats2:Q-U26-030",
+    "stats2:Q-U26-031",
+    "stats2:Q-U26-032",
+    "stats2:Q-U26-040"
    ],
    "en": "rejection region",
    "short": "検定統計量がその範囲に入ったら帰無仮説を棄却すると、前もって決めた範囲",
@@ -13182,7 +13237,14 @@
     "stats2:Q-U24-004",
     "stats2:Q-U24-023",
     "stats2:Q-U25-010",
-    "stats2:Q-U25-021"
+    "stats2:Q-U25-021",
+    "stats2:Q-U26-003",
+    "stats2:Q-U26-004",
+    "stats2:Q-U26-020",
+    "stats2:Q-U26-021",
+    "stats2:Q-U26-022",
+    "stats2:Q-U26-031",
+    "stats2:Q-U26-032"
    ],
    "en": "one-sided and two-sided tests",
    "short": "対立仮説が母数のずれの向きを1つに決めるか（片側）、決めないか（両側）の違いで、棄却域の置き方はそれで決まる",
@@ -13442,16 +13504,63 @@
   {
    "id": "stats2:TERM-pool",
    "name": "プールした比率",
-   "status": "skeleton",
+   "status": "filled",
    "version": 1,
    "units": [
     "stats2:U26"
    ],
-   "problems": [],
+   "problems": [
+    "stats2:Q-U26-002",
+    "stats2:Q-U26-011",
+    "stats2:Q-U26-023",
+    "stats2:Q-U26-030"
+   ],
    "en": "pooled proportion",
    "short": "2群の割合の差を検定するとき、帰無仮説（割合が等しい）のもとで2群を合わせて求めた割合",
    "category": "検定",
    "icon": "https://watanabe-masao.github.io/stats2-labs/icons/TERM-pool.svg",
+   "definition": "2群の標本を1つに合わせたときの、性質をもつものの割合 p̄＝(x₁＋x₂)÷(n₁＋n₂)。各群の標本比率を、標本の大きさで重みを付けて平均した値と同じ。",
+   "principle": "2群の比率が等しい（H₀：p₁＝p₂）と仮定すると、2群は同じ比率 p をもつ1つの集まりとみなせるので、p を推定するのに2群を合わせて使える。差の検定では、標準誤差を √(p̄(1−p̄)(1÷n₁＋1÷n₂)) と、H₀ のもとの共通の比率で作る。差の区間推定では H₀ を置かないので、各群の p̂ で作る。",
+   "conditions": {
+    "math": [
+     "2群の標本の大きさ n₁, n₂ は1以上の整数で、各個体の値は 0 か 1（x₁, x₂ は性質をもつ個数）"
+    ],
+    "data": [
+     "2群で「性質をもつ」の数え方（分母と、何を1と数えるか）がそろっているかを確かめる。数え方の違う2群を合わせても、共通の比率の推定にならない",
+     "2群の比率が明らかに違うときは、p̄ はどちらの群の比率でもない。差の大きさを示すとき（区間）は、各群の p̂ を使う"
+    ]
+   },
+   "example": "A店は100人中20人、B店は100人中30人が購入。p̄＝(20＋30)÷(100＋100)＝0.25。差の検定の標準誤差は √(0.25×0.75×(1÷100＋1÷100))≒0.0612、z＝(0.2−0.3)÷0.0612≒−1.63。",
+   "counterexample": "A店は100人中20人（p̂₁＝0.2）、B店は400人中200人（p̂₂＝0.5）。2つの比率を単純に平均した (0.2＋0.5)÷2＝0.35 は、プールした比率ではない。合わせた標本の割合は (20＋200)÷(100＋400)＝0.44 で、人数の多い B店の比率に近い。",
+   "misconceptions": [
+    {
+     "misconception": "差の区間推定の標準誤差にも、プールした比率を使う",
+     "correction": "区間推定は「差がない」と仮定しないので、各群の p̂ で √(p̂₁(1−p̂₁)÷n₁＋p̂₂(1−p̂₂)÷n₂) を作る。プールした比率は、差がないと仮定する検定でだけ使う"
+    }
+   ],
+   "conditions_detail": [
+    {
+     "text": "2群の標本の大きさ n₁, n₂ は1以上の整数で、各個体の値は 0 か 1（x₁, x₂ は性質をもつ個数）",
+     "scope": "math",
+     "kind": "要件",
+     "outside": "プールした比率が定義されない（0 と 1 以外の値を合わせても割合ではない）"
+    },
+    {
+     "text": "2群で「性質をもつ」の数え方（分母と、何を1と数えるか）がそろっているかを確かめる。数え方の違う2群を合わせても、共通の比率の推定にならない",
+     "scope": "data"
+    },
+    {
+     "text": "2群の比率が明らかに違うときは、p̄ はどちらの群の比率でもない。差の大きさを示すとき（区間）は、各群の p̂ を使う",
+     "scope": "data"
+    }
+   ],
+   "sources": [
+    {
+     "title": "公式2級範囲表",
+     "locator": "検定（2標本の比率の差）",
+     "url": "https://www.toukei-kentei.jp/hubfs/files/grade_range/grade2_hani_20181214.pdf"
+    }
+   ],
    "basis": {
     "text": "2群の標本の大きさ n₁・n₂ と標本比率 p̂₁・p̂₂ から作る (n₁p̂₁＋n₂p̂₂)/(n₁＋n₂)（2群を合わせた標本の中で性質をもつものの割合。観測したあとの値も同じ名前で呼ぶ）",
     "terms": [
@@ -15292,7 +15401,16 @@
     "stats2:Q-U23-003",
     "stats2:Q-U23-012",
     "stats2:Q-U23-023",
-    "stats2:Q-U23-030"
+    "stats2:Q-U23-030",
+    "stats2:Q-U26-001",
+    "stats2:Q-U26-002",
+    "stats2:Q-U26-003",
+    "stats2:Q-U26-010",
+    "stats2:Q-U26-011",
+    "stats2:Q-U26-012",
+    "stats2:Q-U26-022",
+    "stats2:Q-U26-030",
+    "stats2:Q-U26-032"
    ],
    "en": "sample proportion",
    "short": "標本の中で、ある性質をもつものの割合",
@@ -28099,6 +28217,86 @@
     {
      "source": {
       "title": "スルツキーの定理"
+     },
+     "external": true
+    }
+   ]
+  },
+  {
+   "id": "stats2:CLM-45",
+   "label": "④-45",
+   "kind": "極限",
+   "statement": {
+    "text": "2群がそれぞれ独立に Bern(p₁)・Bern(p₂) に従う標本（大きさ n₁・n₂）で、2群が互いに独立、H₀：p₁＝p₂（共通の値 p は 0＜p＜1 で固定）が正しいとき、n₁, n₂ がともに→∞ で、プールした比率 p̄＝(n₁p̂₁＋n₂p̂₂)/(n₁＋n₂) で作った z＝(p̂₁−p̂₂)/√(p̄(1−p̄)(1/n₁＋1/n₂)) の分布は N(0, 1) に近づく"
+   },
+   "teaching": {
+    "conclusion": true,
+    "proof": "範囲外"
+   },
+   "verification": {
+    "math": [
+     {
+      "method": "独立な確かめ",
+      "by": "AB",
+      "date": "2026-11-16",
+      "version": "16c831a"
+     }
+    ],
+    "external": "未照合"
+   },
+   "version": 1,
+   "premises": {
+    "subjects": [
+     "stats2:TERM-sample-prop",
+     "stats2:TERM-pool"
+    ]
+   },
+   "conclusion": {
+    "subjects": [
+     "stats2:TERM-test-stat"
+    ],
+    "predicates": [
+     "stats2:TERM-std-normal"
+    ]
+   },
+   "conditions": [
+    {
+     "text": "各群の個体の値が独立に同じ Bern 分布に従い、2群が互いに独立",
+     "kind": "仮定",
+     "terms": [
+      "stats2:TERM-indep"
+     ],
+     "outside": "標準正規分布に近づくとは保証できない（同じ家族・同じ日にまとまって決める客を数えると、ばらつきが p(1−p) から外れる）",
+     "target": "claim"
+    },
+    {
+     "text": "共通の p は 0＜p＜1 で、n によらず固定",
+     "kind": "仮定",
+     "outside": "p＝0 か 1 なら p̄(1−p̄)＝0 で z が定まらない。p が n とともに 0 に近づく場合は、標準正規分布に近づくとは保証されない",
+     "target": "claim"
+    },
+    {
+     "text": "H₀（p₁＝p₂）が正しい",
+     "kind": "仮定",
+     "outside": "0 を中心にした標準正規分布に近づくとは言えない（差があれば z は n とともに大きくなる）",
+     "target": "claim"
+    }
+   ],
+   "grounds": [
+    {
+     "claim": "stats2:CLM-6b"
+    },
+    {
+     "claim": "stats2:CLM-20b"
+    },
+    {
+     "source": {
+      "title": "H₀ のもとで、各群に ④-6b を当て、2群の独立から特性関数の積で合わせると、(p̂₁−p̂₂)/√(p(1−p)(1/n₁＋1/n₂)) は N(0, 1) に近づく（2群の重みが収束しなくてよいので、n₁/n₂ の比の条件は要らない）。p̄ は ④-20b で p に確率収束し、p̄(1−p̄)/(p(1−p)) は連続写像で1に確率収束する"
+     }
+    },
+    {
+     "source": {
+      "title": "スルツキーの定理（p̄＝0 か 1 で z が定まらない事象の確率は0に近づくので、結論は変わらない）"
      },
      "external": true
     }
