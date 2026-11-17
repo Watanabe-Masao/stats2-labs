@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 2,
- "schema_revision": 5,
+ "schema_revision": 6,
  "experiment_revision": 14,
  "course": {
   "id": "stats2",
@@ -13481,6 +13481,46 @@
    ]
   },
   {
+   "id": "stats2:TERM-pop-mean",
+   "name": "母平均",
+   "status": "heading",
+   "version": 1,
+   "units": [],
+   "problems": [],
+   "en": "population mean",
+   "category": "推定",
+   "heading_of": {
+    "concept": "stats2:TERM-expect",
+    "correspondence": "母集団の分布の期待値（μ＝E(X)。X は母集団から無作為に〔どの要素も同じ確率で〕1つ取り出した要素の値で、その分布が母集団の分布）",
+    "object_diff": "期待値は確率分布（確率変数）について言う。母平均は母集団について言う",
+    "context_diff": "母平均は推測統計の中で、標本から知りたい、決まっているが分からない数として出る。期待値は確率の計算の中で、分布から決まる数として出る"
+   },
+   "icon": "https://watanabe-masao.github.io/stats2-labs/icons/TERM-pop-mean.svg",
+   "forms": [
+    "number"
+   ]
+  },
+  {
+   "id": "stats2:TERM-pop-var",
+   "name": "母分散",
+   "status": "heading",
+   "version": 1,
+   "units": [],
+   "problems": [],
+   "en": "population variance",
+   "category": "推定",
+   "heading_of": {
+    "concept": "stats2:TERM-var",
+    "correspondence": "母集団の分布の分散（σ²＝V(X)。X は母集団から無作為に1つ取り出した要素の値。有限母集団なら全 N 個の値の、N で割ったデータの分散と同じ値）",
+    "object_diff": "分散（確率変数の分散）は確率分布について言う。母分散は母集団について言う",
+    "context_diff": "母分散は推測統計の中で、標本から知りたい、決まっているが分からない数として出る。確率変数の分散は確率の計算の中で、分布から決まる数として出る"
+   },
+   "icon": "https://watanabe-masao.github.io/stats2-labs/icons/TERM-pop-var.svg",
+   "forms": [
+    "number"
+   ]
+  },
+  {
    "id": "stats2:TERM-point-est",
    "name": "点推定",
    "status": "filled",
@@ -24395,6 +24435,77 @@
    "from_form": "random_set"
   },
   {
+   "id": "stats2:REL-xbar-popmean",
+   "version": 1,
+   "from": "stats2:TERM-sample-mean",
+   "to": "stats2:TERM-pop-mean",
+   "type": "推定する",
+   "description": "標本平均 X̄ で、母平均 μ を推し量る。各 Xᵢ を母集団から無作為に取り出せば、各 Xᵢ の期待値が μ なので E(X̄)＝μ（④-20a）。これがどの μ でも成り立つので不偏。さらに独立に取り出し、母分散が有限なら、n を大きくすると X̄ は μ に確率収束する（④-20b。一致）。",
+   "units": [
+    "stats2:U18",
+    "stats2:U19"
+   ],
+   "conditions": [
+    "X₁, …, Xₙ は母集団から無作為に（どの要素も同じ確率で）取り出した値（各 Xᵢ の分布が母集団の分布）",
+    "一致には、X₁, …, Xₙ が独立（有限母集団からは戻して選ぶ）で、母分散が有限"
+   ],
+   "properties": [
+    "stats2:CLM-20a",
+    "stats2:CLM-20b"
+   ],
+   "conditions_detail": [
+    {
+     "text": "X₁, …, Xₙ は母集団から無作為に（どの要素も同じ確率で）取り出した値（各 Xᵢ の分布が母集団の分布）",
+     "kind": "仮定",
+     "claim": "CLM-20a",
+     "outside": "E(X̄) は母平均とは限らない（抽出枠のずれや、大きさに比例して選ぶなどの偏った取り方では、X̄ が近づく先も母平均でない）",
+     "terms": [
+      "stats2:TERM-population",
+      "stats2:TERM-random-sampling"
+     ]
+    },
+    {
+     "text": "一致には、X₁, …, Xₙ が独立（有限母集団からは戻して選ぶ）で、母分散が有限",
+     "kind": "仮定",
+     "claim": "CLM-20b",
+     "outside": "④-20b による一致の保証は使えない（不偏の ④-20a は独立を使わないので、戻さずに選んでも E(X̄)＝μ）",
+     "terms": [
+      "stats2:TERM-indep"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "stats2:REL-unbvar-popvar",
+   "version": 1,
+   "from": "stats2:TERM-unbvar",
+   "to": "stats2:TERM-pop-var",
+   "type": "推定する",
+   "description": "不偏分散 s² で、母分散 σ² を推し量る。n≧2 で、各 Xᵢ を母集団から無作為に、独立に取り出し、母分散が有限なら、どの母数の値でも E(s²)＝σ²（④-11。不偏）。",
+   "units": [
+    "stats2:U18"
+   ],
+   "conditions": [
+    "X₁, …, Xₙ は母集団から無作為に（どの要素も同じ確率で）、独立に取り出した値（有限母集団からは戻して選ぶ）"
+   ],
+   "properties": [
+    "stats2:CLM-11"
+   ],
+   "conditions_detail": [
+    {
+     "text": "X₁, …, Xₙ は母集団から無作為に（どの要素も同じ確率で）、独立に取り出した値（有限母集団からは戻して選ぶ）",
+     "kind": "仮定",
+     "claim": "CLM-11",
+     "outside": "E(s²)＝σ² とは保証できない（偏った取り方では近づく先が母分散でない。有限母集団から戻さずに選ぶと E(s²)＝Nσ²/(N−1) で大きい側にずれる）",
+     "terms": [
+      "stats2:TERM-population",
+      "stats2:TERM-random-sampling",
+      "stats2:TERM-indep"
+     ]
+    }
+   ]
+  },
+  {
    "id": "stats2:REL-datavar-acf",
    "version": 1,
    "from": "stats2:TERM-data-var",
@@ -32772,6 +32883,52 @@
    ]
   },
   {
+   "id": "stats2:LRN-expect-popmean",
+   "op": "add",
+   "from": "stats2:TERM-expect",
+   "to": "stats2:TERM-pop-mean",
+   "reason": "母平均は期待値の文脈の見出しで、自分の定義を持たず、母集団の分布の期待値として読む（① の 2）。期待値の意味を先に持つ（#302）。",
+   "version": 1,
+   "units": [
+    "stats2:U18"
+   ]
+  },
+  {
+   "id": "stats2:LRN-var-popvar",
+   "op": "add",
+   "from": "stats2:TERM-var",
+   "to": "stats2:TERM-pop-var",
+   "reason": "母分散は確率変数の分散の文脈の見出しで、自分の定義を持たず、母集団の分布の分散として読む（① の 2）。分散の意味を先に持つ（#302）。",
+   "version": 1,
+   "units": [
+    "stats2:U18"
+   ]
+  },
+  {
+   "id": "stats2:LRN-population-popmean",
+   "op": "add",
+   "from": "stats2:TERM-population",
+   "to": "stats2:TERM-pop-mean",
+   "reason": "母平均の対応の文は、母集団から無作為に1つ取り出した要素の値の期待値として読む（⑥ の 5 の 4：説明が実際に使う概念。#302）。",
+   "version": 1,
+   "units": [
+    "stats2:U17",
+    "stats2:U18"
+   ]
+  },
+  {
+   "id": "stats2:LRN-population-popvar",
+   "op": "add",
+   "from": "stats2:TERM-population",
+   "to": "stats2:TERM-pop-var",
+   "reason": "母分散の対応の文は、母集団から無作為に1つ取り出した要素の値の分散として読む（⑥ の 5 の 4：説明が実際に使う概念。#302）。",
+   "version": 1,
+   "units": [
+    "stats2:U17",
+    "stats2:U18"
+   ]
+  },
+  {
    "id": "stats2:LRN-var-cov",
    "op": "add",
    "from": "stats2:TERM-var",
@@ -33882,6 +34039,18 @@
    "via": "stats2:REL-statistic-rv"
   },
   {
+   "from": "stats2:TERM-pop-mean",
+   "to": "stats2:TERM-sample-mean",
+   "source": "candidate",
+   "via": "stats2:REL-xbar-popmean"
+  },
+  {
+   "from": "stats2:TERM-pop-var",
+   "to": "stats2:TERM-unbvar",
+   "source": "candidate",
+   "via": "stats2:REL-unbvar-popvar"
+  },
+  {
    "from": "stats2:TERM-data-var",
    "to": "stats2:TERM-acf",
    "source": "candidate",
@@ -34096,6 +34265,30 @@
    "to": "stats2:TERM-rv",
    "source": "add",
    "via": "stats2:LRN-function-rv"
+  },
+  {
+   "from": "stats2:TERM-expect",
+   "to": "stats2:TERM-pop-mean",
+   "source": "add",
+   "via": "stats2:LRN-expect-popmean"
+  },
+  {
+   "from": "stats2:TERM-var",
+   "to": "stats2:TERM-pop-var",
+   "source": "add",
+   "via": "stats2:LRN-var-popvar"
+  },
+  {
+   "from": "stats2:TERM-population",
+   "to": "stats2:TERM-pop-mean",
+   "source": "add",
+   "via": "stats2:LRN-population-popmean"
+  },
+  {
+   "from": "stats2:TERM-population",
+   "to": "stats2:TERM-pop-var",
+   "source": "add",
+   "via": "stats2:LRN-population-popvar"
   },
   {
    "from": "stats2:TERM-var",
