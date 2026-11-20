@@ -8807,7 +8807,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -9060,6 +9060,10 @@
     {
      "misconception": "確率分布はグラフの形のこと",
      "correction": "中身は「値と確率の一覧」。棒グラフでも表でも、一覧が同じなら同じ分布"
+    },
+    {
+     "misconception": "P(X＝k) の P は、事象の確率 P(A) とは別の記号",
+     "correction": "P(X＝k) も事象 {X＝k} の確率で、P(A) と同じ確率 P を使う。値ごとの確率を並べると確率分布になるので、この教材では P(X＝k) の式を確率分布の側で説明する（事象の式は確率の側）。分け方は説明のためで、数学として別のものではない"
     }
    ],
    "conditions_detail": [
@@ -9519,7 +9523,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -10159,7 +10163,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -10432,7 +10436,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -10751,7 +10755,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -10991,7 +10995,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -11449,7 +11453,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -11744,7 +11748,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
@@ -18271,7 +18275,7 @@
      "symbols": [
       {
        "symbol": "P( )",
-       "meaning": "確率",
+       "meaning": "X の値で決まる事象（X＝k、X＞x など）の確率。P(A) と同じ確率 P で、別の記号ではない",
        "key": "P",
        "concept": "stats2:TERM-dist"
       },
