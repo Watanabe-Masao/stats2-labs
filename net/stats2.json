@@ -9020,7 +9020,7 @@
    "figures": [
     {
      "id": "FIG-U16-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg?v=0ea5002a13",
      "caption": "平均100・標準偏差10 の正規分布（例題A）。90〜110 に約68%、80〜120 の外側に合わせて約5%。確率は高さではなく面積。"
     }
    ],
@@ -9433,7 +9433,7 @@
    "figures": [
     {
      "id": "FIG-U13-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U13-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U13-concept.svg?v=e4b7e4b1cd",
      "caption": "1人が買う個数 X の確率分布（例題A）。▲が期待値1.1（分布の重心）、薄い帯が期待値±標準偏差（0.4〜1.8）。"
     }
    ],
@@ -11002,7 +11002,7 @@
    "figures": [
     {
      "id": "FIG-U13-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U13-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U13-concept.svg?v=e4b7e4b1cd",
      "caption": "1人が買う個数 X の確率分布（例題A）。▲が期待値1.1（分布の重心）、薄い帯が期待値±標準偏差（0.4〜1.8）。"
     }
    ],
@@ -11899,7 +11899,7 @@
       "steps": [
        {
         "title": "1回だけ試す",
-        "text": "成功（🛒）の確率は **p**、失敗（❌）は **1−p**。p＝0.3 で1回だけ試す。",
+        "text": "成功（塗った丸）の確率は **p**、失敗（白抜きの丸）は **1−p**。p＝0.3 で1回だけ試す。",
         "states": [
          {
           "n": 1,
@@ -11983,22 +11983,22 @@
    "figures": [
     {
      "id": "FIG-U14-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg?v=14fb072f31",
      "caption": "二項分布 B(4, 0.25)。購入率25%の売場に4人。ちょうど1人がいちばん起きやすく、▲の平均 np＝1人。"
     },
     {
      "id": "FIG-LAB-binom-def-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-1.svg",
-     "caption": "成功（🛒）の確率は p、失敗（❌）は 1−p。p＝0.3 で1回だけ試す。"
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-1.svg?v=0e69de0555",
+     "caption": "成功（塗った丸）の確率は p、失敗（白抜きの丸）は 1−p。p＝0.3 で1回だけ試す。"
     },
     {
      "id": "FIG-LAB-binom-def-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-2.svg?v=bab9172259",
      "caption": "n 回くり返すと、成功1回の並びは n 通りに増える。"
     },
     {
      "id": "FIG-LAB-binom-def-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-def-tour-3.svg?v=62b89f6b66",
      "caption": "成功を2回にする。どの並びも確率は同じ pᵏ(1−p)ⁿ⁻ᵏ（独立なので掛け算）。"
     }
    ],
@@ -12302,7 +12302,7 @@
    "figures": [
     {
      "id": "FIG-U15-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.svg?v=88e82fc2f9",
      "caption": "ポアソン分布（λ＝2）。1時間に平均2件。1件と2件がいちばん高く、右に裾が伸びる。▲の平均と分散はどちらも2。"
     }
    ],
@@ -21299,7 +21299,7 @@
    "figures": [
     {
      "id": "FIG-U16-stdnormal",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=ac0aa808af",
      "caption": "標準正規分布 N(0, 1)。どの正規分布も、平均を引いて標準偏差で割ると、この形になる。−1〜1 に約68%。"
     }
    ],
@@ -21798,7 +21798,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 めったに起きない事をたくさんの機会で数えると、回数の上限が効かなくなる。平均 λ だけで確率をおよそ出せる。",
+        "text": "めったに起きない事をたくさんの機会で数えると、回数の上限が効かなくなる。平均 λ だけで確率をおよそ出せる。",
         "states": [],
         "gist": true
        }
@@ -21826,17 +21826,17 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-approx-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-1.svg?v=989472ec31",
      "caption": "平均 n×p＝3 を保つ（形の違いは「比べる」で見た）。まず n＝10・p＝0.3。"
     },
     {
      "id": "FIG-LAB-pois-rel-approx-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-2.svg?v=ed541a8a7d",
      "caption": "n を大きく、p＝λ÷n を小さくする。棒が点線に寄っていく。"
     },
     {
      "id": "FIG-LAB-pois-rel-approx-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-approx-tour-3.svg?v=66014cc7d6",
      "caption": "n＝1000（p＝0.003）まで。(1−p) が1に近づき、分散も λ に近づく。"
     }
    ]
@@ -21961,7 +21961,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 試行回数が多く、成功も失敗もある程度起きるなら、成功回数の分布はなめらかな山（正規分布）でよく近似できる。平均と標準偏差だけで、範囲の確率をおよそ出せる。",
+        "text": "試行回数が多く、成功も失敗もある程度起きるなら、成功回数の分布はなめらかな山（正規分布）でよく近似できる。平均と標準偏差だけで、範囲の確率をおよそ出せる。",
         "states": [],
         "gist": true
        }
@@ -21995,17 +21995,17 @@
    "figures": [
     {
      "id": "FIG-LAB-binom-rel-norm-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-rel-norm-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-rel-norm-tour-1.svg?v=ac10465c0f",
      "caption": "B(10, 0.3) の棒に、平均 np・分散 np(1−p) の正規分布の曲線を重ねる。"
     },
     {
      "id": "FIG-LAB-binom-rel-norm-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-rel-norm-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-rel-norm-tour-2.svg?v=829bcdc568",
      "caption": "n を大きくすると、棒の山がなめらかになり、曲線との差が小さくなる。"
     },
     {
      "id": "FIG-LAB-binom-rel-norm-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-rel-norm-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-binom-rel-norm-tour-3.svg?v=26c2393bcf",
      "caption": "p＝0.02 だと np＝2。山が端に寄り曲線とずれる（np・n(1−p)≧5 が目安）。"
     }
    ]
@@ -22116,7 +22116,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 平均が同じなら、回数に上限がある数え方（二項）は、上限のない数え方（ポアソン）よりばらつきが小さく、外れ方が違う。",
+        "text": "平均が同じなら、回数に上限がある数え方（二項）は、上限のない数え方（ポアソン）よりばらつきが小さく、外れ方が違う。",
         "states": [],
         "gist": true
        }
@@ -22144,12 +22144,12 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-contrast-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-contrast-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-contrast-tour-1.svg?v=989472ec31",
      "caption": "二項 B(10, 0.3) とポアソン λ＝3。平均はどちらも3で、山の位置もほぼ同じ。"
     },
     {
      "id": "FIG-LAB-pois-rel-contrast-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-contrast-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-contrast-tour-2.svg?v=38072a348a",
      "caption": "回数を 5回 に減らす（p＝0.6）。二項は5より大きくならない。ポアソンに上限はない。"
     }
    ]
@@ -22190,12 +22190,12 @@
    "figures": [
     {
      "id": "FIG-U16-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg?v=0ea5002a13",
      "caption": "平均100・標準偏差10 の正規分布（例題A）。90〜110 に約68%、80〜120 の外側に合わせて約5%。確率は高さではなく面積。"
     },
     {
      "id": "FIG-U16-stdnormal",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=ac0aa808af",
      "caption": "標準正規分布 N(0, 1)。どの正規分布も、平均を引いて標準偏差で割ると、この形になる。−1〜1 に約68%。"
     }
    ]
@@ -22306,7 +22306,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 分散は「1つの量が平均からどれだけずれるか」。共分散は「2つの量が一緒にずれるか」。同じものどうしの共分散が分散。",
+        "text": "分散は「1つの量が平均からどれだけずれるか」。共分散は「2つの量が一緒にずれるか」。同じものどうしの共分散が分散。",
         "states": [],
         "gist": true
        }
@@ -22334,12 +22334,12 @@
    "figures": [
     {
      "id": "FIG-LAB-expect-rel-varcov-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-varcov-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-varcov-tour-1.svg?v=fc429e7933",
      "caption": "共分散は X と Y のずれの積の平均。弁当とお茶なら Cov＝0.1。"
     },
     {
      "id": "FIG-LAB-expect-rel-varcov-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-varcov-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-varcov-tour-2.svg?v=bf94c037f9",
      "caption": "Y＝X にすると Cov(X, X)＝V(X)＝0.25。分散は共分散の特別な場合。"
     }
    ]
@@ -22424,7 +22424,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 お互いに影響しない2つの量は、一緒にずれる傾向がないので共分散は0。ただし共分散が0でも、影響し合っていることはある。",
+        "text": "お互いに影響しない2つの量は、一緒にずれる傾向がないので共分散は0。ただし共分散が0でも、影響し合っていることはある。",
         "states": [],
         "gist": true
        }
@@ -22452,17 +22452,17 @@
    "figures": [
     {
      "id": "FIG-LAB-expect-rel-indep-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-1.svg?v=6319815352",
      "caption": "両方＝20%＝50%×40%。独立なら E(XY)＝E(X)E(Y) で 共分散は0。"
     },
     {
      "id": "FIG-LAB-expect-rel-indep-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-2.svg?v=fc429e7933",
      "caption": "両方を30%にする（XとYの割合は同じ）。一緒に起きやすいと共分散は正。"
     },
     {
      "id": "FIG-LAB-expect-rel-indep-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-indep-tour-3.svg?v=676651bf6b",
      "caption": "両方を10%にすると共分散は負。0でないので独立ではない。"
     }
    ]
@@ -22536,7 +22536,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 二項は「回数を決めて、当たりの数を数える」。幾何は「当たり1回を決めて、そこまでの回数を数える」。決める物と数える物が逆。",
+        "text": "二項は「回数を決めて、当たりの数を数える」。幾何は「当たり1回を決めて、そこまでの回数を数える」。決める物と数える物が逆。",
         "states": [],
         "gist": true
        }
@@ -22568,12 +22568,12 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-geom-contrast-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-1.svg?v=78ac2beeba",
      "caption": "二項：回数を10回に決めて、当たり（p＝0.3）の数 0〜10 を数える。"
     },
     {
      "id": "FIG-LAB-pois-rel-geom-contrast-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-2.svg?v=d3f2f35d1c",
      "caption": "幾何：当たり1回に決めて、そこまでの回数 1, 2, 3, … を数える。上限はない。"
     }
    ]
@@ -22651,7 +22651,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 箱がとても大きければ、取り出して戻さなくても中身の割合はほとんど変わらない。戻しても戻さなくても同じとみなせる。",
+        "text": "箱がとても大きければ、取り出して戻さなくても中身の割合はほとんど変わらない。戻しても戻さなくても同じとみなせる。",
         "states": [],
         "gist": true
        }
@@ -22680,12 +22680,12 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-hyper-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-tour-1.svg?v=432758e5d0",
      "caption": "20個中6個（割合0.3）の箱から5個取る。戻さない方の分散は、戻す二項の ×0.789。"
     },
     {
      "id": "FIG-LAB-pois-rel-hyper-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-tour-2.svg?v=39cf41d2ca",
      "caption": "割合0.3のまま箱を大きくすると、補正 (N−n)/(N−1) が 1に近づく。"
     }
    ]
@@ -22798,7 +22798,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 戻さずに取り出すと、取った結果によって残りの割合が変わり、結果のばらつきが小さくなる。小さな箱から多く取るほど差が大きい。",
+        "text": "戻さずに取り出すと、取った結果によって残りの割合が変わり、結果のばらつきが小さくなる。小さな箱から多く取るほど差が大きい。",
         "states": [],
         "gist": true
        }
@@ -22827,17 +22827,17 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-hyper-contrast-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-contrast-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-contrast-tour-1.svg?v=432758e5d0",
      "caption": "20個中6個が当たりの箱から5個取る。戻さない（超幾何）と戻す（二項）で、平均はどちらも1.5。"
     },
     {
      "id": "FIG-LAB-pois-rel-hyper-contrast-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-contrast-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-contrast-tour-2.svg?v=4409fdc7ed",
      "caption": "取る数を増やすと、戻さない方の分散は (N−n)/(N−1) 倍に小さくなる。"
     },
     {
      "id": "FIG-LAB-pois-rel-hyper-contrast-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-contrast-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-hyper-contrast-tour-3.svg?v=c2459c9b92",
      "caption": "全部取る（n＝N）と、当たりは必ず6個。戻さない方のばらつきは0。"
     }
    ]
@@ -22960,7 +22960,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 幾何は「最初の当たりまで」待つ。負の二項は「r 回目の当たりまで」待つ。r＝1 にすると幾何に戻る。",
+        "text": "幾何は「最初の当たりまで」待つ。負の二項は「r 回目の当たりまで」待つ。r＝1 にすると幾何に戻る。",
         "states": [],
         "gist": true
        }
@@ -22988,12 +22988,12 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-negbinom-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.svg?v=47a18db71b",
      "caption": "幾何分布：当たり（p＝0.3）の 1回目が何回目に来るか。平均 1/p≒3.3回。"
     },
     {
      "id": "FIG-LAB-pois-rel-negbinom-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.svg?v=1a6a660c45",
      "caption": "待つ当たりを r 回に広げると負の二項分布。平均 r/p も r 倍に。"
     }
    ]
@@ -23063,7 +23063,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 順番が意味を持つ（1位・2位）なら順列、持たない（選ぶだけ）なら組合せ。場面に役割や順位があるかで決める。",
+        "text": "順番が意味を持つ（1位・2位）なら順列、持たない（選ぶだけ）なら組合せ。場面に役割や順位があるかで決める。",
         "states": [],
         "gist": true
        }
@@ -23091,12 +23091,12 @@
    "figures": [
     {
      "id": "FIG-LAB-count-rel-perm-comb-contrast-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-contrast-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-contrast-tour-1.svg?v=60cd9a82d1",
      "caption": "どちらも 6人から3人を取り出す数で、取り出す3人の組は同じ 20 組。"
     },
     {
      "id": "FIG-LAB-count-rel-perm-comb-contrast-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-contrast-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-contrast-tour-2.svg?v=f1b690bfbb",
      "caption": "役割（1番・2番・3番）を区別すると、1つの組の中の並べ方 3!＝6 通りを別々に数えるので、20×6＝120 通り。"
     }
    ]
@@ -23223,7 +23223,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 「同時に起きない」と「影響しない」は別のこと。むしろ排反なら、一方が起きたと分かれば他方は起きないと分かるので、強く影響し合っている。",
+        "text": "「同時に起きない」と「影響しない」は別のこと。むしろ排反なら、一方が起きたと分かれば他方は起きないと分かるので、強く影響し合っている。",
         "states": [],
         "gist": true
        }
@@ -23254,12 +23254,12 @@
    "figures": [
     {
      "id": "FIG-LAB-expect-rel-excl-indep-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-excl-indep-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-excl-indep-tour-1.svg?v=d364d87db9",
      "caption": "P(A)＝30%・P(B)＝20%。両方 6%＝30%×20% で独立。"
     },
     {
      "id": "FIG-LAB-expect-rel-excl-indep-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-excl-indep-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-expect-rel-excl-indep-tour-2.svg?v=ef45d9c295",
      "caption": "両方を 0% に。A∩B が空で排反。積 6% と違うので独立でない。"
     }
    ]
@@ -23325,7 +23325,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 起こり方を重ならない場合に分け、「その場合になる確率×その場合で起こる確率」を全部足すと、全体の確率になる。各項が乗法定理の形。",
+        "text": "起こり方を重ならない場合に分け、「その場合になる確率×その場合で起こる確率」を全部足すと、全体の確率になる。各項が乗法定理の形。",
         "states": [],
         "gist": true
        }
@@ -23354,7 +23354,7 @@
    "figures": [
     {
      "id": "FIG-LAB-prob-rel-mult-total-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-mult-total-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-mult-total-tour-1.svg?v=495d9e6101",
      "caption": "1000 個のうち不良 20 個 × 検出 90% ＝ 18 個（乗法定理：P(不良)×P(検出｜不良)）。"
     }
    ]
@@ -23462,7 +23462,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 データを見る前の見込みを、データの起こりやすさで重み付けし直したのが、データを見たあとの見込み。",
+        "text": "データを見る前の見込みを、データの起こりやすさで重み付けし直したのが、データを見たあとの見込み。",
         "states": [],
         "gist": true
        }
@@ -23491,17 +23491,17 @@
    "figures": [
     {
      "id": "FIG-LAB-prob-rel-prior-post-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-prior-post-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-prior-post-tour-1.svg?v=495d9e6101",
      "caption": "元の不良率 2%（事前確率）。検出の道すじは、不良で 18 個・良品で 49 個。"
     },
     {
      "id": "FIG-LAB-prob-rel-prior-post-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-prior-post-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-prior-post-tour-3.svg?v=8da181a846",
      "caption": "誤りが独立な同じ検品をもう1回。2回とも検出なら約 87%。"
     },
     {
      "id": "FIG-LAB-prob-rel-prior-post-tour-4",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-prior-post-tour-4.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-prob-rel-prior-post-tour-4.svg?v=c6283cd2bc",
      "caption": "1回の検品で、元の不良率を 0.5% と 10% にすると、事後確率は約 8% と約 67%。"
     }
    ]
@@ -23704,7 +23704,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 データが多いと、σ を s で置き換えたことで加わるばらつきが小さくなる。だから t 分布の裾は細くなり、正規分布に近づく（等しくはならない）。",
+        "text": "データが多いと、σ を s で置き換えたことで加わるばらつきが小さくなる。だから t 分布の裾は細くなり、正規分布に近づく（等しくはならない）。",
         "states": [],
         "gist": true
        }
@@ -23733,12 +23733,12 @@
    "figures": [
     {
      "id": "FIG-LAB-tcf-rel-t-normal-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-1.svg?v=f0d431f2b3",
      "caption": "自由度5の t 分布（実線）は、標準正規分布（点線）より山が低く、裾が厚い。両側5%の点は 2.571 で、正規の 1.96 より外。"
     },
     {
      "id": "FIG-LAB-tcf-rel-t-normal-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-3.svg?v=1e4a1e1736",
      "caption": "自由度120では 1.98 で、正規の 1.96 との差は 0.02 ほど。図では見分けにくいが、等しくはならない（自由度を限りなく大きくした極限で標準正規分布になる）。"
     }
    ]
@@ -23872,7 +23872,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 「たぶん50」と1つの値で言うのが点推定、「45〜55（95%信頼区間）」と幅で言うのが区間推定。幅があると、推定がどれだけ確かかまで伝わる。",
+        "text": "「たぶん50」と1つの値で言うのが点推定、「45〜55（95%信頼区間）」と幅で言うのが区間推定。幅があると、推定がどれだけ確かかまで伝わる。",
         "states": [],
         "gist": true
        }
@@ -23902,12 +23902,12 @@
    "figures": [
     {
      "id": "FIG-LAB-ci-rel-point-interval-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-ci-rel-point-interval-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-ci-rel-point-interval-tour-2.svg?v=93385ca3a5",
      "caption": "点推定は 120 のまま変わらないが、区間は信頼係数で幅が変わる。99%にすると確率点が 2.576 になり、誤差幅は 10.304、区間は 109.696〜130.304 に広がる。"
     },
     {
      "id": "FIG-LAB-ci-rel-point-interval-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-ci-rel-point-interval-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-ci-rel-point-interval-tour-3.svg?v=3fd408eb5d",
      "caption": "95%に戻して n を 100 にすると、標準誤差は 2 に半減し、区間は 116.08〜123.92 に狭まる。点推定の 120 は同じでも、区間の幅が「どれだけ確かか」を伝える。"
     }
    ]
@@ -24000,7 +24000,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 同じ人の前と後なら、差を1人ずつ取って比べる（対応あり）。別の人たちの2群なら、群ごとのばらつきも込みで比べる（ウェルチ）。取り方で方法が決まる。",
+        "text": "同じ人の前と後なら、差を1人ずつ取って比べる（対応あり）。別の人たちの2群なら、群ごとのばらつきも込みで比べる（ウェルチ）。取り方で方法が決まる。",
         "states": [],
         "gist": true
        }
@@ -24032,12 +24032,12 @@
    "figures": [
     {
      "id": "FIG-LAB-two-rel-paired-welch-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-two-rel-paired-welch-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-two-rel-paired-welch-tour-2.svg?v=5fc6770597",
      "caption": "同じ数を、前と後が別々の10店ずつの2群（どちらも標準偏差10）とみてウェルチで区間を作ると、標準誤差は 4.47、区間は −6.40〜12.40 と広がり、0を含む。店ごとの違いが2群のばらつきに残ったまま。"
     },
     {
      "id": "FIG-LAB-two-rel-paired-welch-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-two-rel-paired-welch-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-two-rel-paired-welch-tour-3.svg?v=df345ac47c",
      "caption": "前と後に相関がなければ、差の標準偏差は √(10²＋10²)≒14.1。区間は −7.09〜13.09 で、自由度が9に減る分、ウェルチより少し広い。10店なら、相関が0.14ほどを超えると対応ありの方が狭い。"
     }
    ]
@@ -24166,7 +24166,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 有意水準は前もって引いておく線、p値はデータが出した数。線より小さければ「偶然とは考えにくい」と判断する。",
+        "text": "有意水準は前もって引いておく線、p値はデータが出した数。線より小さければ「偶然とは考えにくい」と判断する。",
         "states": [],
         "gist": true
        }
@@ -24197,12 +24197,12 @@
    "figures": [
     {
      "id": "FIG-LAB-test-rel-pvalue-alpha-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-2.svg?v=d9e67efdbe",
      "caption": "同じデータで、有意水準を1%（境目2.576）にすると、p 値 0.036 は1%より大きく、棄却しない。有意水準は判断の線で、データを見る前に決める数。"
     },
     {
      "id": "FIG-LAB-test-rel-pvalue-alpha-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-3.svg?v=cc2745f9f4",
      "caption": "有意水準を5%に戻し、別の36人で平均が102.6 だったとする。z＝1.3、p 値は 0.194 に変わり、棄却しない。p 値は標本ごとに変わる数。"
     }
    ]
@@ -24295,7 +24295,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 「無実の人を有罪にする」のが第1種、「犯人を見逃す」のが第2種。片方を厳しくすると、もう片方が起こりやすくなる。",
+        "text": "「無実の人を有罪にする」のが第1種、「犯人を見逃す」のが第2種。片方を厳しくすると、もう片方が起こりやすくなる。",
         "states": [],
         "gist": true
        }
@@ -24326,12 +24326,12 @@
    "figures": [
     {
      "id": "FIG-LAB-test-rel-type1-type2-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-2.svg?v=9f979d2c6b",
      "caption": "有意水準を1%にすると、第1種の過誤は0.01 に減るが、境目が外へ動き、β は 0.78 に増える。"
     },
     {
      "id": "FIG-LAB-test-rel-type1-type2-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-3.svg?v=a2057ac8d6",
      "caption": "人数を4倍の144人にすると標準誤差が半分になる。有意水準を1%にしたままでも、β は 0.15 まで下がる。段1（有意水準0.05・β 0.56）と比べて、2つの誤りがどちらも減った。"
     }
    ]
@@ -24516,7 +24516,7 @@
    "figures": [
     {
      "id": "FIG-U04-scale",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U04-scale.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U04-scale.svg?v=6f5e94c976",
      "caption": "名義→順序→間隔→比例と上がるほど、意味のある計算が増える。何倍と言えるのは0が「無い」を表す比例尺度だけ"
     }
    ]
@@ -24538,7 +24538,7 @@
    "figures": [
     {
      "id": "FIG-U06-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg?v=1d7e40432f",
      "caption": "10人の購入額（千円）を数直線に積み、平均・中央値・最頻値の位置に線を引いた。17千円の1人が平均を右へ引っ張る"
     }
    ]
@@ -24560,7 +24560,7 @@
    "figures": [
     {
      "id": "FIG-U06-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg?v=1d7e40432f",
      "caption": "10人の購入額（千円）を数直線に積み、平均・中央値・最頻値の位置に線を引いた。17千円の1人が平均を右へ引っ張る"
     }
    ]
@@ -24604,7 +24604,7 @@
    "figures": [
     {
      "id": "FIG-U05-exA",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=facfc4bc3d",
      "caption": "上：20日の売上のヒストグラム（10万円ごと）。下：箱ひげ図（ひげは柵の内側の最大値42まで、55は外れ値候補）"
     }
    ]
@@ -24627,7 +24627,7 @@
    "figures": [
     {
      "id": "FIG-U05-exA",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=facfc4bc3d",
      "caption": "上：20日の売上のヒストグラム（10万円ごと）。下：箱ひげ図（ひげは柵の内側の最大値42まで、55は外れ値候補）"
     }
    ]
@@ -24684,7 +24684,7 @@
    "figures": [
     {
      "id": "FIG-U05-exA",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=facfc4bc3d",
      "caption": "上：20日の売上のヒストグラム（10万円ごと）。下：箱ひげ図（ひげは柵の内側の最大値42まで、55は外れ値候補）"
     }
    ]
@@ -24752,7 +24752,7 @@
    "figures": [
     {
      "id": "FIG-U05T-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.svg?v=2ecfdbfb22",
      "caption": "実際の 100→150→81 と、毎期同じ倍率で100から81に届く線（幾何平均）、率の算術平均（＋2%）で増やした線"
     }
    ]
@@ -24785,7 +24785,7 @@
    "figures": [
     {
      "id": "FIG-U14-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg?v=14fb072f31",
      "caption": "二項分布 B(4, 0.25)。購入率25%の売場に4人。ちょうど1人がいちばん起きやすく、▲の平均 np＝1人。"
     }
    ]
@@ -24852,7 +24852,7 @@
    "figures": [
     {
      "id": "FIG-U29-r2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg?v=fd2e958394",
      "caption": "例題Aの5週。平均からの偏差の2乗の和 SST＝10 のうち、回帰直線の残差として残ったのが SSE＝1.9。R²＝1−1.9÷10＝0.81 は、相関係数0.9 の2乗と同じ"
     }
    ]
@@ -24885,7 +24885,7 @@
    "figures": [
     {
      "id": "FIG-U29-resid",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-resid.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-resid.svg?v=deef64ab47",
      "caption": "例題A の5週。点線は平均 ȳ からの偏差（y のばらつき SST のもと）、実線は回帰直線からの残差（SSE のもと）。直線で見込むと、平均で見込むより縦のずれが小さくなる"
     }
    ]
@@ -25029,7 +25029,7 @@
    "figures": [
     {
      "id": "FIG-U31-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-concept.svg?v=dfa80465c1",
      "caption": "10地域×10店（1行が1地域）から10店を選ぶ。層化はどの地域からも1店ずつ、集落は1つの地域の10店を全部選ぶ"
     }
    ]
@@ -25051,7 +25051,7 @@
    "figures": [
     {
      "id": "FIG-U31-error",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.svg?v=f03531432d",
      "caption": "偏りが10ポイントの調べ方で、回答数を100人から1万人まで増やしたときの標準誤差と総合誤差（割合が0.5 前後、単位はポイント）"
     }
    ]
@@ -25085,7 +25085,7 @@
    "figures": [
     {
      "id": "FIG-U32-randomize",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U32-randomize.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U32-randomize.svg?v=e17c2c191b",
      "caption": "同じ100店。無作為抽出は、調べる店をくじで選ぶ。無作為化は、全部の店をくじで2つの群に分ける"
     }
    ]
@@ -25176,7 +25176,7 @@
    "figures": [
     {
      "id": "FIG-U14-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U14-concept.svg?v=14fb072f31",
      "caption": "二項分布 B(4, 0.25)。購入率25%の売場に4人。ちょうど1人がいちばん起きやすく、▲の平均 np＝1人。"
     }
    ]
@@ -25197,7 +25197,7 @@
    "figures": [
     {
      "id": "FIG-U16-stdnormal",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=ac0aa808af",
      "caption": "標準正規分布 N(0, 1)。どの正規分布も、平均を引いて標準偏差で割ると、この形になる。−1〜1 に約68%。"
     }
    ]
@@ -25421,7 +25421,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 t 分布に従う量を2乗すると、F 分布（分子の自由度1）に従う。だから、F 統計量が t 統計量の2乗になる場面（2群の一元配置分散分析とプールした t 検定など）では、両側の t 検定と F 検定は同じ判定になる。",
+        "text": "t 分布に従う量を2乗すると、F 分布（分子の自由度1）に従う。だから、F 統計量が t 統計量の2乗になる場面（2群の一元配置分散分析とプールした t 検定など）では、両側の t 検定と F 検定は同じ判定になる。",
         "states": [],
         "gist": true
        }
@@ -25454,12 +25454,12 @@
    "figures": [
     {
      "id": "FIG-LAB-tcf-rel-t-f-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-1.svg?v=1b5047e369",
      "caption": "自由度9の t 分布で、両側5%の点は 2.262。|T| が 2.262 を超える確率が 5%。"
     },
     {
      "id": "FIG-LAB-tcf-rel-t-f-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-2.svg?v=01c67758ca",
      "caption": "T＝Z÷√(V÷9) を2乗すると T²＝(Z²÷1)÷(V÷9)。Z² は χ²(1) なので、T² は F(1, 9)（分子の自由度1：n₁＝2、分母の自由度9：n₂＝10）に従う。"
     }
    ]
@@ -25526,7 +25526,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 n を大きくすると、標本平均は平均に近づき（大数の法則）、近づくときのずれ方は釣鐘の形になる（中心極限定理）。",
+        "text": "n を大きくすると、標本平均は平均に近づき（大数の法則）、近づくときのずれ方は釣鐘の形になる（中心極限定理）。",
         "states": [],
         "gist": true
        }
@@ -25553,12 +25553,12 @@
    "figures": [
     {
      "id": "FIG-LAB-clt-rel-lln-clt-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-clt-rel-lln-clt-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-clt-rel-lln-clt-tour-2.svg?v=18b2f1ffd4",
      "caption": "5人分の平均。X̄ は 5分のまわりに寄り、X̄ の標準偏差は 5÷√5≒2.24分。n を増やすほど幅は縮み、5分から1分以上離れる確率は 0 に近づく。"
     },
     {
      "id": "FIG-LAB-clt-rel-lln-clt-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-clt-rel-lln-clt-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-clt-rel-lln-clt-tour-3.svg?v=6c61af674d",
      "caption": "20人分の平均。幅は 1.12分まで縮み、形は同じ平均・幅の正規分布（点線）とかなり重なる。歪み（歪度）は 2÷√20≒0.45。"
     }
    ]
@@ -25820,7 +25820,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 「平均すれば当たる」と「たくさん取れば近づく」は別の性質。片方だけを満たす推定量がある。",
+        "text": "「平均すれば当たる」と「たくさん取れば近づく」は別の性質。片方だけを満たす推定量がある。",
         "states": [],
         "gist": true
        }
@@ -25852,12 +25852,12 @@
    "figures": [
     {
      "id": "FIG-LAB-est-rel-unb-cons-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-est-rel-unb-cons-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-est-rel-unb-cons-tour-2.svg?v=a7722ab95f",
      "caption": "n を 50 にすると、標本平均の標準誤差は 1.41 まで縮むが、最初の1個は 10 のまま。最初の1個は不偏だが、n を増やしても母平均に近づかない（一致しない）。"
     },
     {
      "id": "FIG-LAB-est-rel-unb-cons-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-est-rel-unb-cons-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-est-rel-unb-cons-tour-3.svg?v=604d81e282",
      "caption": "分散 σ²＝4 を n で割る v で推し量ると、n＝5 で偏りは −0.8。不偏ではない。"
     }
    ]
@@ -26146,7 +26146,7 @@
    "figures": [
     {
      "id": "FIG-U29-r2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg?v=fd2e958394",
      "caption": "例題Aの5週。平均からの偏差の2乗の和 SST＝10 のうち、回帰直線の残差として残ったのが SSE＝1.9。R²＝1−1.9÷10＝0.81 は、相関係数0.9 の2乗と同じ"
     }
    ]
@@ -26169,7 +26169,7 @@
    "figures": [
     {
      "id": "FIG-U29-slope",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg?v=c34976d063",
      "caption": "例題Aの5週（丸）と店Pの5週（四角）。どちらも相関係数は0.9 だが、店Pは y の標準偏差が x の2倍で、回帰直線の傾きも2倍"
     }
    ]
@@ -26192,7 +26192,7 @@
    "figures": [
     {
      "id": "FIG-U29-slope",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg?v=c34976d063",
      "caption": "例題Aの5週（丸）と店Pの5週（四角）。どちらも相関係数は0.9 だが、店Pは y の標準偏差が x の2倍で、回帰直線の傾きも2倍"
     }
    ]
@@ -26214,7 +26214,7 @@
    "figures": [
     {
      "id": "FIG-U30-adjr2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.svg?v=c0789cd2bd",
      "caption": "20日のデータで、説明変数2つのモデル A と、A に3つを足した5つのモデル B。R² は B の方が高いが、自由度調整済み R² は A の方が高い"
     }
    ]
@@ -26236,7 +26236,7 @@
    "figures": [
     {
      "id": "FIG-U07-cov",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U07-cov.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U07-cov.svg?v=59eb6895ca",
      "caption": "売場A（横）と売場C（縦）の同じ日の販売数。平均の点からの偏差の積を長方形にした。同じ向きに動く5日では、長方形がみな正の側に来る"
     }
    ]
@@ -26515,7 +26515,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 順列は並べ方まで数え、組合せは選ぶだけ。同じ r 個の組が順列では r! 通りに数えられるので、r! で割ると組合せになる。",
+        "text": "順列は並べ方まで数え、組合せは選ぶだけ。同じ r 個の組が順列では r! 通りに数えられるので、r! で割ると組合せになる。",
         "states": [],
         "gist": true
        }
@@ -26543,17 +26543,17 @@
    "figures": [
     {
      "id": "FIG-LAB-count-rel-perm-comb-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-tour-1.svg?v=0c18f444c9",
      "caption": "6人から2人を、役割を区別して並べる。1人目は6通り、2人目は残りの5通りで、6×5＝30 通り。"
     },
     {
      "id": "FIG-LAB-count-rel-perm-comb-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-tour-2.svg?v=9c866fa586",
      "caption": "区別したときの帯1本（A→B と B→A）が、役割を区別しないと 1つの組 {A,B} になる。どの組も 2!＝2 回ずつ数えていたので、30÷2＝15 通り。"
     },
     {
      "id": "FIG-LAB-count-rel-perm-comb-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-tour-3.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-comb-tour-3.svg?v=60cd9a82d1",
      "caption": "3人を選ぶと、1つの組の中の並べ方は 3!＝6 通り。順列 120 通りを 6 で割ると、組合せは 20 通り。"
     }
    ]
@@ -26627,7 +26627,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 n 個を全部1列に並べる並べ方は、先頭が n 通り、次が n−1 通り……と掛けていくので n!。全部を並べる順列が階乗。",
+        "text": "n 個を全部1列に並べる並べ方は、先頭が n 通り、次が n−1 通り……と掛けていくので n!。全部を並べる順列が階乗。",
         "states": [],
         "gist": true
        }
@@ -26655,12 +26655,12 @@
    "figures": [
     {
      "id": "FIG-LAB-count-rel-perm-fact-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-fact-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-fact-tour-1.svg?v=1036d06565",
      "caption": "4人から何人かを役割を区別して並べる。1人なら 4 通り、2人なら 4×3＝12 通り。"
     },
     {
      "id": "FIG-LAB-count-rel-perm-fact-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-fact-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-count-rel-perm-fact-tour-2.svg?v=93eb62c219",
      "caption": "選ぶ人数を増やす。3人で 4×3×2＝24 通り。4人目は残った1人に決まり、選ぶ余地がない（×1）ので、全員を並べても 24 通りのまま。全員を並べる ₄P₄ は 4!。"
     }
    ]
@@ -33321,7 +33321,7 @@
        },
        {
         "title": "つまり",
-        "text": "💡 同じ出来事を「一定時間に何件来るか」で見るとポアソン、「次の1件まで何分待つか」で見ると指数分布。見方が違うだけ。",
+        "text": "同じ出来事を「一定時間に何件来るか」で見るとポアソン、「次の1件まで何分待つか」で見ると指数分布。見方が違うだけ。",
         "states": [],
         "gist": true
        }
@@ -33349,12 +33349,12 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-expo-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.svg?v=1fedc75731",
      "caption": "1時間に平均2件（λ＝2）。1時間に0件の確率は e⁻²≒0.135。"
     },
     {
      "id": "FIG-LAB-pois-rel-expo-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.svg",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.svg?v=c94c0f1108",
      "caption": "時間 t を延ばすと λ＝2t が増え、0件の確率 e^(−2t) は小さくなる。"
     }
    ],
