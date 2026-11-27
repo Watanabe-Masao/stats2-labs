@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 2,
- "schema_revision": 16,
+ "schema_revision": 17,
  "experiment_revision": 14,
  "course": {
   "id": "stats2",
@@ -9712,6 +9712,28 @@
    ],
    "gist": "売上が1年目に＋50%、2年目に−50% 動いた。2つの率を足して2で割ると0% だが、実際の売上が2年でどうなったかと比べる。",
    "question": "年ごとの伸び率がばらばらなとき、平均の伸び率はどう求める？",
+   "chart": {
+    "kind": "line",
+    "series": [
+     {
+      "label": "実際の値",
+      "values": [
+       100,
+       110,
+       143,
+       114.4
+      ]
+     }
+    ],
+    "labels": [
+     "始め",
+     "1期後",
+     "2期後",
+     "3期後"
+    ],
+    "geom": true,
+    "note": "＋10%・＋30%・−20% の3期で 114.4。毎期同じ倍率（約1.046倍）で結ぶと、同じ 114.4 に届く。"
+   },
    "conditions_detail": [
     {
      "text": "どの値も正（倍率なら、どの期も伸び率が −100% より大きい）",
@@ -9968,6 +9990,50 @@
    ],
    "gist": "気温と傘の販売本数、気温と売上金額（千円）を、それぞれ点に打つ。単位も大きさも違う2つの組の、そろって動く強さを同じ物差しで比べたい。",
    "question": "2つの量は、どれくらい直線的に一緒に動く？",
+   "chart": {
+    "kind": "scatter",
+    "show": "fit",
+    "sets": [
+     {
+      "label": "気温とアイス",
+      "points": [
+       [
+        20,
+        30
+       ],
+       [
+        22,
+        34
+       ],
+       [
+        24,
+        35
+       ],
+       [
+        26,
+        40
+       ],
+       [
+        28,
+        41
+       ]
+      ]
+     }
+    ],
+    "x": {
+     "label": "気温（℃）",
+     "lo": 20,
+     "hi": 28,
+     "step": 2
+    },
+    "y": {
+     "label": "販売数（個）",
+     "lo": 30,
+     "hi": 42,
+     "step": 3
+    },
+    "note": "点が右上がりの直線のまわりに集まる。相関係数は 56÷√(40×82)≒0.98。"
+   },
    "conditions_detail": [
     {
      "text": "n≧2 で、x と y のどちらも、値がすべて同じではない（標準偏差が正）",
@@ -17749,6 +17815,46 @@
    ],
    "gist": "20日分の最高気温と麦茶の販売本数を、日ごとに組にして記録した。表の数字を眺めるだけでは、気温が高い日ほど売れるのかが見えにくい。",
    "question": "2つの量の関係を、点の並び方で見るには？",
+   "chart": {
+    "kind": "scatter",
+    "show": "cov",
+    "unbiased": true,
+    "points": [
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      5,
+      7
+     ]
+    ],
+    "x": {
+     "label": "広告回数 x",
+     "lo": 1,
+     "hi": 5,
+     "step": 1
+    },
+    "y": {
+     "label": "来店者数 y（百人）",
+     "lo": 3,
+     "hi": 7,
+     "step": 1
+    },
+    "note": "平均の十字（3, 5）で4つに分けると、右上と左下に点が多く、左上・右下には点がない。右上がりの関係。"
+   },
    "conditions_detail": [
     {
      "text": "2つの値が、同じ個体の組になっている",
@@ -18048,6 +18154,45 @@
    ],
    "gist": "6週間の気温と麦茶の販売本数の点に、直線を何本も引いてみる。どの直線でも週ごとの見込みと実際の本数のずれが出るので、そのずれをまとめて1つの数で比べる。",
    "question": "散らばった点に、どの直線を引けばいちばん当てはまる？",
+   "chart": {
+    "kind": "scatter",
+    "show": "resid",
+    "points": [
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      5,
+      7
+     ]
+    ],
+    "x": {
+     "label": "広告回数 x",
+     "lo": 1,
+     "hi": 5,
+     "step": 1
+    },
+    "y": {
+     "label": "来店者数 y（百人）",
+     "lo": 3,
+     "hi": 7,
+     "step": 1
+    },
+    "note": "ŷ＝2.3＋0.9x は、各点の残差（右の実線）の2乗の和がいちばん小さい直線。その和は1.9。"
+   },
    "conditions_detail": [
     {
      "text": "説明変数の値が全部同じではない（重回帰では、切片の列と説明変数の値の列が1次独立）",
@@ -18171,6 +18316,75 @@
    ],
    "gist": "12日分の最高気温と麦茶の販売本数に直線を当てはめた。25℃の日と26℃の日で、販売本数の見込みがどれだけ違うかを読みたい。",
    "question": "説明変数が1大きいところでは、目的変数はどれだけ違うと見込む？",
+   "chart": {
+    "kind": "scatter",
+    "show": "fit",
+    "sets": [
+     {
+      "label": "例題A",
+      "points": [
+       [
+        1,
+        3
+       ],
+       [
+        2,
+        5
+       ],
+       [
+        3,
+        4
+       ],
+       [
+        4,
+        6
+       ],
+       [
+        5,
+        7
+       ]
+      ]
+     },
+     {
+      "label": "店P",
+      "points": [
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        5
+       ],
+       [
+        3,
+        3
+       ],
+       [
+        4,
+        7
+       ],
+       [
+        5,
+        9
+       ]
+      ]
+     }
+    ],
+    "x": {
+     "label": "広告回数 x",
+     "lo": 1,
+     "hi": 5,
+     "step": 1
+    },
+    "y": {
+     "label": "来店者数 y（百人）",
+     "lo": 1,
+     "hi": 9,
+     "step": 2
+    },
+    "note": "相関係数はどちらも0.9。y のばらつきが2倍の店P は、傾きも2倍の1.8。"
+   },
    "conditions_detail": [
     {
      "text": "最小二乗法で係数が1組に決まっている（最小二乗法の要件）",
@@ -18390,6 +18604,46 @@
    ],
    "gist": "麦茶の販売本数は日によって大きく違い、気温で見込む直線を点にいちばん合うように（切片も含めて）引いても、まだ散らばりが残る。もとの散らばりのうち、どれだけが直線で消えたかを1つの数で言いたい。",
    "question": "回帰式は、目的変数のばらつきのどれだけを説明している？",
+   "chart": {
+    "kind": "scatter",
+    "show": "resid",
+    "r2": true,
+    "points": [
+     [
+      1,
+      3
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      5,
+      7
+     ]
+    ],
+    "x": {
+     "label": "広告回数 x",
+     "lo": 1,
+     "hi": 5,
+     "step": 1
+    },
+    "y": {
+     "label": "来店者数 y（百人）",
+     "lo": 3,
+     "hi": 7,
+     "step": 1
+    },
+    "note": "もとの散らばり SST＝10 のうち、直線で消えずに残ったのが SSE＝1.9。R²＝1−1.9÷10＝0.81。"
+   },
    "conditions_detail": [
     {
      "text": "目的変数の値が全部同じではない（SST＞0）",
@@ -18533,6 +18787,109 @@
    ],
    "gist": "10日の麦茶の販売本数を、気温だけで見込む式と、気温と来店客数の2つで見込む式を作る。暑い日ほど来店客数も多い。",
    "question": "目的変数を、いくつかの説明変数でまとめて見込むには？",
+   "chart": {
+    "kind": "scatter",
+    "show": "fit",
+    "slope_only": true,
+    "sets": [
+     {
+      "label": "売価と販売数",
+      "points": [
+       [
+        8,
+        39
+       ],
+       [
+        9,
+        43
+       ],
+       [
+        10,
+        44
+       ],
+       [
+        10,
+        49
+       ],
+       [
+        11,
+        45
+       ],
+       [
+        12,
+        45
+       ],
+       [
+        12,
+        49
+       ],
+       [
+        13,
+        47
+       ]
+      ]
+     },
+     {
+      "label": "売価と（販売数−3×客数）",
+      "adjust": 3,
+      "points": [
+       [
+        8,
+        3,
+        39
+       ],
+       [
+        9,
+        4,
+        43
+       ],
+       [
+        10,
+        4,
+        44
+       ],
+       [
+        10,
+        6,
+        49
+       ],
+       [
+        11,
+        5,
+        45
+       ],
+       [
+        12,
+        6,
+        45
+       ],
+       [
+        12,
+        7,
+        49
+       ],
+       [
+        13,
+        7,
+        47
+       ]
+      ]
+     }
+    ],
+    "x": {
+     "label": "売価 x₁",
+     "lo": 8,
+     "hi": 13,
+     "step": 1
+    },
+    "y": {
+     "label": "販売数・販売数−3×客数",
+     "lo": 26,
+     "hi": 49,
+     "step": 23
+    },
+    "note": "売価だけの傾きは＋1.38。客数の分（3×客数）を除くと、傾きは −1 と逆向きになる。"
+   },
    "conditions_detail": [
     {
      "text": "観察データの係数は、式に入れていない要因と一緒に動く分も含みうる。式に何を入れたかを書き添える",
@@ -21323,6 +21680,50 @@
    ],
    "gist": "5週間の広告回数と来店者数を点に打つと、右上がりに散らばる。来店者数を広告回数から見込む直線は何本でも引けるので、各週の見込みと実際の来店者数の差を見て1本を選ぶ。",
    "question": "1つの量から、もう1つの量を直線でどう見込む？",
+   "chart": {
+    "kind": "scatter",
+    "show": "fit",
+    "sets": [
+     {
+      "label": "広告回数と来店者数",
+      "points": [
+       [
+        1,
+        3
+       ],
+       [
+        2,
+        5
+       ],
+       [
+        3,
+        4
+       ],
+       [
+        4,
+        6
+       ],
+       [
+        5,
+        7
+       ]
+      ]
+     }
+    ],
+    "x": {
+     "label": "広告回数 x",
+     "lo": 1,
+     "hi": 5,
+     "step": 1
+    },
+    "y": {
+     "label": "来店者数 y（百人）",
+     "lo": 3,
+     "hi": 7,
+     "step": 1
+    },
+    "note": "ŷ＝2.3＋0.9x。広告が1回多い週は、来店者数が平均して90人多いと見込む。"
+   },
    "conditions_detail": [
     {
      "text": "当てはめたあと、残差を x に対して打ち、曲がりが残っていないかを見る",
@@ -21972,6 +22373,45 @@
    ],
    "gist": "5日間の気温と売上を組にして、それぞれの平均からのずれを日ごとに並べる。気温と売上が平均から同じ向きにずれた日と、逆の向きにずれた日が、どれだけの大きさで混ざっているかを見る。",
    "question": "2つの量のデータは、平均に対して同じ向きにずれるか、逆向きか？",
+   "chart": {
+    "kind": "scatter",
+    "show": "cov",
+    "points": [
+     [
+      8,
+      18
+     ],
+     [
+      9,
+      19
+     ],
+     [
+      10,
+      20
+     ],
+     [
+      11,
+      21
+     ],
+     [
+      12,
+      22
+     ]
+    ],
+    "x": {
+     "label": "売場A（個）",
+     "lo": 8,
+     "hi": 12,
+     "step": 2
+    },
+    "y": {
+     "label": "売場C（個）",
+     "lo": 18,
+     "hi": 22,
+     "step": 2
+    },
+    "note": "偏差の積は 4, 1, 0, 1, 4 で、どれも0以上。足して5で割ると、データの共分散は2（個²）。"
+   },
    "conditions_detail": [
     {
      "text": "2つの値が、同じ個体の組になっている",
@@ -25162,8 +25602,8 @@
    "figures": [
     {
      "id": "FIG-U05T-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.svg?v=2ecfdbfb22",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.dark.svg?v=8715d3bc6e",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.svg?v=668d5b0626",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.dark.svg?v=69197d9e06",
      "caption": "実際の 100→150→81 と、毎期同じ倍率で100から81に届く線（幾何平均）、率の算術平均（＋2%）で増やした線"
     }
    ]
@@ -25264,8 +25704,8 @@
    "figures": [
     {
      "id": "FIG-U29-r2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg?v=fd2e958394",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.dark.svg?v=d1afcece1e",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg?v=d39f4cfb39",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.dark.svg?v=f8712c0e58",
      "caption": "例題Aの5週。平均からの偏差の2乗の和 SST＝10 のうち、回帰直線の残差として残ったのが SSE＝1.9。R²＝1−1.9÷10＝0.81 は、相関係数0.9 の2乗と同じ"
     }
    ]
@@ -25298,8 +25738,8 @@
    "figures": [
     {
      "id": "FIG-U29-resid",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-resid.svg?v=deef64ab47",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-resid.dark.svg?v=41afb07ed2",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-resid.svg?v=6d826717fa",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-resid.dark.svg?v=908b70e47e",
      "caption": "例題A の5週。点線は平均 ȳ からの偏差（y のばらつき SST のもと）、実線は回帰直線からの残差（SSE のもと）。直線で見込むと、平均で見込むより縦のずれが小さくなる"
     }
    ]
@@ -25466,8 +25906,8 @@
    "figures": [
     {
      "id": "FIG-U31-error",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.svg?v=f03531432d",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.dark.svg?v=50d6205ae0",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.svg?v=808ad3e0c6",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.dark.svg?v=ae3d2ffb27",
      "caption": "偏りが10ポイントの調べ方で、回答数を100人から1万人まで増やしたときの標準誤差と総合誤差（割合が0.5 前後、単位はポイント）"
     }
    ]
@@ -26571,8 +27011,8 @@
    "figures": [
     {
      "id": "FIG-U29-r2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg?v=fd2e958394",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.dark.svg?v=d1afcece1e",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.svg?v=d39f4cfb39",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-r2.dark.svg?v=f8712c0e58",
      "caption": "例題Aの5週。平均からの偏差の2乗の和 SST＝10 のうち、回帰直線の残差として残ったのが SSE＝1.9。R²＝1−1.9÷10＝0.81 は、相関係数0.9 の2乗と同じ"
     }
    ]
@@ -26595,8 +27035,8 @@
    "figures": [
     {
      "id": "FIG-U29-slope",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg?v=c34976d063",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.dark.svg?v=68f1a8e648",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg?v=80ad40e878",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.dark.svg?v=bef6bf24e6",
      "caption": "例題Aの5週（丸）と店Pの5週（四角）。どちらも相関係数は0.9 だが、店Pは y の標準偏差が x の2倍で、回帰直線の傾きも2倍"
     }
    ]
@@ -26619,8 +27059,8 @@
    "figures": [
     {
      "id": "FIG-U29-slope",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg?v=c34976d063",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.dark.svg?v=68f1a8e648",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.svg?v=80ad40e878",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U29-slope.dark.svg?v=bef6bf24e6",
      "caption": "例題Aの5週（丸）と店Pの5週（四角）。どちらも相関係数は0.9 だが、店Pは y の標準偏差が x の2倍で、回帰直線の傾きも2倍"
     }
    ]
@@ -26642,8 +27082,8 @@
    "figures": [
     {
      "id": "FIG-U30-adjr2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.svg?v=c0789cd2bd",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.dark.svg?v=a97acc0f99",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.svg?v=53733c4d6c",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.dark.svg?v=1ad86a997e",
      "caption": "20日のデータで、説明変数2つのモデル A と、A に3つを足した5つのモデル B。R² は B の方が高いが、自由度調整済み R² は A の方が高い"
     }
    ]
@@ -26665,8 +27105,8 @@
    "figures": [
     {
      "id": "FIG-U07-cov",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U07-cov.svg?v=59eb6895ca",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U07-cov.dark.svg?v=4f46eeaf3e",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U07-cov.svg?v=72fc0e659f",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U07-cov.dark.svg?v=374ac4a2ec",
      "caption": "売場A（横）と売場C（縦）の同じ日の販売数。平均の点からの偏差の積を長方形にした。同じ向きに動く5日では、長方形がみな正の側に来る"
     }
    ]
