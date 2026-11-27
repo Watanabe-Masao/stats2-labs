@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 2,
- "schema_revision": 14,
+ "schema_revision": 15,
  "experiment_revision": 14,
  "course": {
   "id": "stats2",
@@ -8980,6 +8980,25 @@
    ],
    "gist": "工場の2つのラインで袋の重さを何千袋も量ると、どちらも平均と標準偏差が同じで左右対称の山になったが、片方は山がとがって裾が長い。標準偏差1つ分・2つ分の範囲に入る袋の割合が、2つのラインで同じになるかを考える。",
    "question": "平均を中心に左右対称に散らばる量は、平均と散らばりだけで、どこに何%入るかが決まる？",
+   "chart": {
+    "kind": "normal",
+    "mu": 500,
+    "sigma": 4,
+    "ticks": [
+     488,
+     512,
+     4
+    ],
+    "unit": "g",
+    "shade": [
+     {
+      "from": 496,
+      "to": 504,
+      "label": "約68%"
+     }
+    ],
+    "note": "平均500g・標準偏差4g の袋の重さ。平均±標準偏差（496〜504g）に約68%が入る。"
+   },
    "conditions_detail": [
     {
      "text": "σ＞0（μ は実数）",
@@ -9020,8 +9039,8 @@
    "figures": [
     {
      "id": "FIG-U16-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg?v=0ea5002a13",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.dark.svg?v=7de0b3867b",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg?v=5d4e41843e",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.dark.svg?v=9f6161c51f",
      "caption": "平均100・標準偏差10 の正規分布（例題A）。90〜110 に約68%、80〜120 の外側に合わせて約5%。確率は高さではなく面積。"
     }
    ],
@@ -13663,6 +13682,17 @@
    ],
    "gist": "平日の午後2〜4時は、客が1時間に6人の割合で、互いに関係なく来る。この時間帯だけ、客が来るたびに次の客までの時間を何日分も記録して並べる。",
    "question": "次の出来事が起きるまで、どれくらい待つ？",
+   "chart": {
+    "kind": "expo",
+    "lam": 0.1,
+    "ticks": [
+     0,
+     40,
+     10
+    ],
+    "unit": "分",
+    "note": "1時間に6人なので、1分あたり λ＝0.1人。次の客までの時間は0分の近くがいちばん多く、右へ長く裾を引く。平均は 1/λ＝10分。"
+   },
    "conditions_detail": [
     {
      "text": "λ＞0",
@@ -14210,6 +14240,25 @@
    ],
    "gist": "バスは12分おきに来て、時刻表を見ずにバス停に着く。待ち時間が0〜12分のどこも同じように出るとき、4分以内に乗れる確率を考える。",
    "question": "ある範囲のどこも同じように出るとき、確率はどう決まる？",
+   "chart": {
+    "kind": "uniform",
+    "a": 0,
+    "b": 12,
+    "ticks": [
+     -2,
+     14,
+     2
+    ],
+    "unit": "分",
+    "shade": [
+     {
+      "from": 0,
+      "to": 4,
+      "label": "1/3"
+     }
+    ],
+    "note": "0〜12分のどこも同じ高さ。4分以内に乗れる確率は、その幅の分の面積で 4÷12＝1/3。平均は真ん中の6分。"
+   },
    "conditions_detail": [
     {
      "text": "a＜b",
@@ -14897,6 +14946,21 @@
    ],
    "gist": "正規分布に従う量から6個ずつ取り、標本平均を本当の σ で標準化した値と、毎回の s で標準化した値を、何度も作って並べる。2つの並び方を、裾の広がりに注目して比べる。",
    "question": "σ が分からず s で置き換えて標本平均を標準化すると、どんな分布になる？",
+   "chart": {
+    "kind": "t",
+    "df": 5,
+    "ticks": [
+     -4,
+     4,
+     1
+    ],
+    "overlay": {
+     "mu": 0,
+     "sigma": 1,
+     "label": "標準正規分布"
+    },
+    "note": "6個から s を出すと自由度は5。標準正規分布（点線）より山が低く、裾が厚い。"
+   },
    "conditions_detail": [
     {
      "text": "Z と V は独立",
@@ -15000,6 +15064,16 @@
    ],
    "gist": "標準正規分布に従う値を独立に3つ取り、2乗して足すことを何度もくり返す。足した値が0より小さくなることがあるか、どちらに長く広がるかを見る。",
    "question": "標準正規分布の値を2乗して足すと、どんな分布になる？",
+   "chart": {
+    "kind": "chi2",
+    "df": 3,
+    "ticks": [
+     0,
+     12,
+     2
+    ],
+    "note": "標準正規の値3つの2乗の和。0より小さくならず、右へ長く裾を引く。平均は自由度の3。"
+   },
    "conditions_detail": [
     {
      "text": "Z₁, …, Z_k は独立で、どれも標準正規分布に従う",
@@ -15097,6 +15171,17 @@
    ],
    "gist": "重さが正規分布に従う2台の機械で詰めた袋から、それぞれ無作為に袋を選んで不偏分散を出し、比をとる。2台の散らばりが本当に同じでも、比を取り直すたびにどんな値がどれくらい出るかを考える。",
    "question": "2つの標本の分散の比は、どんな分布に従う？",
+   "chart": {
+    "kind": "f",
+    "d1": 9,
+    "d2": 9,
+    "ticks": [
+     0,
+     5,
+     1
+    ],
+    "note": "10袋ずつなら自由度は 9 と 9。比は1の近くに多いが、0より小さくならず右へ裾を引く。平均は 9÷7≒1.29。"
+   },
    "conditions_detail": [
     {
      "text": "分子と分母のカイ二乗の確率変数は独立",
@@ -21333,6 +21418,24 @@
    ],
    "gist": "袋の重さは平均500g・標準偏差4g、箱の重さは平均2kg・標準偏差50gの正規分布に従う。手元には、平均0・標準偏差1の正規分布の表が1枚しかない。",
    "question": "平均も散らばりも違う正規分布の確率を、1つの表で読むには？",
+   "chart": {
+    "kind": "normal",
+    "mu": 0,
+    "sigma": 1,
+    "ticks": [
+     -3,
+     3,
+     1
+    ],
+    "shade": [
+     {
+      "from": -1.96,
+      "to": 1.96,
+      "label": "約95%"
+     }
+    ],
+    "note": "平均0・標準偏差1。−1.96〜1.96 に約95%が入る。袋の重さ 500g±4g も、(x−500)÷4 でこの物差しに直せる。"
+   },
    "conditions_detail": [
     {
      "text": "標準正規分布表で確率を読むのは、標準化した量がこの分布に従う（元が正規分布）か、近づく（中心極限定理・正規近似の目安を満たす）と言えるときだけ",
@@ -21342,8 +21445,8 @@
    "figures": [
     {
      "id": "FIG-U16-stdnormal",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=ac0aa808af",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.dark.svg?v=76cd4eb307",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=9100a2628c",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.dark.svg?v=5f4b2e3978",
      "caption": "標準正規分布 N(0, 1)。どの正規分布も、平均を引いて標準偏差で割ると、この形になる。−1〜1 に約68%。"
     }
    ],
@@ -22242,14 +22345,14 @@
    "figures": [
     {
      "id": "FIG-U16-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg?v=0ea5002a13",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.dark.svg?v=7de0b3867b",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.svg?v=5d4e41843e",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-concept.dark.svg?v=9f6161c51f",
      "caption": "平均100・標準偏差10 の正規分布（例題A）。90〜110 に約68%、80〜120 の外側に合わせて約5%。確率は高さではなく面積。"
     },
     {
      "id": "FIG-U16-stdnormal",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=ac0aa808af",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.dark.svg?v=76cd4eb307",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=9100a2628c",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.dark.svg?v=5f4b2e3978",
      "caption": "標準正規分布 N(0, 1)。どの正規分布も、平均を引いて標準偏差で割ると、この形になる。−1〜1 に約68%。"
     }
    ]
@@ -23809,14 +23912,14 @@
    "figures": [
     {
      "id": "FIG-LAB-tcf-rel-t-normal-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-1.svg?v=f0d431f2b3",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-1.dark.svg?v=0d4ff9557d",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-1.svg?v=c041182e6d",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-1.dark.svg?v=c4c67627f8",
      "caption": "自由度5の t 分布（実線）は、標準正規分布（点線）より山が低く、裾が厚い。両側5%の点は 2.571 で、正規の 1.96 より外。"
     },
     {
      "id": "FIG-LAB-tcf-rel-t-normal-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-3.svg?v=1e4a1e1736",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-3.dark.svg?v=a6246cce96",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-3.svg?v=0ea225f2c9",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-normal-tour-3.dark.svg?v=1c29bc5685",
      "caption": "自由度120では 1.98 で、正規の 1.96 との差は 0.02 ほど。図では見分けにくいが、等しくはならない（自由度を限りなく大きくした極限で標準正規分布になる）。"
     }
    ]
@@ -24279,14 +24382,14 @@
    "figures": [
     {
      "id": "FIG-LAB-test-rel-pvalue-alpha-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-2.svg?v=d9e67efdbe",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-2.dark.svg?v=cc76345dea",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-2.svg?v=71c12c4fe4",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-2.dark.svg?v=aa53886d28",
      "caption": "同じデータで、有意水準を1%（境目2.576）にすると、p 値 0.036 は1%より大きく、棄却しない。有意水準は判断の線で、データを見る前に決める数。"
     },
     {
      "id": "FIG-LAB-test-rel-pvalue-alpha-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-3.svg?v=cc2745f9f4",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-3.dark.svg?v=458c7498a5",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-3.svg?v=03c4ab82c1",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-pvalue-alpha-tour-3.dark.svg?v=a3af140606",
      "caption": "有意水準を5%に戻し、別の36人で平均が102.6 だったとする。z＝1.3、p 値は 0.194 に変わり、棄却しない。p 値は標本ごとに変わる数。"
     }
    ]
@@ -24410,14 +24513,14 @@
    "figures": [
     {
      "id": "FIG-LAB-test-rel-type1-type2-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-2.svg?v=9f979d2c6b",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-2.dark.svg?v=d5d60ac34b",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-2.svg?v=67c2ba5845",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-2.dark.svg?v=0058e98484",
      "caption": "有意水準を1%にすると、第1種の過誤は0.01 に減るが、境目が外へ動き、β は 0.78 に増える。"
     },
     {
      "id": "FIG-LAB-test-rel-type1-type2-tour-3",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-3.svg?v=a2057ac8d6",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-3.dark.svg?v=57c973ad53",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-3.svg?v=7427b3dc18",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-test-rel-type1-type2-tour-3.dark.svg?v=37df42a6ef",
      "caption": "人数を4倍の144人にすると標準誤差が半分になる。有意水準を1%にしたままでも、β は 0.15 まで下がる。段1（有意水準0.05・β 0.56）と比べて、2つの誤りがどちらも減った。"
     }
    ]
@@ -25296,8 +25399,8 @@
    "figures": [
     {
      "id": "FIG-U16-stdnormal",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=ac0aa808af",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.dark.svg?v=76cd4eb307",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.svg?v=9100a2628c",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U16-stdnormal.dark.svg?v=5f4b2e3978",
      "caption": "標準正規分布 N(0, 1)。どの正規分布も、平均を引いて標準偏差で割ると、この形になる。−1〜1 に約68%。"
     }
    ]
@@ -25554,14 +25657,14 @@
    "figures": [
     {
      "id": "FIG-LAB-tcf-rel-t-f-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-1.svg?v=1b5047e369",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-1.dark.svg?v=0b4697ed95",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-1.svg?v=707029cf01",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-1.dark.svg?v=b91d8eb5cd",
      "caption": "自由度9の t 分布で、両側5%の点は 2.262。|T| が 2.262 を超える確率が 5%。"
     },
     {
      "id": "FIG-LAB-tcf-rel-t-f-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-2.svg?v=01c67758ca",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-2.dark.svg?v=be759e7c39",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-2.svg?v=eb76c30a22",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-tcf-rel-t-f-tour-2.dark.svg?v=3c366650e7",
      "caption": "T＝Z÷√(V÷9) を2乗すると T²＝(Z²÷1)÷(V÷9)。Z² は χ²(1) なので、T² は F(1, 9)（分子の自由度1：n₁＝2、分母の自由度9：n₂＝10）に従う。"
     }
    ]
