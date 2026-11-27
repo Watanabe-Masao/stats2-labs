@@ -9272,7 +9272,7 @@
       },
       {
        "symbol": "Φ( )",
-       "meaning": "標準正規分布の累積分布関数 Φ(z)＝P(Z≦z)（標準正規分布表で読む値）",
+       "meaning": "標準正規分布の累積分布関数 Φ(z)＝P(Z≦z)（下側の累積。上側確率の表なら 1−表の値）",
        "key": "Phi",
        "concept": "stats2:TERM-std-normal"
       }
@@ -9411,8 +9411,7 @@
        }
       }
      ],
-     "unverified": true,
-     "review_pending": true
+     "unverified": true
     },
     {
      "id": "F-std-def",
@@ -14187,7 +14186,7 @@
       },
       {
        "symbol": "X",
-       "meaning": "確率変数",
+       "meaning": "指数分布に従う待ち時間",
        "key": "X",
        "kind": "rv"
       },
@@ -14371,8 +14370,7 @@
        }
       }
      ],
-     "unverified": true,
-     "review_pending": true
+     "unverified": true
     },
     {
      "id": "F-expo-mean",
@@ -14967,7 +14965,12 @@
       {
        "symbol": "b",
        "meaning": "値のとる範囲の右端",
+       "range": "a より大きい",
        "key": "b",
+       "domain": {
+        "min": "a",
+        "minOpen": true
+       },
        "kind": "param"
       }
      ],
@@ -15083,8 +15086,7 @@
        }
       }
      ],
-     "unverified": true,
-     "review_pending": true
+     "unverified": true
     },
     {
      "id": "F-uniform-mean",
@@ -22894,7 +22896,7 @@
      "symbols": [
       {
        "symbol": "Φ( )",
-       "meaning": "標準正規分布の累積分布関数 Φ(z)＝P(Z≦z)（標準正規分布表で読む値）",
+       "meaning": "標準正規分布の累積分布関数 Φ(z)＝P(Z≦z)（下側の累積。上側確率の表なら 1−表の値）",
        "key": "Phi",
        "concept": "stats2:TERM-std-normal"
       },
@@ -22914,7 +22916,8 @@
        "symbol": "z",
        "meaning": "値（標準正規分布表の見出し）",
        "key": "z",
-       "kind": "value"
+       "kind": "value",
+       "range": "実数全体"
       },
       {
        "symbol": "φ( )",
@@ -22979,8 +22982,7 @@
       ]
      },
      "tex": "\\Phi(z)=P(Z\\le z)=\\int_{-\\infty}^{z}\\varphi(t)\\,dt",
-     "unverified": true,
-     "review_pending": true
+     "unverified": true
     },
     {
      "id": "F-stdnorm-interval",
@@ -23024,7 +23026,7 @@
       },
       {
        "symbol": "Φ( )",
-       "meaning": "標準正規分布の累積分布関数 Φ(z)＝P(Z≦z)（標準正規分布表で読む値）",
+       "meaning": "標準正規分布の累積分布関数 Φ(z)＝P(Z≦z)（下側の累積。上側確率の表なら 1−表の値）",
        "key": "Phi",
        "concept": "stats2:TERM-std-normal"
       }
@@ -26728,8 +26730,8 @@
    "figures": [
     {
      "id": "FIG-U05T-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.svg?v=b154636a6e",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.dark.svg?v=c1fe45a46e",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.svg?v=668d5b0626",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05T-concept.dark.svg?v=69197d9e06",
      "caption": "実際の 100→150→81 と、毎期同じ倍率で100から81に届く線（幾何平均）、率の算術平均（＋2%）で増やした線"
     }
    ]
@@ -27032,8 +27034,8 @@
    "figures": [
     {
      "id": "FIG-U31-error",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.svg?v=fca90d428b",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.dark.svg?v=4719d65ebb",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.svg?v=808ad3e0c6",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U31-error.dark.svg?v=ae3d2ffb27",
      "caption": "偏りが10ポイントの調べ方で、回答数を100人から1万人まで増やしたときの標準誤差と総合誤差（割合が0.5 前後、単位はポイント）"
     }
    ]
@@ -28208,8 +28210,8 @@
    "figures": [
     {
      "id": "FIG-U30-adjr2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.svg?v=9f80e1aa28",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.dark.svg?v=f8c9199f28",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.svg?v=53733c4d6c",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U30-adjr2.dark.svg?v=1ad86a997e",
      "caption": "20日のデータで、説明変数2つのモデル A と、A に3つを足した5つのモデル B。R² は B の方が高いが、自由度調整済み R² は A の方が高い"
     }
    ]
