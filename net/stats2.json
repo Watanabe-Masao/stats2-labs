@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 2,
- "schema_revision": 13,
+ "schema_revision": 14,
  "experiment_revision": 14,
  "course": {
   "id": "stats2",
@@ -12274,6 +12274,13 @@
    },
    "gist": "問い合わせは、時間帯によらず平均して1時間に3件、互いに関係なく来る。1時間ごとに件数を数えることを何日分もくり返し、0件・1件・2件…の時間がそれぞれ何回あったかを並べる。",
    "question": "一定の割合でばらばらに起きる出来事は、決まった時間の中で何回起きる？",
+   "chart": {
+    "kind": "poisson",
+    "lam": 3,
+    "kmax": 10,
+    "unit": "件",
+    "note": "λ＝3 では 2件と3件がいちばん起こりやすい（どちらも約0.22）。平均は λ＝3件で、右へ裾を引く。"
+   },
    "conditions_detail": [
     {
      "text": "λ＞0",
@@ -12309,8 +12316,8 @@
    "figures": [
     {
      "id": "FIG-U15-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.svg?v=88e82fc2f9",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.dark.svg?v=1c2bcca2d6",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.svg?v=9ef3396353",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U15-concept.dark.svg?v=6c9b8c2b1a",
      "caption": "ポアソン分布（λ＝2）。1時間に平均2件。1件と2件がいちばん高く、右に裾が伸びる。▲の平均と分散はどちらも2。"
     }
    ],
@@ -12608,6 +12615,13 @@
    },
    "gist": "1割が当たるくじを、初めて当たるまで引く人を何人も記録し、止まった回数ごとに人数を数える。",
    "question": "初めて成功するまでに、何回かかる？",
+   "chart": {
+    "kind": "geom",
+    "p": 0.1,
+    "kmax": 30,
+    "unit": "回目",
+    "note": "いちばん起こりやすいのは1回目（0.1）。1回ごとに0.9倍ずつ減るが、裾が長く、平均は 1/p＝10回目。"
+   },
    "conditions_detail": [
     {
      "text": "0＜p≦1",
@@ -12869,6 +12883,14 @@
    },
    "gist": "当たりの出る確率が毎回同じで、前の結果に左右されないくじを引き続け、当たりが3回出たところで止める。止めるまでに引いた回数を、何度も記録して並べる。",
    "question": "r 回目の成功までに、何回かかる？",
+   "chart": {
+    "kind": "geom",
+    "p": 0.3,
+    "r": 3,
+    "kmax": 25,
+    "unit": "回目",
+    "note": "いちばん起こりやすいのは7回目（約0.097）。平均は r/p＝3÷0.3＝10回目。"
+   },
    "conditions_detail": [
     {
      "text": "r は1以上の整数・0＜p≦1",
@@ -13246,6 +13268,14 @@
    },
    "gist": "10個のうち3個が当たりの箱から、4個を1個ずつ戻さずに取る。1個目が当たりだったら、2個目を取るときの箱の中身がどう変わるかを考える。",
    "question": "箱から戻さずにいくつか取り出すと、その中に当たりはいくつある？",
+   "chart": {
+    "kind": "hyper",
+    "N": 10,
+    "K": 3,
+    "n": 4,
+    "unit": "個",
+    "note": "いちばん起こりやすいのは1個（0.5）。当たりは3個しかないので、4個とも当たりは起こらない。平均は 4×3/10＝1.2個。"
+   },
    "conditions_detail": [
     {
      "text": "N・M・n は整数で、0≦M≦N・1≦n≦N",
@@ -20310,6 +20340,11 @@
    },
    "gist": "1人の客に試食を出し、買えば1、買わなければ0と記録する。この1人が買う見込みを、記録する前に確率で表したい。",
    "question": "1回だけ試すとき、成功するかどうかを確率でどう表す？",
+   "chart": {
+    "kind": "bernoulli",
+    "p": 0.3,
+    "note": "1（買う）の確率 0.3、0（買わない）の確率 0.7。期待値は p＝0.3 で、0 と 1 の間の値になる。"
+   },
    "conditions_detail": [
     {
      "text": "0≦p≦1",
@@ -22598,8 +22633,8 @@
     },
     {
      "id": "FIG-LAB-pois-rel-geom-contrast-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-2.svg?v=d3f2f35d1c",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-2.dark.svg?v=76af40b8b9",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-2.svg?v=1c4d238b1b",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-geom-contrast-tour-2.dark.svg?v=aed7467e88",
      "caption": "幾何：当たり1回に決めて、そこまでの回数 1, 2, 3, … を数える。上限はない。"
     }
    ]
@@ -23019,14 +23054,14 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-negbinom-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.svg?v=47a18db71b",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.dark.svg?v=8866e8ad6c",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.svg?v=4e5b075291",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-1.dark.svg?v=9c7a7c1609",
      "caption": "幾何分布：当たり（p＝0.3）の 1回目が何回目に来るか。平均 1/p≒3.3回。"
     },
     {
      "id": "FIG-LAB-pois-rel-negbinom-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.svg?v=1a6a660c45",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.dark.svg?v=22be2fa50b",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.svg?v=3cb05bde99",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-negbinom-tour-2.dark.svg?v=fe6ec1e71e",
      "caption": "待つ当たりを r 回に広げると負の二項分布。平均 r/p も r 倍に。"
     }
    ]
@@ -33430,14 +33465,14 @@
    "figures": [
     {
      "id": "FIG-LAB-pois-rel-expo-tour-1",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.svg?v=1fedc75731",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.dark.svg?v=799d9f813b",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.svg?v=9e0810dcb1",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-1.dark.svg?v=fb14be7544",
      "caption": "1時間に平均2件（λ＝2）。1時間に0件の確率は e⁻²≒0.135。"
     },
     {
      "id": "FIG-LAB-pois-rel-expo-tour-2",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.svg?v=c94c0f1108",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.dark.svg?v=99278b9fac",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.svg?v=2fe0674b99",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-LAB-pois-rel-expo-tour-2.dark.svg?v=dc763b9596",
      "caption": "時間 t を延ばすと λ＝2t が増え、0件の確率 e^(−2t) は小さくなる。"
     }
    ],
