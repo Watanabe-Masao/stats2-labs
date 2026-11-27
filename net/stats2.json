@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 2,
- "schema_revision": 15,
+ "schema_revision": 16,
  "experiment_revision": 14,
  "course": {
   "id": "stats2",
@@ -6607,6 +6607,39 @@
    ],
    "gist": "来店客にアンケートで好きな弁当のおかずを1つ選んでもらった。おかずの名前は平均できないが、来月いちばん多く作る1品を決めたい。",
    "question": "いちばんよく出る値はどれか？",
+   "chart": {
+    "kind": "centers",
+    "data": [
+     24,
+     24,
+     24,
+     24.5,
+     24.5,
+     24.5,
+     24.5,
+     24.5,
+     24.5,
+     24.5,
+     25,
+     25,
+     25,
+     25,
+     25,
+     26,
+     26
+    ],
+    "lo": 23.5,
+    "hi": 26.5,
+    "ticks": [
+     24,
+     24.5,
+     25,
+     25.5,
+     26
+    ],
+    "axis_label": "靴のサイズ（cm）",
+    "note": "いちばん多く売れたのは7足の24.5。この例では中央値も24.5で、平均は約24.7。"
+   },
    "conditions_detail": [
     {
      "text": "度数分布表から読むときは、階級の分け方を決めてある",
@@ -6707,6 +6740,30 @@
    ],
    "gist": "7人の待ち時間 2, 3, 3, 4, 5, 6, 45 分の平均は約9.7分で、7人のうち6人はそれより短い。平均とは別の「真ん中」の決め方を考える。",
    "question": "大きく外れた値に引っぱられにくい「真ん中」は、どの値か？",
+   "chart": {
+    "kind": "centers",
+    "data": [
+     2,
+     3,
+     3,
+     4,
+     5,
+     6,
+     45
+    ],
+    "lo": 0,
+    "hi": 50,
+    "ticks": [
+     0,
+     10,
+     20,
+     30,
+     40,
+     50
+    ],
+    "axis_label": "待ち時間（分）",
+    "note": "平均は約9.7分で、7人中6人はそれより短い。真ん中の4番目の人の4分が中央値。"
+   },
    "conditions_detail": [
     {
      "text": "値に順序がある（順序尺度以上）",
@@ -6789,6 +6846,36 @@
    ],
    "gist": "20日分の売上の数字を並べても、どのあたりの日が多いかは見えにくい。10万円ごとに区切って見るなら、区切りごとに何を残し何が消えるかを考え、30万円ちょうどの日をどちらに入れるかも先に決めておく。",
    "question": "たくさんの数値を、どのあたりに多いか分かるようにまとめるには？",
+   "chart": {
+    "kind": "hist",
+    "data": [
+     12,
+     15,
+     18,
+     19,
+     21,
+     22,
+     22,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31,
+     33,
+     35,
+     38,
+     42,
+     55
+    ],
+    "start": 10,
+    "width": 10,
+    "cumulative": true,
+    "axis_label": "売上（万円）",
+    "note": "20日の売上を10万円ごと（以上・未満）に数えると 4・9・5・1・1日。30万円ちょうどの日は30〜40に入る。"
+   },
    "conditions_detail": [
     {
      "text": "値が量的（数直線の上に並ぶ数）で、n≧1",
@@ -6871,6 +6958,36 @@
    ],
    "gist": "度数分布表の階級を横に並べ、その上に柱を立てる。最後の階級だけ幅が2倍のとき、柱の高さを度数のままにすると、その階級が大きく見えてしまう。",
    "question": "度数分布表の形を、一目で見るには？",
+   "chart": {
+    "kind": "hist",
+    "data": [
+     12,
+     15,
+     18,
+     19,
+     21,
+     22,
+     22,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31,
+     33,
+     35,
+     38,
+     42,
+     55
+    ],
+    "start": 10,
+    "width": 10,
+    "mark": 1,
+    "axis_label": "売上（万円）",
+    "note": "20〜30 の柱がいちばん高く（9日）、大きい側へ低い柱が続く。右に裾が伸びた形。"
+   },
    "conditions_detail": [
     {
      "text": "どの階級も、両端の決まった区間である（幅が有限）",
@@ -6947,6 +7064,38 @@
    ],
    "gist": "2つの店の30日分の来店客数を、1本ずつの数直線の上で比べたい。全部の値を打つと重なって見にくいので、どの位置の値だけを残せば、真ん中・広がり・端を比べられるかを考える。",
    "question": "真ん中・半分の広がり・端を、1本の図で比べるには？",
+   "chart": {
+    "kind": "boxplot",
+    "rows": [
+     {
+      "label": "20日の売上（万円）",
+      "data": [
+       12,
+       15,
+       18,
+       19,
+       21,
+       22,
+       22,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       30,
+       31,
+       33,
+       35,
+       38,
+       42,
+       55
+      ]
+     }
+    ],
+    "step": 10,
+    "note": "箱は Q₁ 21.5〜Q₃ 32、中の線が中央値 26.5。ひげは 42 まで伸び、55 は点で描く。"
+   },
    "conditions_detail": [
     {
      "text": "値が量的で、四分位数が決まる（n≧2）",
@@ -7179,6 +7328,39 @@
    ],
    "gist": "12日分の青果の廃棄数で、1日だけ極端に多い日がある。どこからを「ほかから大きく離れた」とするかを、目で見て決めるのではなく、どの日数のデータにも同じように使える決まりで決めたい。",
    "question": "ほかから大きく離れた値は、どこからを外れ値とみなす？",
+   "chart": {
+    "kind": "boxplot",
+    "rows": [
+     {
+      "label": "20日の売上（万円）",
+      "data": [
+       12,
+       15,
+       18,
+       19,
+       21,
+       22,
+       22,
+       24,
+       25,
+       26,
+       27,
+       28,
+       29,
+       30,
+       31,
+       33,
+       35,
+       38,
+       42,
+       55
+      ]
+     }
+    ],
+    "fence": true,
+    "step": 10,
+    "note": "柵（点線）は 21.5−1.5×10.5＝5.75 と 32＋1.5×10.5＝47.75。その外の 55 が外れ値候補。"
+   },
    "conditions_detail": [
     {
      "text": "飛び抜けた値が、片側で全体の4分の1より少ない",
@@ -8615,6 +8797,20 @@
    ],
    "gist": "2つの店で、客ごとの購入額の平均からのずれを調べた。大きく外れた客が平均の上側に多いのか下側に多いのかを、ずれを使った1つの数の符号で見分けたい。",
    "question": "分布は、左右のどちらに裾を長く引いている？",
+   "chart": {
+    "kind": "hist",
+    "data": [
+     2,
+     3,
+     3,
+     4,
+     13
+    ],
+    "start": 2,
+    "width": 2,
+    "axis_label": "販売数（個）",
+    "note": "2〜6個に4日が集まり、13個の日だけが右に飛び出す。この日が正の歪度（約1.41）を作る。"
+   },
    "conditions_detail": [
     {
      "text": "データの標準偏差が正（値がすべて同じではない）",
@@ -19571,6 +19767,26 @@
    ],
    "gist": "4日の売上 10・10・10・30（万円）を1つの箱に集めて、4日に同じだけ配り直す。配り直したあとの1日分と、もとの4日の値を比べる。",
    "question": "全部を同じだけに分けるとしたら、1つあたりいくつになる？",
+   "chart": {
+    "kind": "centers",
+    "data": [
+     10,
+     10,
+     10,
+     30
+    ],
+    "lo": 0,
+    "hi": 40,
+    "ticks": [
+     0,
+     10,
+     20,
+     30,
+     40
+    ],
+    "axis_label": "売上（万円）",
+    "note": "4日に同じだけ配り直すと 60÷4＝15。平均15は、3日の10と30の間に来る。中央値と最頻値は10。"
+   },
    "conditions_detail": [
     {
      "text": "値が量的（足すことに意味がある）",
@@ -24727,8 +24943,8 @@
    "figures": [
     {
      "id": "FIG-U06-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg?v=1d7e40432f",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.dark.svg?v=73808b92df",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg?v=49137e480a",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.dark.svg?v=f0809c7cdf",
      "caption": "10人の購入額（千円）を数直線に積み、平均・中央値・最頻値の位置に線を引いた。17千円の1人が平均を右へ引っ張る"
     }
    ]
@@ -24750,8 +24966,8 @@
    "figures": [
     {
      "id": "FIG-U06-concept",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg?v=1d7e40432f",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.dark.svg?v=73808b92df",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.svg?v=49137e480a",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U06-concept.dark.svg?v=f0809c7cdf",
      "caption": "10人の購入額（千円）を数直線に積み、平均・中央値・最頻値の位置に線を引いた。17千円の1人が平均を右へ引っ張る"
     }
    ]
@@ -24795,8 +25011,8 @@
    "figures": [
     {
      "id": "FIG-U05-exA",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=facfc4bc3d",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.dark.svg?v=27aec78865",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=0f8a63847b",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.dark.svg?v=8628a35135",
      "caption": "上：20日の売上のヒストグラム（10万円ごと）。下：箱ひげ図（ひげは柵の内側の最大値42まで、55は外れ値候補）"
     }
    ]
@@ -24819,8 +25035,8 @@
    "figures": [
     {
      "id": "FIG-U05-exA",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=facfc4bc3d",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.dark.svg?v=27aec78865",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=0f8a63847b",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.dark.svg?v=8628a35135",
      "caption": "上：20日の売上のヒストグラム（10万円ごと）。下：箱ひげ図（ひげは柵の内側の最大値42まで、55は外れ値候補）"
     }
    ]
@@ -24877,8 +25093,8 @@
    "figures": [
     {
      "id": "FIG-U05-exA",
-     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=facfc4bc3d",
-     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.dark.svg?v=27aec78865",
+     "url": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.svg?v=0f8a63847b",
+     "url_dark": "https://watanabe-masao.github.io/stats2-labs/fig/FIG-U05-exA.dark.svg?v=8628a35135",
      "caption": "上：20日の売上のヒストグラム（10万円ごと）。下：箱ひげ図（ひげは柵の内側の最大値42まで、55は外れ値候補）"
     }
    ]
