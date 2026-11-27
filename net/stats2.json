@@ -1,7 +1,7 @@
 {
  "schema": "kn-schema",
  "version": 2,
- "schema_revision": 18,
+ "schema_revision": 19,
  "experiment_revision": 14,
  "course": {
   "id": "stats2",
@@ -9378,7 +9378,23 @@
        }
       ]
      },
-     "tex": "P(a\\le X\\le b)=\\int_{a}^{b}f(x)\\,dx=\\mathrm{Phi}\\left(\\dfrac{b-\\mu}{\\sigma}\\right)-\\mathrm{Phi}\\left(\\dfrac{a-\\mu}{\\sigma}\\right)",
+     "parts": [
+      {
+       "path": [
+        1
+       ],
+       "name": "面積",
+       "meaning": "密度の曲線の下の、a から b までの面積"
+      },
+      {
+       "path": [
+        2
+       ],
+       "name": "標準化して表で読む",
+       "meaning": "a・b を標準化し、標準正規分布の累積 Φ の差にした形"
+      }
+     ],
+     "tex": "P(a\\le X\\le b)=\\int_{a}^{b}f(x)\\,dx=\\Phi\\left(\\dfrac{b-\\mu}{\\sigma}\\right)-\\Phi\\left(\\dfrac{a-\\mu}{\\sigma}\\right)",
      "conditions": [
       {
        "text": "a ≦ b",
@@ -9487,6 +9503,23 @@
      "correction": "正規分布に近づくのは、独立な要因が足し合わさるときなど。売上・所得など右に裾の長いデータは多い"
     }
    ],
+   "curve_workspace": {
+    "formula": 1,
+    "family": "normal",
+    "vary": [
+     "mu",
+     "sigma"
+    ],
+    "lo": "a",
+    "hi": "b",
+    "dir": "between",
+    "initial": {
+     "mu": 500,
+     "sigma": 4,
+     "a": 496,
+     "b": 504
+    }
+   },
    "gist": "工場の2つのラインで袋の重さを何千袋も量ると、どちらも平均と標準偏差が同じで左右対称の山になったが、片方は山がとがって裾が長い。標準偏差1つ分・2つ分の範囲に入る袋の割合が、2つのラインで同じになるかを考える。",
    "question": "平均を中心に左右対称に散らばる量は、平均と散らばりだけで、どこに何%入るかが決まる？",
    "chart": {
@@ -14305,6 +14338,22 @@
        }
       ]
      },
+     "parts": [
+      {
+       "path": [
+        1
+       ],
+       "name": "面積",
+       "meaning": "密度の曲線の下の、a から b までの面積"
+      },
+      {
+       "path": [
+        2
+       ],
+       "name": "閉じた形",
+       "meaning": "a を超えて待つ確率 e^(−λa) から、b を超えて待つ確率 e^(−λb) を引いた形"
+      }
+     ],
      "tex": "P(a\\le X\\le b)=\\int_{a}^{b}f(x)\\,dx=e^{-\\lambda a}-e^{-\\lambda b}",
      "conditions": [
       {
@@ -14462,6 +14511,21 @@
      "correction": "密度は0分がいちばん高く、待つほど下がる。平均より早く来る確率は 1−e^(−1)≒63%"
     }
    ],
+   "curve_workspace": {
+    "formula": 2,
+    "family": "expo",
+    "vary": [
+     "lambda"
+    ],
+    "lo": "a",
+    "hi": "b",
+    "dir": "le",
+    "initial": {
+     "lambda": 0.1,
+     "a": 0,
+     "b": 10
+    }
+   },
    "gist": "平日の午後2〜4時は、客が1時間に6人の割合で、互いに関係なく来る。この時間帯だけ、客が来るたびに次の客までの時間を何日分も記録して並べる。",
    "question": "次の出来事が起きるまで、どれくらい待つ？",
    "chart": {
@@ -14980,6 +15044,22 @@
        }
       ]
      },
+     "parts": [
+      {
+       "path": [
+        1
+       ],
+       "name": "面積",
+       "meaning": "密度の曲線（平らな線）の下の、c から d までの面積"
+      },
+      {
+       "path": [
+        2
+       ],
+       "name": "幅の比",
+       "meaning": "区間の幅 d−c を、とりうる範囲の幅 b−a で割った形"
+      }
+     ],
      "tex": "P(c\\le X\\le d)=\\int_{c}^{d}f(x)\\,dx=\\dfrac{d-c}{b-a}",
      "conditions": [
       {
@@ -15172,6 +15252,23 @@
      "correction": "連続なので1点の確率は0。同じなのは「同じ長さの区間に入る確率」"
     }
    ],
+   "curve_workspace": {
+    "formula": 1,
+    "family": "uniform",
+    "vary": [
+     "a",
+     "b"
+    ],
+    "lo": "c",
+    "hi": "d",
+    "dir": "between",
+    "initial": {
+     "a": 0,
+     "b": 12,
+     "c": 0,
+     "d": 4
+    }
+   },
    "gist": "バスは12分おきに来て、時刻表を見ずにバス停に着く。待ち時間が0〜12分のどこも同じように出るとき、4分以内に乗れる確率を考える。",
    "question": "ある範囲のどこも同じように出るとき、確率はどう決まる？",
    "chart": {
@@ -22788,7 +22885,7 @@
        }
       ]
      },
-     "tex": "\\mathrm{phi}(z)=\\dfrac{1}{\\sqrt{2\\pi}}\\exp\\left(-\\dfrac{z^{2}}{2}\\right)",
+     "tex": "\\varphi(z)=\\dfrac{1}{\\sqrt{2\\pi}}\\exp\\left(-\\dfrac{z^{2}}{2}\\right)",
      "unverified": true
     },
     {
@@ -22881,7 +22978,7 @@
        }
       ]
      },
-     "tex": "\\mathrm{Phi}(z)=P(Z\\le z)=\\int_{-\\infty}^{z}\\mathrm{phi}(t)\\,dt",
+     "tex": "\\Phi(z)=P(Z\\le z)=\\int_{-\\infty}^{z}\\varphi(t)\\,dt",
      "unverified": true,
      "review_pending": true
     },
@@ -23001,7 +23098,23 @@
        }
       ]
      },
-     "tex": "P(a\\le Z\\le b)=\\int_{a}^{b}\\mathrm{phi}(z)\\,dz=\\mathrm{Phi}(b)-\\mathrm{Phi}(a)",
+     "parts": [
+      {
+       "path": [
+        1
+       ],
+       "name": "面積",
+       "meaning": "密度の曲線の下の、a から b までの面積"
+      },
+      {
+       "path": [
+        2
+       ],
+       "name": "表で読む",
+       "meaning": "標準正規分布表の Φ(b) と Φ(a) の差"
+      }
+     ],
+     "tex": "P(a\\le Z\\le b)=\\int_{a}^{b}\\varphi(z)\\,dz=\\Phi(b)-\\Phi(a)",
      "conditions": [
       {
        "text": "a ≦ b",
@@ -23035,6 +23148,17 @@
      "correction": "N(μ, σ²) の2つ目は分散 σ²。割るのは標準偏差 σ＝√100＝10 で、Z＝(X−60)÷10。100 で割ると、Z の標準偏差は 0.1 になり、標準正規分布表で読めない"
     }
    ],
+   "curve_workspace": {
+    "formula": 2,
+    "family": "std-normal",
+    "lo": "a",
+    "hi": "b",
+    "dir": "between",
+    "initial": {
+     "a": -1.96,
+     "b": 1.96
+    }
+   },
    "gist": "袋の重さは平均500g・標準偏差4g、箱の重さは平均2kg・標準偏差50gの正規分布に従う。手元には、平均0・標準偏差1の正規分布の表が1枚しかない。",
    "question": "平均も散らばりも違う正規分布の確率を、1つの表で読むには？",
    "chart": {
